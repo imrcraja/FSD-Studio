@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">FSD Studio</string>
+    <string name="app_tagline">Minecraft Skin Studio</string>
+
+    <!-- Bottom navigation -->
+    <string name="tab_home">Home</string>
+    <string name="tab_poses">Poses</string>
+    <string name="tab_ai">AI</string>
+    <string name="tab_history">History</string>
+    <string name="tab_settings">Settings</string>
+
+    <!-- Home -->
+    <string name="home_username_label">Minecraft username</string>
+    <string name="home_username_hint">e.g. Mr_FSD</string>
+    <string name="home_search">Search</string>
+    <string name="home_upload">Upload skin</string>
+    <string name="home_or">or</string>
+    <string name="home_empty_title">Start with a character</string>
+    <string name="home_empty_body">Search any Minecraft username to load their skin, or upload your own 64×64 skin file. Then make pose renders and AI artwork of that character.</string>
+    <string name="home_current_character">Current character</string>
+    <string name="home_recent">Recent renders</string>
+    <string name="home_searching">Searching…</string>
+    <string name="error_player_not_found">Player not found. Check the spelling and try again.</string>
+    <string name="error_network">Network problem. Check your connection and try again.</string>
+    <string name="error_upload_invalid">That file is not a valid Minecraft skin (needs a 64×64 or 64×32 PNG).</string>
+    <string name="error_upload_failed">Could not read that file.</string>
+    <string name="source_username">Username</string>
+    <string name="source_upload">Uploaded</string>
+    <string name="model_classic">Classic</string>
+    <string name="model_slim">Slim</string>
+
+    <!-- Poses -->
+    <string name="poses_title">Poses</string>
+    <string name="poses_no_character">Load a character on the Home tab first — search a username or upload a skin.</string>
+    <string name="poses_upload_note">Uploaded skins show flat renders. Pose renders and AI character reference need a public skin from a username.</string>
+    <string name="flat_front">Front</string>
+    <string name="flat_back">Back</string>
+    <string name="flat_face">Face</string>
+    <string name="pro_badge">PRO</string>
+
+    <!-- Render detail -->
+    <string name="detail_background">Background</string>
+    <string name="detail_size">Size</string>
+    <string name="bg_transparent">Transparent</string>
+    <string name="bg_dark">Dark</string>
+    <string name="bg_purple">Purple</string>
+    <string name="bg_white">White</string>
+    <string name="action_download">Download</string>
+    <string name="action_share">Share</string>
+    <string name="action_delete">Delete</string>
+    <string name="saved_to_gallery">Saved to Pictures/FSD Studio</string>
+    <string name="saved_failed">Could not save the image.</string>
+    <string name="pro_locked_size">1024 is a Pro size</string>
+
+    <!-- AI -->
+    <string name="ai_title">AI Artwork</string>
+    <string name="ai_prompt_label">Describe the scene</string>
+    <string name="ai_prompt_hint">e.g. standing on a castle wall at sunset, holding a diamond sword</string>
+    <string name="ai_generate">Generate</string>
+    <string name="ai_generating">Generating… this can take up to a minute</string>
+    <string name="ai_remaining">%1$d free AI renders left today</string>
+    <string name="ai_limit_reached">Daily free limit reached. Pro raises it to 50 per day.</string>
+    <string name="ai_reference_note">Your current character is used as the visual reference.</string>
+    <string name="ai_reference_upload_note">Uploaded skin: AI runs from your prompt only (no character reference).</string>
+    <string name="ai_error">Generation failed. The free AI service may be busy — try again.</string>
+    <string name="ai_retry">Retry</string>
+    <string name="ai_need_character">Load a character on the Home tab first.</string>
+    <string name="ai_need_prompt">Write a prompt first.</string>
+
+    <!-- History -->
+    <string name="history_title">History</string>
+    <string name="history_empty">No renders yet. Open a pose or generate AI artwork and it will appear here.</string>
+
+    <!-- Pro -->
+    <string name="pro_title">FSD Pro</string>
+    <string name="pro_price">BDT 99/month · or BDT 499 one-time</string>
+    <string name="pro_note">Purchases open at launch. In this test build, Pro features are shown locked.</string>
+    <string name="pro_at_launch">Available at launch</string>
+    <string name="coming_soon">Coming soon</string>
+
+    <!-- Settings -->
+    <string name="settings_title">Settings</string>
+    <string name="settings_language">Language</string>
+    <string name="settings_cache">Image cache</string>
+    <string name="settings_clear_cache">Clear image cache</string>
+    <string name="settings_cache_cleared">Cache cleared</string>
+    <string name="settings_about">About</string>
+    <string name="settings_links">FSD ETC</string>
+    <string name="link_youtube">YouTube</string>
+    <string name="link_discord">Discord</string>
+    <string name="link_website">Website</string>
+    <string name="about_version">FSD Studio v%1$s (V1 test build)</string>
+    <string name="about_credits">Renders: skinrender.dev free API · AI images: Pollinations free tier · Skins &amp; profiles: Mojang</string>
+    <string name="about_disclaimer">Unofficial fan-made tool. Not affiliated with Mojang AB or Microsoft.</string>
+</resources>
