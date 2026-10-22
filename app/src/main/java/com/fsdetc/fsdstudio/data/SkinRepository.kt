@@ -71,7 +71,7 @@ class SkinRepository(private val context: Context) {
         httpClient.newCall(request).execute().use { resp ->
             if (resp.code == 404) throw PlayerNotFoundException()
             if (!resp.isSuccessful) throw IOException("Profile HTTP ${resp.code}")
-            val body = resp.body.string()
+            val body = (resp.body ?: throw IOException("Empty profile response")).string()
             val info = parseProfile(body) ?: throw IOException("Bad profile data")
             context.dataStore.edit { p ->
                 p[jsonKey] = body
@@ -87,7 +87,7 @@ class SkinRepository(private val context: Context) {
         val request = Request.Builder().url(url).build()
         httpClient.newCall(request).execute().use { resp ->
             if (!resp.isSuccessful) throw IOException("HTTP ${resp.code}")
-            resp.body.bytes()
+            (resp.body ?: throw IOException("Empty response")).bytes()
         }
     }
 
@@ -113,7 +113,7 @@ class SkinRepository(private val context: Context) {
         val request = Request.Builder().url(url).header("Accept", "image/*").build()
         aiClient.newCall(request).execute().use { resp ->
             if (!resp.isSuccessful) throw IOException("AI HTTP ${resp.code}")
-            return resp.body.bytes()
+            return (resp.body ?: throw IOException("Empty AI response")).bytes()
         }
     }
 
