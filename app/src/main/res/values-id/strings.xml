@@ -372,4 +372,30 @@
     <string name="editor_switch_title">Mulai ulang?</string>
     <string name="editor_switch_body">Ini akan mengganti lukisan dan pakaianmu saat ini.</string>
     <string name="editor_switch_confirm">Ganti</string>
+    <!-- Totem Maker (V5) -->
+    <string name="home_totem_title">Pembuat Totem</string>
+    <string name="home_totem_subtitle">Ubah skin menjadi totem of undying milikmu</string>
+    <string name="totem_title">Pembuat Totem</string>
+    <string name="totem_source_title">Skin</string>
+    <string name="totem_use_current">Pakai karakter saat ini</string>
+    <string name="totem_upload">Unggah PNG skin</string>
+    <string name="totem_username_label">Nama pengguna Minecraft</string>
+    <string name="totem_fetch">Ambil</string>
+    <string name="totem_fetching">Mengambil…</string>
+    <string name="totem_need_skin">Model mob tidak bisa jadi totem — pilih skin pemain atau unggah satu.</string>
+    <string name="totem_no_skin">Belum ada skin — ambil nama pengguna atau unggah skin untuk mulai.</string>
+    <string name="totem_style_title">Gaya</string>
+    <string name="totem_style_mini">Mini saya</string>
+    <string name="totem_style_full">Tubuh penuh</string>
+    <string name="totem_preview_title">Pratinjau</string>
+    <string name="totem_download_png">Unduh PNG</string>
+    <string name="totem_pack_title">Paket tekstur</string>
+    <string name="totem_edition_title">Edisi</string>
+    <string name="totem_edition_java">Java</string>
+    <string name="totem_edition_bedrock">Bedrock · Beta</string>
+    <string name="totem_version_title">Versi Minecraft</string>
+    <string name="totem_download_pack">Unduh paket</string>
+    <string name="totem_pack_pro_note">Paket adalah fitur Pro &amp; Max — unduhan PNG di atas tetap gratis untuk semua.</string>
+    <string name="totem_saved_downloads">Tersimpan di Unduhan/FSD Studio</string>
+    <string name="totem_loading">Memuat skin…</string>
 </resources>
