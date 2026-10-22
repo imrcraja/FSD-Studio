@@ -42,6 +42,7 @@
     <string name="lib_title">कैरेक्टर लाइब्रेरी</string>
     <string name="lib_players">प्लेयर्स</string>
     <string name="lib_mobs">मॉब्स</string>
+    <string name="lib_mobs_more">मॉब्स और भी</string>
 
     <!-- Poses -->
     <string name="poses_title">पोज़</string>
@@ -74,7 +75,7 @@
 
     <!-- Upgrade pop-up -->
     <string name="popup_title">FSD Studio पसंद आ रहा है?</string>
-    <string name="popup_body">Pro आपको अनलिमिटेड डाउनलोड, सभी 30 पोज़ और HD देता है।</string>
+    <string name="popup_body">Pro आपको अनलिमिटेड डाउनलोड, सभी 60 पोज़ और HD देता है।</string>
     <string name="popup_see_plans">प्लान देखें</string>
     <string name="popup_not_now">अभी नहीं</string>
 
@@ -113,7 +114,7 @@
     <string name="sub_view_plans">प्लान देखें</string>
     <string name="sub_purchase_note">खरीद लॉन्च पर खुलेगी। यह टेस्ट बिल्ड प्लान लॉक रखता है — कोई भुगतान नहीं लिया जाता।</string>
     <string name="sub_compare">प्लान की तुलना करें</string>
-    <string name="sub_feat_poses">सभी 30 पोज़</string>
+    <string name="sub_feat_poses">सभी 60 पोज़</string>
     <string name="sub_feat_hd">HD रेंडर (1024 px)</string>
     <string name="sub_feat_downloads">अनलिमिटेड डाउनलोड</string>
     <string name="sub_feat_backgrounds">प्रीमियम बैकग्राउंड</string>
@@ -221,6 +222,36 @@
     <string name="pose_hero_angle">हीरो एंगल</string>
     <string name="pose_top_view">ऊपर का दृश्य</string>
     <string name="pose_shadow_stand">शैडो स्टैंड</string>
+    <string name="pose_walk_quarter">चलने का कदम</string>
+    <string name="pose_run_start">दौड़ की शुरुआत</string>
+    <string name="pose_look_down">नीचे देखें</string>
+    <string name="pose_three_quarter">तिरछा दृश्य</string>
+    <string name="pose_sit_relaxed">आराम से बैठें</string>
+    <string name="pose_greet_bust">अभिवादन क्लोज़-अप</string>
+    <string name="pose_walk_late">लंबी चाल</string>
+    <string name="pose_run_late">अंतिम स्प्रिंट</string>
+    <string name="pose_dance_quarter">डांस बीट</string>
+    <string name="pose_dance_late">डांस फिनाले</string>
+    <string name="pose_zombie_walk">ज़ॉम्बी चाल</string>
+    <string name="pose_jump_peak">छलांग की ऊंचाई</string>
+    <string name="pose_sneak_peek">झलक</string>
+    <string name="pose_hero_low">नीचे से हीरो</string>
+    <string name="pose_flex_bust">फ्लेक्स क्लोज़-अप</string>
+    <string name="pose_think_bust">विचारक क्लोज़-अप</string>
+    <string name="pose_salute_bust">सलामी क्लोज़-अप</string>
+    <string name="pose_point_bust">इशारा क्लोज़-अप</string>
+    <string name="pose_dab_bust">डैब क्लोज़-अप</string>
+    <string name="pose_shrug_bust">श्रग क्लोज़-अप</string>
+    <string name="pose_face_closeup">चेहरे का क्लोज़-अप</string>
+    <string name="pose_back_quarter">पीछे का तिरछा दृश्य</string>
+    <string name="pose_over_shoulder">कंधे के ऊपर से</string>
+    <string name="pose_tiny">छोटा सा</string>
+    <string name="pose_action_tilt">एक्शन टिल्ट</string>
+    <string name="pose_spin_tpose">घूमता टी-पोज़</string>
+    <string name="pose_shadow_dance">शैडो डांस</string>
+    <string name="pose_power_punch">पावर पंच</string>
+    <string name="pose_big_cheer">बड़ा उत्साह</string>
+    <string name="pose_sit_view">बैठा दृश्य</string>
 
     <!-- Account (Settings) -->
     <string name="settings_account">खाता</string>
