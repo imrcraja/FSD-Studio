@@ -36,6 +36,7 @@
     <string name="error_generic">कुछ गड़बड़ हो गई। फिर से कोशिश करें।</string>
     <string name="error_load_failed">यह रेंडर लोड नहीं हो सका। अपना कनेक्शन जाँचें और फिर से कोशिश करें।</string>
     <string name="action_retry">फिर से कोशिश करें</string>
+    <string name="action_back">वापस</string>
 
     <!-- Library -->
     <string name="lib_button">कैरेक्टर लाइब्रेरी</string>
