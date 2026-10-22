@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Brush
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Download
 import androidx.compose.material.icons.filled.Share
@@ -62,6 +63,7 @@ fun RenderDetailScreen(
     mainVm: MainViewModel,
     onBack: () -> Unit,
     onOpenPro: () -> Unit,
+    onOpenEditor: () -> Unit,
 ) {
     val req by mainVm.detailRequest.collectAsState()
     val current = req
@@ -93,11 +95,34 @@ fun RenderDetailScreen(
         Column(Modifier.padding(padding).fillMaxSize()) {
             when (current) {
                 null -> LaunchedEffect(Unit) { onBack() }
-                is DetailRequest.RemotePose -> RemoteDetail(mainVm, current, onOpenPro)
-                is DetailRequest.LocalFile -> LocalDetail(mainVm, current, onBack, onOpenPro)
+                is DetailRequest.RemotePose -> RemoteDetail(mainVm, current, onOpenPro, onOpenEditor)
+                is DetailRequest.LocalFile -> LocalDetail(mainVm, current, onBack, onOpenPro, onOpenEditor)
                 is DetailRequest.MobRender -> MobDetail(mainVm, current, onOpenPro)
             }
         }
+    }
+}
+
+/**
+ * "Edit skin" entry into the Skin Editor, shown when the current character's
+ * skin can be resolved (username/library skins via their texture URL, uploads
+ * via their local file) — the editor itself loads the actual pixels.
+ */
+@Composable
+private fun EditSkinButton(mainVm: MainViewModel, onOpenEditor: () -> Unit) {
+    val character by mainVm.character.collectAsState()
+    val canEdit = character?.let { ch ->
+        when (ch.source) {
+            com.fsdetc.fsdstudio.data.CharacterSource.UPLOAD -> ch.localSkinPath != null
+            com.fsdetc.fsdstudio.data.CharacterSource.USERNAME ->
+                ch.skinUrl != null || ch.renderId != null
+        }
+    } ?: false
+    if (!canEdit) return
+    OutlinedButton(onClick = onOpenEditor, modifier = Modifier.fillMaxWidth()) {
+        Icon(Icons.Filled.Brush, contentDescription = null, modifier = Modifier.size(18.dp))
+        Spacer(Modifier.width(6.dp))
+        Text(stringResource(R.string.detail_edit_skin))
     }
 }
 
@@ -143,6 +168,7 @@ private fun RemoteDetail(
     mainVm: MainViewModel,
     req: DetailRequest.RemotePose,
     onOpenPro: () -> Unit,
+    onOpenEditor: () -> Unit,
 ) {
     val plan by mainVm.plan.collectAsState()
     val defaultBgName by mainVm.defaultBgName.collectAsState()
@@ -212,6 +238,7 @@ private fun RemoteDetail(
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
+        EditSkinButton(mainVm, onOpenEditor)
 
         Text(stringResource(R.string.detail_background), style = MaterialTheme.typography.labelLarge)
         BgSelector(selected = bg, onSelect = { bg = it })
@@ -410,6 +437,7 @@ private fun LocalDetail(
     req: DetailRequest.LocalFile,
     onBack: () -> Unit,
     onOpenPro: () -> Unit,
+    onOpenEditor: () -> Unit,
 ) {
     val defaultBgName by mainVm.defaultBgName.collectAsState()
     val context = LocalContext.current
@@ -500,6 +528,8 @@ private fun LocalDetail(
                 Text(stringResource(R.string.action_share))
             }
         }
+
+        EditSkinButton(mainVm, onOpenEditor)
 
         if (req.deletableHistory && req.historyId != null) {
             OutlinedButton(

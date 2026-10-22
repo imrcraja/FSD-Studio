@@ -49,6 +49,7 @@ object Routes {
     const val PRO = "pro"
     const val DETAIL = "detail"
     const val LIBRARY = "library"
+    const val EDITOR = "editor"
 }
 
 private data class Tab(val route: String, val labelRes: Int, val icon: ImageVector)
@@ -63,7 +64,12 @@ private val TABS = listOf(
 )
 
 @Composable
-fun FsdNavHost(mainVm: MainViewModel, aiVm: AiViewModel, historyVm: HistoryViewModel) {
+fun FsdNavHost(
+    mainVm: MainViewModel,
+    aiVm: AiViewModel,
+    historyVm: HistoryViewModel,
+    editorVm: com.fsdetc.fsdstudio.viewmodel.SkinEditorViewModel,
+) {
     val nav = rememberNavController()
     val backStack by nav.currentBackStackEntryAsState()
     val currentRoute = backStack?.destination?.route
@@ -128,6 +134,7 @@ fun FsdNavHost(mainVm: MainViewModel, aiVm: AiViewModel, historyVm: HistoryViewM
                             },
                             onOpenPro = { nav.navigate(Routes.PRO) },
                             onOpenLibrary = { nav.navigate(Routes.LIBRARY) },
+                            onOpenEditor = { nav.navigate(Routes.EDITOR) },
                         )
                     }
                     composable(Routes.POSES) {
@@ -195,6 +202,15 @@ fun FsdNavHost(mainVm: MainViewModel, aiVm: AiViewModel, historyVm: HistoryViewM
                     composable(Routes.DETAIL) {
                         RenderDetailScreen(
                             mainVm = mainVm,
+                            onBack = { nav.popBackStack() },
+                            onOpenPro = { nav.navigate(Routes.PRO) },
+                            onOpenEditor = { nav.navigate(Routes.EDITOR) },
+                        )
+                    }
+                    composable(Routes.EDITOR) {
+                        SkinEditorScreen(
+                            mainVm = mainVm,
+                            editorVm = editorVm,
                             onBack = { nav.popBackStack() },
                             onOpenPro = { nav.navigate(Routes.PRO) },
                         )
