@@ -22,13 +22,26 @@
     <string name="home_recent">Recent renders</string>
     <string name="home_searching">Searching…</string>
     <string name="error_player_not_found">Player not found. Check the spelling and try again.</string>
-    <string name="error_network">Network problem. Check your connection and try again.</string>
     <string name="error_upload_invalid">That file is not a valid Minecraft skin (needs a 64×64 or 64×32 PNG).</string>
     <string name="error_upload_failed">Could not read that file.</string>
     <string name="source_username">Username</string>
     <string name="source_upload">Uploaded</string>
     <string name="model_classic">Classic</string>
     <string name="model_slim">Slim</string>
+
+    <!-- Errors -->
+    <string name="error_offline">No internet connection. Check Wi-Fi or mobile data and try again.</string>
+    <string name="error_timeout">The server took too long to answer. Try again.</string>
+    <string name="error_server_busy">The render service is busy right now. Wait a moment and try again.</string>
+    <string name="error_generic">Something went wrong. Try again.</string>
+    <string name="error_load_failed">Could not load this render. Check your connection and retry.</string>
+    <string name="action_retry">Retry</string>
+
+    <!-- Library -->
+    <string name="lib_button">Character library</string>
+    <string name="lib_title">Character Library</string>
+    <string name="lib_players">Players</string>
+    <string name="lib_mobs">Mobs</string>
 
     <!-- Poses -->
     <string name="poses_title">Poses</string>
@@ -42,6 +55,7 @@
     <!-- Render detail -->
     <string name="detail_background">Background</string>
     <string name="detail_size">Size</string>
+    <string name="detail_pose">Pose</string>
     <string name="bg_transparent">Transparent</string>
     <string name="bg_dark">Dark</string>
     <string name="bg_purple">Purple</string>
@@ -51,7 +65,18 @@
     <string name="action_delete">Delete</string>
     <string name="saved_to_gallery">Saved to Pictures/FSD Studio</string>
     <string name="saved_failed">Could not save the image.</string>
-    <string name="pro_locked_size">1024 is a Pro size</string>
+    <string name="pro_locked_size">HD 1024 needs Pro or Max</string>
+
+    <!-- Downloads -->
+    <string name="dl_left_today">%1$d downloads left today</string>
+    <string name="dl_unlimited">Unlimited downloads</string>
+    <string name="dl_limit_reached">Daily free downloads used up. Free includes 5 downloads a day — Pro and Max are unlimited.</string>
+
+    <!-- Upgrade pop-up -->
+    <string name="popup_title">Enjoying FSD Studio?</string>
+    <string name="popup_body">Pro gives you unlimited downloads, all poses and HD.</string>
+    <string name="popup_see_plans">See plans</string>
+    <string name="popup_not_now">Not now</string>
 
     <!-- AI -->
     <string name="ai_title">AI Artwork</string>
@@ -60,55 +85,92 @@
     <string name="ai_generate">Generate</string>
     <string name="ai_generating">Generating… this can take up to a minute</string>
     <string name="ai_remaining">%1$d free AI renders left today</string>
-    <string name="ai_limit_reached">Daily free limit reached. Pro raises it to 50 per day.</string>
+    <string name="ai_limit_reached">Daily AI limit reached. Max raises it to 50 per day.</string>
     <string name="ai_reference_note">Your current character is used as the visual reference.</string>
     <string name="ai_reference_upload_note">Uploaded skin: AI runs from your prompt only (no character reference).</string>
     <string name="ai_error">Generation failed. The free AI service may be busy — try again.</string>
     <string name="ai_retry">Retry</string>
     <string name="ai_need_character">Load a character on the Home tab first.</string>
     <string name="ai_need_prompt">Write a prompt first.</string>
+    <string name="ai_fallback_note">Gemini unavailable — used free engine</string>
+    <string name="ai_error_quota">Your Gemini key\'s free quota is finished. Remove the key in Settings to use the free engine, or try tomorrow.</string>
+    <string name="ai_error_badkey">That Gemini API key was rejected. Check the key in Settings.</string>
 
     <!-- History -->
     <string name="history_title">History</string>
     <string name="history_empty">No renders yet. Open a pose or generate AI artwork and it will appear here.</string>
 
-    <!-- Pro -->
-    <string name="pro_title">FSD Pro</string>
-    <string name="pro_price">BDT 99/month · or BDT 499 one-time</string>
-    <string name="pro_note">Purchases open at launch. In this test build, Pro features are shown locked.</string>
-    <string name="pro_at_launch">Available at launch</string>
+    <!-- Plans / subscription -->
+    <string name="pro_headline">Unlock the full studio</string>
     <string name="coming_soon">Coming soon</string>
+    <string name="sub_title">FSD Studio Plans</string>
+    <string name="sub_current_plan">Current plan: %1$s</string>
+    <string name="sub_billing_weekly">Weekly</string>
+    <string name="sub_billing_monthly">Monthly</string>
+    <string name="sub_per_week">/week</string>
+    <string name="sub_per_month">/month</string>
+    <string name="sub_best_badge">Best</string>
+    <string name="sub_current_badge">Current</string>
+    <string name="sub_choose_pro">Choose Pro</string>
+    <string name="sub_choose_max">Choose Max</string>
+    <string name="sub_view_plans">View plans</string>
+    <string name="sub_purchase_note">Purchases open at launch. This test build keeps plans locked — no payment is taken.</string>
+    <string name="sub_compare">Compare plans</string>
+    <string name="sub_feat_poses">All 18 poses</string>
+    <string name="sub_feat_hd">HD renders (1024 px)</string>
+    <string name="sub_feat_downloads">Unlimited downloads</string>
+    <string name="sub_feat_backgrounds">Premium backgrounds</string>
+    <string name="sub_feat_ai">AI renders</string>
+    <string name="sub_feat_ai_pro_value">3/day (basic)</string>
+    <string name="sub_feat_ai_max_value">50/day + priority</string>
+    <string name="sub_feat_noads">No ads</string>
+    <string name="sub_at_launch">(at launch)</string>
+    <string name="plan_name_free">Free</string>
+    <string name="plan_name_pro">Pro</string>
+    <string name="plan_name_max">Max</string>
+    <string name="plan_price_pro_weekly">৳49</string>
+    <string name="plan_price_pro_monthly">৳99</string>
+    <string name="plan_price_max_weekly">৳79</string>
+    <string name="plan_price_max_monthly">৳169</string>
+    <string name="cmp_poses">Poses</string>
+    <string name="cmp_hd">HD 1024</string>
+    <string name="cmp_downloads">Downloads / day</string>
+    <string name="cmp_ai">AI renders / day</string>
 
     <!-- Settings -->
     <string name="settings_title">Settings</string>
     <string name="settings_language">Language</string>
+    <string name="settings_theme">Theme</string>
+    <string name="theme_purple">FSD Purple</string>
+    <string name="theme_midnight">Midnight</string>
+    <string name="theme_light">Light</string>
+    <string name="settings_defaults">Render defaults</string>
+    <string name="settings_default_bg">Default background</string>
+    <string name="settings_default_size">Default size</string>
+    <string name="settings_ai">AI engine</string>
+    <string name="settings_gemini_label">Your Gemini API key (optional)</string>
+    <string name="settings_gemini_hint">Paste your Google AI Studio key</string>
+    <string name="settings_gemini_explain">With your own Google AI Studio key, AI renders use Gemini for best character likeness. Without a key, the free built-in engine is used.</string>
+    <string name="settings_gemini_save">Save key</string>
+    <string name="settings_gemini_clear">Clear key</string>
+    <string name="settings_gemini_saved">Key saved</string>
+    <string name="settings_ai_engine_gemini">Active engine: Gemini (your key)</string>
+    <string name="settings_ai_engine_free">Active engine: free built-in engine</string>
     <string name="settings_cache">Image cache</string>
-    <string name="settings_clear_cache">Clear image cache</string>
     <string name="settings_cache_cleared">Cache cleared</string>
     <string name="settings_about">About</string>
     <string name="settings_links">FSD ETC</string>
     <string name="link_youtube">YouTube</string>
     <string name="link_discord">Discord</string>
     <string name="link_website">Website</string>
-    <string name="about_version">FSD Studio v%1$s (V1 test build)</string>
-    <string name="about_credits">Renders: skinrender.dev free API · AI images: Pollinations free tier · Skins &amp; profiles: Mojang</string>
+    <string name="about_version">FSD Studio v%1$s (test build)</string>
+    <string name="about_credits">Renders: skinrender.dev free API · AI images: Pollinations free tier or your Gemini key · Skins &amp; profiles: Mojang</string>
     <string name="about_disclaimer">Unofficial fan-made tool. Not affiliated with Mojang AB or Microsoft.</string>
-
-    <!-- Pro benefits -->
-    <string name="pro_headline">Unlock the full studio</string>
-    <string name="pro_all_poses">All 18 poses unlocked</string>
-    <string name="pro_hd">HD renders up to 1024 px</string>
-    <string name="pro_ai_50">50 AI renders every day</string>
-    <string name="pro_multi">Multi-character scenes (coming soon)</string>
-    <string name="pro_backgrounds">Premium background pack</string>
-    <string name="pro_pfp">PFP Pack — Discord, YouTube and WhatsApp sizes (coming soon)</string>
-    <string name="pro_noads">No ads (at launch)</string>
 
     <!-- Language + settings extras -->
     <string name="language_english">English</string>
     <string name="language_hindi">Hindi</string>
     <string name="language_bangla">Bangla</string>
-    <string name="settings_theme_note">FSD purple dark theme</string>
     <string name="settings_cache_size">Cache size: %1$s</string>
     <string name="settings_cache_clear">Clear image cache</string>
 </resources>
