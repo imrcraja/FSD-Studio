@@ -1,7 +1,6 @@
 package com.fsdetc.fsdstudio.ui
 
 import androidx.annotation.StringRes
-import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -33,17 +32,13 @@ import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.nativeCanvas
-import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import coil.compose.SubcomposeAsyncImage
 import com.fsdetc.fsdstudio.R
 
-/** Background choices on the render-detail screen. [hex] is the API `bg` value; null = transparent. */
 enum class BgOption(@StringRes val labelRes: Int, val hex: String?, val previewColor: Color?) {
     Transparent(R.string.bg_transparent, null, null),
     Dark(R.string.bg_dark, "101018", Color(0xFF101018)),
@@ -52,13 +47,11 @@ enum class BgOption(@StringRes val labelRes: Int, val hex: String?, val previewC
     ;
 
     companion object {
-        /** Resolve a stored option name (Settings default); Transparent when unknown. */
         fun fromName(name: String?): BgOption =
             entries.firstOrNull { it.name == name } ?: Transparent
     }
 }
 
-/** Classic transparency checkerboard. */
 @Composable
 fun Checkerboard(modifier: Modifier = Modifier, content: @Composable BoxScope.() -> Unit) {
     Box(
@@ -77,50 +70,10 @@ fun Checkerboard(modifier: Modifier = Modifier, content: @Composable BoxScope.()
     )
 }
 
-/**
- * Preview-only branding: "FSD Studio" tiled diagonally (rotated about -30°,
- * white at ~14% alpha, bold) so even a screenshot of a preview carries the
- * brand. This is drawn ONLY as a Compose overlay on previews — downloads
- * always save the raw, clean image bytes, never a composited bitmap.
- */
+/** Watermarks are disabled: previews and saved images are clean. */
 @Composable
-fun WatermarkOverlay(modifier: Modifier = Modifier) {
-    Canvas(modifier.clip(RoundedCornerShape(16.dp))) {
-        val paint = android.graphics.Paint().apply {
-            color = Color.White.copy(alpha = 0.14f).toArgb()
-            textSize = 13.sp.toPx()
-            typeface = android.graphics.Typeface.DEFAULT_BOLD
-            isFakeBoldText = true
-            isAntiAlias = true
-        }
-        val text = "FSD Studio"
-        val stepX = paint.measureText(text) + 56.dp.toPx()
-        val stepY = 72.dp.toPx()
-        with(drawContext.canvas.nativeCanvas) {
-            save()
-            translate(size.width / 2f, size.height / 2f)
-            rotate(-30f)
-            // Cover the full diagonal of the (rotated) frame.
-            val limit = maxOf(size.width, size.height)
-            var y = -limit
-            while (y <= limit) {
-                var x = -limit
-                while (x <= limit) {
-                    drawText(text, x, y, paint)
-                    x += stepX
-                }
-                y += stepY
-            }
-            restore()
-        }
-    }
-}
+fun WatermarkOverlay(modifier: Modifier = Modifier) = Unit
 
-/**
- * An image framed on the chosen background: checkerboard for transparent,
- * the matching solid colour otherwise (for remote renders the colour is also
- * baked into the image by the API, this is just the letterbox behind it).
- */
 @Composable
 fun FramedImage(
     model: Any?,
@@ -149,10 +102,6 @@ fun FramedImage(
     }
 }
 
-/**
- * A grid thumbnail with a loading spinner and a tap-to-retry error placeholder,
- * so a failed render request shows a human state instead of an empty box.
- */
 @Composable
 fun GridThumb(
     model: Any?,
