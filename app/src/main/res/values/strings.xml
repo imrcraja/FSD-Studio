@@ -42,6 +42,7 @@
     <string name="lib_title">Character Library</string>
     <string name="lib_players">Players</string>
     <string name="lib_mobs">Mobs</string>
+    <string name="lib_mobs_more">Mobs &amp; More</string>
 
     <!-- Poses -->
     <string name="poses_title">Poses</string>
@@ -74,7 +75,7 @@
 
     <!-- Upgrade pop-up -->
     <string name="popup_title">Enjoying FSD Studio?</string>
-    <string name="popup_body">Pro gives you unlimited downloads, all 30 poses and HD.</string>
+    <string name="popup_body">Pro gives you unlimited downloads, all 60 poses and HD.</string>
     <string name="popup_see_plans">See plans</string>
     <string name="popup_not_now">Not now</string>
 
@@ -113,7 +114,7 @@
     <string name="sub_view_plans">View plans</string>
     <string name="sub_purchase_note">Purchases open at launch. This test build keeps plans locked — no payment is taken.</string>
     <string name="sub_compare">Compare plans</string>
-    <string name="sub_feat_poses">All 30 poses</string>
+    <string name="sub_feat_poses">All 60 poses</string>
     <string name="sub_feat_hd">HD renders (1024 px)</string>
     <string name="sub_feat_downloads">Unlimited downloads</string>
     <string name="sub_feat_backgrounds">Premium backgrounds</string>
@@ -221,6 +222,36 @@
     <string name="pose_hero_angle">Hero Angle</string>
     <string name="pose_top_view">Top View</string>
     <string name="pose_shadow_stand">Shadow Stand</string>
+    <string name="pose_walk_quarter">Walk Step</string>
+    <string name="pose_run_start">Run Start</string>
+    <string name="pose_look_down">Look Down</string>
+    <string name="pose_three_quarter">Three-Quarter</string>
+    <string name="pose_sit_relaxed">Relaxed Sit</string>
+    <string name="pose_greet_bust">Greet Close-Up</string>
+    <string name="pose_walk_late">Long Stride</string>
+    <string name="pose_run_late">Late Sprint</string>
+    <string name="pose_dance_quarter">Dance Beat</string>
+    <string name="pose_dance_late">Dance Finale</string>
+    <string name="pose_zombie_walk">Zombie Walk</string>
+    <string name="pose_jump_peak">Jump Peak</string>
+    <string name="pose_sneak_peek">Sneak Peek</string>
+    <string name="pose_hero_low">Low Hero</string>
+    <string name="pose_flex_bust">Flex Close-Up</string>
+    <string name="pose_think_bust">Thinker Close-Up</string>
+    <string name="pose_salute_bust">Salute Close-Up</string>
+    <string name="pose_point_bust">Point Close-Up</string>
+    <string name="pose_dab_bust">Dab Close-Up</string>
+    <string name="pose_shrug_bust">Shrug Close-Up</string>
+    <string name="pose_face_closeup">Face Close-Up</string>
+    <string name="pose_back_quarter">Back Three-Quarter</string>
+    <string name="pose_over_shoulder">Over Shoulder</string>
+    <string name="pose_tiny">Tiny</string>
+    <string name="pose_action_tilt">Action Tilt</string>
+    <string name="pose_spin_tpose">Spin T-Pose</string>
+    <string name="pose_shadow_dance">Shadow Dance</string>
+    <string name="pose_power_punch">Power Punch</string>
+    <string name="pose_big_cheer">Big Cheer</string>
+    <string name="pose_sit_view">Seated View</string>
 
     <!-- Account (Settings) -->
     <string name="settings_account">Account</string>
