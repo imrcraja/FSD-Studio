@@ -39,6 +39,7 @@ import com.fsdetc.fsdstudio.R
 import com.fsdetc.fsdstudio.data.CharacterSource
 import com.fsdetc.fsdstudio.data.DownloadOutcome
 import com.fsdetc.fsdstudio.data.ImageSaver
+import com.fsdetc.fsdstudio.data.Plan
 import com.fsdetc.fsdstudio.viewmodel.AiViewModel
 import kotlinx.coroutines.launch
 import java.io.File
@@ -47,6 +48,7 @@ import java.io.File
 fun AiScreen(aiVm: AiViewModel, onOpenPro: () -> Unit) {
     val character by aiVm.character.collectAsState()
     val remaining by aiVm.remaining.collectAsState()
+    val plan by aiVm.plan.collectAsState()
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
 
@@ -110,7 +112,7 @@ fun AiScreen(aiVm: AiViewModel, onOpenPro: () -> Unit) {
         )
 
         Text(
-            text = stringResource(R.string.ai_remaining, remaining),
+            text = if (plan == Plan.MAX) "AI edits: Unlimited" else stringResource(R.string.ai_remaining, remaining),
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
