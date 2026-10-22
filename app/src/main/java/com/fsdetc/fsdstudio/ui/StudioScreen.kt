@@ -259,12 +259,13 @@ private fun StudioEditor(
     // height) and never scrolls; every control lives in the LazyColumn below
     // it, so adjusting a slider and watching the result needs no scrolling.
     BoxWithConstraints(Modifier.fillMaxSize()) {
+        val previewHeight = maxHeight * 0.38f
         Column(Modifier.fillMaxSize()) {
             // ------------------------------------------------------ preview
             Box(
                 Modifier
                     .fillMaxWidth()
-                    .height(maxHeight * 0.38f),
+                    .height(previewHeight),
             ) {
                 FramedImage(
                     model = previewUrl,

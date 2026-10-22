@@ -964,6 +964,7 @@ private fun OutfitChip(
     }
 }
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 private fun TintPanel(currentTint: Int?, onTint: (Int?) -> Unit, onCustom: () -> Unit) {
     Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)) {
@@ -1189,7 +1190,7 @@ private fun SkinCanvas(
                         while (event.changes.any { it.pressed }) {
                             if (event.changes.size >= 2) {
                                 transformMode = true
-                                val centroid = event.calculateCentroid(useTouchSlop = false)
+                                val centroid = event.calculateCentroid()
                                 val zoomChange = event.calculateZoom()
                                 val panChange = event.calculatePan()
                                 val oldZoom = zoom
