@@ -38,6 +38,10 @@ sealed interface DetailRequest {
         val poseId: String,
         val poseLabel: String,
         val charName: String,
+        /** Render type for the recipe ("body" or "bust"). */
+        val renderType: String = "body",
+        /** Full recipe parameters (pose name, camera, frame, joints) from PoseCatalog. */
+        val extraParams: Map<String, String> = emptyMap(),
     ) : DetailRequest
 
     data class LocalFile(

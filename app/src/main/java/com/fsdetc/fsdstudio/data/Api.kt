@@ -14,31 +14,14 @@ object Api {
 
     data class Pose(val id: String, val label: String)
 
-    /** All 18 poses, in API order. Free unlocks the first 10 (see Entitlements). */
-    val POSES: List<Pose> = listOf(
-        Pose("default", "Default"),
-        Pose("walk", "Walk"),
-        Pose("run", "Run"),
-        Pose("wave", "Wave"),
-        Pose("sit", "Sit"),
-        Pose("sneak", "Sneak"),
-        Pose("point", "Point"),
-        Pose("dab", "Dab"),
-        Pose("zombie", "Zombie"),
-        Pose("tpose", "T-Pose"),
-        Pose("cheer", "Cheer"),
-        Pose("think", "Think"),
-        Pose("flex", "Flex"),
-        Pose("salute", "Salute"),
-        Pose("dance", "Dance"),
-        Pose("punch", "Punch"),
-        Pose("shrug", "Shrug"),
-        Pose("jump", "Jump"),
-    )
-
     fun profileUrl(username: String): String = "$BASE/api/profile/$username"
 
     /**
+     * Render URL builder. [extra] carries any additional documented API
+     * parameters (camera yaw/pitch/roll, fov, zoom, offsetX/offsetY, pose
+     * frame, joint overrides, cape/overlay/shadow/shading toggles) — entries
+     * in [extra] win over the convenience arguments.
+     *
      * @param bgHex background colour as hex without '#', or null for a transparent render.
      */
     fun renderUrl(
@@ -47,11 +30,15 @@ object Api {
         size: Int,
         pose: String? = null,
         bgHex: String? = null,
+        extra: Map<String, String> = emptyMap(),
     ): String {
-        val params = mutableListOf("size=$size")
-        if (pose != null) params += "pose=$pose"
-        if (bgHex != null) params += "bg=$bgHex"
-        return "$BASE/render/$id/$type?" + params.joinToString("&")
+        val params = linkedMapOf<String, String>()
+        params["size"] = size.toString()
+        if (pose != null) params["pose"] = pose
+        for ((k, v) in extra) params[k] = v
+        if (bgHex != null) params["bg"] = bgHex
+        return "$BASE/render/$id/$type?" +
+            params.entries.joinToString("&") { "${it.key}=${it.value}" }
     }
 
     /** Mob render: GET /render/mob/<mob>/<body|head>?size=&pose=&bg= */

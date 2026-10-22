@@ -47,10 +47,22 @@ class Entitlements(private val context: Context) {
 
     suspend fun currentPlan(): Plan = plan.first()
 
+    /** Forget the stored plan (log out) — the next read falls back to FREE. */
+    suspend fun resetPlan() {
+        context.dataStore.edit { p ->
+            p.remove(planKey)
+            p.remove(legacyIsProKey)
+        }
+    }
+
     // ------------------------------------------------------------ plan limits
 
-    /** Number of unlocked poses: FREE 10, PRO/MAX all 18. */
-    fun maxPoseIndex(plan: Plan): Int = if (plan == Plan.FREE) 10 else Api.POSES.size
+    /**
+     * Pose access is data-driven since V3: a [PoseDef] carries its own `free`
+     * flag — FREE-plan users get exactly the free poses, Pro/Max get all.
+     */
+    fun poseUnlocked(pose: PoseDef, plan: Plan): Boolean =
+        pose.free || plan != Plan.FREE
 
     /** Largest render size the plan may request. */
     fun maxRenderSize(plan: Plan): Int = if (plan == Plan.FREE) 512 else 1024

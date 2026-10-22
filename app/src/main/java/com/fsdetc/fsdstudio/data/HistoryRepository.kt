@@ -80,6 +80,14 @@ class HistoryRepository(context: Context, private val dao: HistoryDao) {
         dao.findById(id)?.let { delete(it) }
     }
 
+    /** Remove every history file and row (used by Settings → Reset app data). */
+    suspend fun clearAll() {
+        runCatching {
+            historyDir.listFiles()?.forEach { it.delete() }
+        }
+        dao.clearAll()
+    }
+
     private fun pngSize(bytes: ByteArray): Pair<Int, Int> {
         val opts = BitmapFactory.Options().apply { inJustDecodeBounds = true }
         BitmapFactory.decodeByteArray(bytes, 0, bytes.size, opts)

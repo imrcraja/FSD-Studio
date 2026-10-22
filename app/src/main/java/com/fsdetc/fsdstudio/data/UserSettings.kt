@@ -1,6 +1,7 @@
 package com.fsdetc.fsdstudio.data
 
 import android.content.Context
+import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
@@ -8,18 +9,21 @@ import com.fsdetc.fsdstudio.ui.theme.AppTheme
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
+import java.util.UUID
 
 /**
- * User-facing preferences that are not entitlements: app theme, render defaults
- * and the optional bring-your-own Gemini API key (stored locally only, never
- * leaves the device except to Google's API as its auth header).
+ * User-facing preferences that are not entitlements: app theme, render
+ * defaults, language, user id and the tutorial flag. (The AI engine is fully
+ * built in — there is no user API key anywhere in the app.)
  */
 class UserSettings(private val context: Context) {
 
     private val themeKey = stringPreferencesKey("theme")
     private val defaultBgKey = stringPreferencesKey("default_bg")
     private val defaultSizeKey = intPreferencesKey("default_size")
-    private val geminiKeyKey = stringPreferencesKey("gemini_key")
+    private val languageKey = stringPreferencesKey("app_language")
+    private val userIdKey = stringPreferencesKey("user_id")
+    private val seenTutorialKey = booleanPreferencesKey("seen_tutorial")
 
     // ------------------------------------------------------------ theme
 
@@ -51,25 +55,88 @@ class UserSettings(private val context: Context) {
         context.dataStore.edit { p -> p[defaultSizeKey] = size }
     }
 
-    // ------------------------------------------------------------ Gemini key
+    // ------------------------------------------------------------ language
 
-    /** The user's own Gemini API key, or null when none is stored. */
-    val geminiKey: Flow<String?> = context.dataStore.data.map { p ->
-        p[geminiKeyKey]?.takeIf { it.isNotBlank() }
+    /**
+     * In-app language ("en" default; also "hi", "bn", "ur", "es", "id").
+     * Translations are first-pass (see the values-hi / values-bn / … folders).
+     *
+     * The value is mirrored into SharedPreferences ("fsd_prefs") because
+     * MainActivity.attachBaseContext must read it synchronously, before any
+     * coroutine/DataStore read could complete.
+     */
+    val appLanguage: Flow<String> = context.dataStore.data.map { p ->
+        p[languageKey] ?: DEFAULT_LANGUAGE
     }
 
-    suspend fun geminiKey(): String? = geminiKey.first()
+    suspend fun setAppLanguage(code: String) {
+        context.dataStore.edit { p -> p[languageKey] = code }
+        writeLanguageMirror(code)
+    }
 
-    /** Save a key; null or blank clears it. */
-    suspend fun setGeminiKey(key: String?) {
+    private fun writeLanguageMirror(code: String) {
+        // commit() (not apply()) so the value is on disk before the activity
+        // is recreated and attachBaseContext reads it back.
+        context.getSharedPreferences(LANGUAGE_PREFS, Context.MODE_PRIVATE)
+            .edit()
+            .putString(LANGUAGE_KEY, code)
+            .commit()
+    }
+
+    // ------------------------------------------------------------ user id
+
+    /** Stable per-install user id ("FSD-XXXXXXXXXX"), shown in Settings → Account. */
+    val userId: Flow<String?> = context.dataStore.data.map { p -> p[userIdKey] }
+
+    /** Read the id, generating and persisting it on first need. */
+    suspend fun ensureUserId(): String {
+        context.dataStore.data.first()[userIdKey]?.let { return it }
+        val generated = "FSD-" + UUID.randomUUID().toString()
+            .replace("-", "")
+            .take(10)
+            .uppercase()
+        context.dataStore.edit { p -> p[userIdKey] = generated }
+        return generated
+    }
+
+    // ------------------------------------------------------------ tutorial
+
+    /** Whether the first-run tutorial has been finished or skipped. */
+    val seenTutorial: Flow<Boolean> = context.dataStore.data.map { p ->
+        p[seenTutorialKey] ?: false
+    }
+
+    suspend fun setSeenTutorial(seen: Boolean) {
+        context.dataStore.edit { p -> p[seenTutorialKey] = seen }
+    }
+
+    // ------------------------------------------------------------ log out
+
+    /**
+     * Log-out reset: theme, render defaults and language return to defaults.
+     * Deliberately KEPT (handled by the callers' scope): history, the daily
+     * counters and the user id.
+     */
+    suspend fun clearAccountPrefs() {
         context.dataStore.edit { p ->
-            val trimmed = key?.trim()
-            if (trimmed.isNullOrEmpty()) p.remove(geminiKeyKey) else p[geminiKeyKey] = trimmed
+            p.remove(themeKey)
+            p.remove(defaultBgKey)
+            p.remove(defaultSizeKey)
+            p.remove(languageKey)
         }
+        writeLanguageMirror(DEFAULT_LANGUAGE)
     }
 
     companion object {
         const val DEFAULT_BG = "Transparent"
         const val DEFAULT_SIZE = 512
+        const val DEFAULT_LANGUAGE = "en"
+
+        // SharedPreferences mirror for the language (synchronous reads only).
+        const val LANGUAGE_PREFS = "fsd_prefs"
+        const val LANGUAGE_KEY = "app_language"
+
+        /** Supported in-app language codes, in Settings display order. */
+        val LANGUAGE_CODES = listOf("en", "hi", "bn", "ur", "es", "id")
     }
 }
