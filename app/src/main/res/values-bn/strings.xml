@@ -372,4 +372,30 @@
     <string name="editor_switch_title">আবার শুরু করবেন?</string>
     <string name="editor_switch_body">এটি আপনার বর্তমান পেইন্টিং এবং পোশাক বদলে দেবে।</string>
     <string name="editor_switch_confirm">বদলান</string>
+    <!-- Totem Maker (V5) -->
+    <string name="home_totem_title">টোটেম মেকার</string>
+    <string name="home_totem_subtitle">যেকোনো স্কিনকে নিজের টোটেম অব আনডাইং বানান</string>
+    <string name="totem_title">টোটেম মেকার</string>
+    <string name="totem_source_title">স্কিন</string>
+    <string name="totem_use_current">বর্তমান ক্যারেক্টার ব্যবহার করুন</string>
+    <string name="totem_upload">স্কিন PNG আপলোড করুন</string>
+    <string name="totem_username_label">Minecraft ইউজারনেম</string>
+    <string name="totem_fetch">আনুন</string>
+    <string name="totem_fetching">আনা হচ্ছে…</string>
+    <string name="totem_need_skin">মব মডেল টোটেম হতে পারে না — একটি প্লেয়ার স্কিন বেছে নিন বা আপলোড করুন।</string>
+    <string name="totem_no_skin">এখনো কোনো স্কিন নেই — শুরু করতে ইউজারনেম আনুন বা স্কিন আপলোড করুন।</string>
+    <string name="totem_style_title">স্টাইল</string>
+    <string name="totem_style_mini">মিনি মি</string>
+    <string name="totem_style_full">পুরো শরীর</string>
+    <string name="totem_preview_title">প্রিভিউ</string>
+    <string name="totem_download_png">PNG ডাউনলোড করুন</string>
+    <string name="totem_pack_title">টেক্সচার প্যাক</string>
+    <string name="totem_edition_title">এডিশন</string>
+    <string name="totem_edition_java">Java</string>
+    <string name="totem_edition_bedrock">Bedrock · Beta</string>
+    <string name="totem_version_title">Minecraft সংস্করণ</string>
+    <string name="totem_download_pack">প্যাক ডাউনলোড করুন</string>
+    <string name="totem_pack_pro_note">প্যাক Pro ও Max-এর ফিচার — উপরের PNG ডাউনলোড সবার জন্য ফ্রি থাকে।</string>
+    <string name="totem_saved_downloads">Downloads/FSD Studio-তে সেভ হয়েছে</string>
+    <string name="totem_loading">স্কিন লোড হচ্ছে…</string>
 </resources>
