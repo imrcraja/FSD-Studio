@@ -336,4 +336,30 @@
     <string name="editor_switch_title">¿Empezar de nuevo?</string>
     <string name="editor_switch_body">Esto reemplaza tu pintura y conjunto actuales.</string>
     <string name="editor_switch_confirm">Cambiar</string>
+    <!-- Totem Maker (V5) -->
+    <string name="home_totem_title">Creador de tótems</string>
+    <string name="home_totem_subtitle">Convierte una skin en tu propio tótem de inmortalidad</string>
+    <string name="totem_title">Creador de tótems</string>
+    <string name="totem_source_title">Skin</string>
+    <string name="totem_use_current">Usar personaje actual</string>
+    <string name="totem_upload">Subir PNG de skin</string>
+    <string name="totem_username_label">Usuario de Minecraft</string>
+    <string name="totem_fetch">Buscar</string>
+    <string name="totem_fetching">Obteniendo…</string>
+    <string name="totem_need_skin">Los modelos de mobs no pueden ser tótems: elige una skin de jugador o sube una.</string>
+    <string name="totem_no_skin">Aún no hay skin: busca un usuario o sube una skin para empezar.</string>
+    <string name="totem_style_title">Estilo</string>
+    <string name="totem_style_mini">Mini yo</string>
+    <string name="totem_style_full">Cuerpo completo</string>
+    <string name="totem_preview_title">Vista previa</string>
+    <string name="totem_download_png">Descargar PNG</string>
+    <string name="totem_pack_title">Paquete de texturas</string>
+    <string name="totem_edition_title">Edición</string>
+    <string name="totem_edition_java">Java</string>
+    <string name="totem_edition_bedrock">Bedrock · Beta</string>
+    <string name="totem_version_title">Versión de Minecraft</string>
+    <string name="totem_download_pack">Descargar paquete</string>
+    <string name="totem_pack_pro_note">Los paquetes son una función Pro y Max; la descarga PNG de arriba sigue siendo gratis para todos.</string>
+    <string name="totem_saved_downloads">Guardado en Descargas/FSD Studio</string>
+    <string name="totem_loading">Cargando skin…</string>
 </resources>
