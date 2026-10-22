@@ -42,6 +42,7 @@
     <string name="lib_title">Pustaka Karakter</string>
     <string name="lib_players">Pemain</string>
     <string name="lib_mobs">Mob</string>
+    <string name="lib_mobs_more">Mob &amp; Lainnya</string>
 
     <!-- Poses -->
     <string name="poses_title">Pose</string>
@@ -74,7 +75,7 @@
 
     <!-- Upgrade pop-up -->
     <string name="popup_title">Menikmati FSD Studio?</string>
-    <string name="popup_body">Pro memberimu unduhan tanpa batas, semua 30 pose dan HD.</string>
+    <string name="popup_body">Pro memberimu unduhan tanpa batas, semua 60 pose dan HD.</string>
     <string name="popup_see_plans">Lihat paket</string>
     <string name="popup_not_now">Nanti saja</string>
 
@@ -113,7 +114,7 @@
     <string name="sub_view_plans">Lihat paket</string>
     <string name="sub_purchase_note">Pembelian dibuka saat peluncuran. Build uji ini menjaga paket tetap terkunci — tidak ada pembayaran yang diambil.</string>
     <string name="sub_compare">Bandingkan paket</string>
-    <string name="sub_feat_poses">Semua 30 pose</string>
+    <string name="sub_feat_poses">Semua 60 pose</string>
     <string name="sub_feat_hd">Render HD (1024 px)</string>
     <string name="sub_feat_downloads">Unduhan tanpa batas</string>
     <string name="sub_feat_backgrounds">Latar belakang premium</string>
@@ -221,6 +222,36 @@
     <string name="pose_hero_angle">Sudut Pahlawan</string>
     <string name="pose_top_view">Tampak Atas</string>
     <string name="pose_shadow_stand">Berdiri Bayangan</string>
+    <string name="pose_walk_quarter">Langkah Jalan</string>
+    <string name="pose_run_start">Mulai Lari</string>
+    <string name="pose_look_down">Lihat Bawah</string>
+    <string name="pose_three_quarter">Tampak Tiga Perempat</string>
+    <string name="pose_sit_relaxed">Duduk Santai</string>
+    <string name="pose_greet_bust">Close-Up Sapaan</string>
+    <string name="pose_walk_late">Langkah Panjang</string>
+    <string name="pose_run_late">Sprint Akhir</string>
+    <string name="pose_dance_quarter">Irama Tari</string>
+    <string name="pose_dance_late">Penutup Tari</string>
+    <string name="pose_zombie_walk">Jalan Zombie</string>
+    <string name="pose_jump_peak">Puncak Lompatan</string>
+    <string name="pose_sneak_peek">Mengintip</string>
+    <string name="pose_hero_low">Pahlawan Rendah</string>
+    <string name="pose_flex_bust">Close-Up Flex</string>
+    <string name="pose_think_bust">Close-Up Pemikir</string>
+    <string name="pose_salute_bust">Close-Up Hormat</string>
+    <string name="pose_point_bust">Close-Up Menunjuk</string>
+    <string name="pose_dab_bust">Close-Up Dab</string>
+    <string name="pose_shrug_bust">Close-Up Angkat Bahu</string>
+    <string name="pose_face_closeup">Close-Up Wajah</string>
+    <string name="pose_back_quarter">Tiga Perempat Belakang</string>
+    <string name="pose_over_shoulder">Lewat Bahu</string>
+    <string name="pose_tiny">Mungil</string>
+    <string name="pose_action_tilt">Miring Aksi</string>
+    <string name="pose_spin_tpose">T-Pose Berputar</string>
+    <string name="pose_shadow_dance">Tari Bayangan</string>
+    <string name="pose_power_punch">Pukulan Kuat</string>
+    <string name="pose_big_cheer">Sorakan Besar</string>
+    <string name="pose_sit_view">Tampak Duduk</string>
 
     <!-- Account (Settings) -->
     <string name="settings_account">Akun</string>
