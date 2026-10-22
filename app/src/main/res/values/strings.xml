@@ -372,4 +372,30 @@
     <string name="editor_switch_title">Start over?</string>
     <string name="editor_switch_body">This replaces your current painting and outfit.</string>
     <string name="editor_switch_confirm">Switch</string>
+    <!-- Totem Maker (V5) -->
+    <string name="home_totem_title">Totem Maker</string>
+    <string name="home_totem_subtitle">Turn a skin into your own totem of undying</string>
+    <string name="totem_title">Totem Maker</string>
+    <string name="totem_source_title">Skin</string>
+    <string name="totem_use_current">Use current character</string>
+    <string name="totem_upload">Upload skin PNG</string>
+    <string name="totem_username_label">Minecraft username</string>
+    <string name="totem_fetch">Fetch</string>
+    <string name="totem_fetching">Fetching…</string>
+    <string name="totem_need_skin">Mob models can\'t become totems — pick a player skin or upload one.</string>
+    <string name="totem_no_skin">No skin yet — fetch a username or upload a skin to start.</string>
+    <string name="totem_style_title">Style</string>
+    <string name="totem_style_mini">Mini me</string>
+    <string name="totem_style_full">Full body</string>
+    <string name="totem_preview_title">Preview</string>
+    <string name="totem_download_png">Download PNG</string>
+    <string name="totem_pack_title">Texture pack</string>
+    <string name="totem_edition_title">Edition</string>
+    <string name="totem_edition_java">Java</string>
+    <string name="totem_edition_bedrock">Bedrock · Beta</string>
+    <string name="totem_version_title">Minecraft version</string>
+    <string name="totem_download_pack">Download pack</string>
+    <string name="totem_pack_pro_note">Packs are a Pro &amp; Max feature — the PNG download above stays free for everyone.</string>
+    <string name="totem_saved_downloads">Saved to Downloads/FSD Studio</string>
+    <string name="totem_loading">Loading skin…</string>
 </resources>
