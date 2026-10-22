@@ -312,3 +312,102 @@ Owner's overnight instruction: posing and the character library must feel
   6 × strings.xml: 31 keys added per file + "30"→"60" inside popup_body /
   sub_feat_poses only. BUILD_NOTES.md: this section. versionCode /
   versionName NOT bumped (parent does it at build time).
+
+## V4 changes — Skin Editor (2026-10-22, local — version bump at build time)
+
+The flagship Studio feature from the owner's point 13: a full 64×64 skin
+editor. **The core editor is completely free by the owner's rule** — painting,
+colours, zoom, every tool; the ONLY plan check anywhere in the editor is
+`SkinEditorViewModel.assetLocked` (premade assets flagged non-free in the
+catalog are PRO/MAX), used by the asset cells and the random-outfit pool.
+
+### Architecture (non-destructive by design)
+- Two-part state in `SkinEditorViewModel`: `paintBitmap` (the 64×64 skin the
+  user paints) + `outfit` (ordered slot → OutfitEntry(assetId, tint?)). The
+  displayed/exported skin is always `paint + outfit patches`, composited by
+  `SkinAssetRepository.composite` in the FIXED slot order
+  **pants → shoes → tops → jewelry → back → head → glasses**
+  (`AssetSlots.ORDER`). Painting never touches patches; removing an outfit
+  chip restores the painted pixels underneath exactly.
+- Start sources: (a) the current character (username/library skins load their
+  texture via the render API's `skin` type, upload characters via their local
+  file), (b) an uploaded skin file (SAF picker), (c) two programmatic blanks
+  from `BlankSkins` — a warm skin-tone base (hair, eyes, mouth, denim shorts,
+  per-face shading) and a gray mannequin matching the asset test renders.
+- `SkinTemplate.kt` centralizes the classic 64×64 layout: part boxes, the six
+  face rects per part/layer, and the BASE/OVERLAY region masks that the layer
+  toggle paints through (painting with OVERLAY selected can only touch
+  overlay-region pixels, and vice versa; eraser writes transparent).
+- Tools (all free): Pencil (drag paints continuous Bresenham runs), Eraser,
+  Fill (4-connected exact-colour flood fill, layer-mask constrained),
+  Eyedropper (reads from the paint bitmap, then returns to Pencil),
+  Undo/Redo (bitmap snapshot stack, cap 40, one snapshot per gesture),
+  Clear-part (Head/Torso/Arms/Legs/Overlay/Whole — base regions reset to the
+  skin-tone blank's pixels, overlay regions to transparent).
+- Canvas: the full 64×64 paint template drawn nearest-neighbour large (the
+  raw paint bitmap, so strokes land exactly where seen); one finger paints,
+  two fingers pinch-zoom (1–12×) and pan; optional grid (auto-shown once a
+  cell is ≥4px) and optional part-region tint + label overlay drawn from
+  `SkinTemplate` front faces. Front/Back flat previews show the COMPOSITED
+  skin (SkinBitmaps, scale ×9) and update on every edit.
+- Colours: 24-color curated palette (FSD purple family + skin tones),
+  HSV sliders + hex field, recent-colors row (cap 12).
+
+### Asset library (bundled)
+- `app/src/main/assets/skin_assets/`: `catalog.json` + all **130** patch PNGs
+  copied from `~/workspace/skin-editor-assets/` (31 FREE / 99 PRO, 40
+  tintable, 11 sections). Parsed lazily with org.json (no new dependencies);
+  patches decoded on demand into an LruCache.
+- Slot rules follow the asset NOTES.md: hats+masks → HEAD (one at a time);
+  wings/bags/capes + seasonal vampire_cape → BACK (one at a time); seasonal
+  santa_coat/christmas_sweater → TOP; pants → PANTS; shoes → SHOES (over
+  pants); tops → TOP; glasses → GLASSES (over head); jewelry → JEWELRY.
+  Applying a same-slot asset replaces the slot. Grid cells render the asset
+  composited live onto the CURRENT painting's front view (cached per paint
+  revision + outfit); locked cells are dimmed with a lock + PRO badge and
+  navigate to Plans on tap.
+- **Tint derivation:** pixels whose hue is within ±25° of the catalog
+  `defaultColor` hue with saturation > 0.15 form the colour family; they are
+  remapped by rotating hue to the tint hue and scaling saturation/value by
+  the tint÷default ratios. Neutrals (hair, metal, shading detail) are
+  untouched; alpha is preserved. Tinted patches are cached per asset+tint.
+  UI: 10 curated tint swatches + custom HSV picker, plus "Original".
+- "Random outfit" fills every slot from the plan-allowed pool (FREE users:
+  free assets only), glasses sometimes skipped, 70% chance of a tint on
+  tintable picks.
+
+### Actions
+- **Use as my skin** — the composite is saved through the normal upload path
+  (`SkinBitmaps.importEditedSkin`: filesDir/skins/<sha>.png + flats) and set
+  as the current character, so Poses/Studio/History treat it exactly like an
+  uploaded skin.
+- **Download skin PNG** — saves the 64×64 PNG to Pictures/FSD Studio via
+  MediaStore. **Deliberately NOT through DownloadGate** (owner's rule: your
+  own skin is core-free) — but it IS recorded in History as kind "SKIN".
+- **Wardrobe** — named skins stored as PNG + index.json under
+  filesDir/wardrobe (`WardrobeStore`); list with front-render thumbnails,
+  Load / Delete. PNG-only by design (no paint/outfit recipe — Load replaces
+  the painting with the saved composite).
+
+### Classic-layout note
+Painting and previews use the classic (non-slim) template mapping from
+`SkinTemplate.kt` — the same mapping the asset generator used. Slim skins are
+painted on their own file pixels (the file is edited in place), but the flat
+front/back preview and the part labels are approximate for slim arms, since
+the preview renderer uses the classic arm boxes.
+
+### Files
+- Created: `data/SkinTemplate.kt`, `data/SkinAssets.kt`,
+  `data/WardrobeStore.kt`, `viewmodel/SkinEditorViewModel.kt`,
+  `ui/SkinEditorScreen.kt`, `app/src/main/assets/skin_assets/` (catalog +
+  130 patches).
+- Modified: `data/SkinBitmaps.kt` (decodeSkinBytes/decodeSkinFile,
+  importEditedSkin, renderFrontScaled/renderBackScaled), `AppContainer.kt`
+  (skinAssets + wardrobe), `ui/Nav.kt` (Routes.EDITOR + wiring; bottom nav
+  unchanged at 6 tabs), `MainActivity.kt` (editorVm), `ui/HomeScreen.kt`
+  (prominent Skin Editor card), `ui/RenderDetailScreen.kt` ("Edit skin"
+  button when the current character's skin is resolvable).
+- Strings: **79 new keys × 6 locales → 333 keys per file**, identical order
+  in all six values files (editor_*, tool_*, part_*, section_*, slot_*,
+  home_editor_*, detail_edit_skin, action_save). versionCode / versionName
+  NOT bumped (parent does it at build time).
