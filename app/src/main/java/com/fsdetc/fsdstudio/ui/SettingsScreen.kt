@@ -1,5 +1,6 @@
 package com.fsdetc.fsdstudio.ui
 
+import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.text.format.Formatter
@@ -17,12 +18,12 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -37,16 +38,20 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
 import coil.imageLoader
 import com.fsdetc.fsdstudio.FsdStudioApp
 import com.fsdetc.fsdstudio.R
+import com.fsdetc.fsdstudio.data.Api
 import com.fsdetc.fsdstudio.data.ImageSaver
 import com.fsdetc.fsdstudio.data.Plan
+import com.fsdetc.fsdstudio.data.UserSettings
 import com.fsdetc.fsdstudio.ui.theme.AppTheme
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -54,11 +59,13 @@ import kotlinx.coroutines.withContext
 import java.io.File
 
 @Composable
-fun SettingsScreen(onOpenPro: () -> Unit) {
+fun SettingsScreen(onOpenPro: () -> Unit, onReplayTutorial: () -> Unit) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
     val app = context.applicationContext as FsdStudioApp
-    val settings = app.container.userSettings
+    val container = app.container
+    val settings = container.userSettings
+    val clipboard = LocalClipboardManager.current
 
     var cacheSizeBytes by remember { mutableStateOf<Long?>(null) }
     var clearedNote by remember { mutableStateOf(false) }
@@ -72,7 +79,7 @@ fun SettingsScreen(onOpenPro: () -> Unit) {
     val version = remember {
         runCatching {
             context.packageManager.getPackageInfo(context.packageName, 0).versionName
-        }.getOrNull() ?: "1.1"
+        }.getOrNull() ?: "1.2"
     }
 
     Column(
@@ -88,27 +95,148 @@ fun SettingsScreen(onOpenPro: () -> Unit) {
             color = MaterialTheme.colorScheme.onSurface,
         )
 
-        // ------------------------------------------------ language
+        // ------------------------------------------------ account
+        val character by container.characterStore.character.collectAsState(initial = null)
+        var userId by remember { mutableStateOf<String?>(null) }
+        var logoutDialog by remember { mutableStateOf(false) }
+        var resetDialog by remember { mutableStateOf(false) }
+        LaunchedEffect(Unit) { userId = settings.ensureUserId() }
+        SettingsCard(title = stringResource(R.string.settings_account)) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                val faceId = character?.renderId
+                if (faceId != null) {
+                    AsyncImage(
+                        model = Api.renderUrl(faceId, "face", 128),
+                        contentDescription = null,
+                        modifier = Modifier
+                            .size(56.dp)
+                            .clip(RoundedCornerShape(12.dp)),
+                    )
+                } else {
+                    Image(
+                        painter = painterResource(R.drawable.fsd_logo),
+                        contentDescription = null,
+                        modifier = Modifier
+                            .size(56.dp)
+                            .clip(RoundedCornerShape(12.dp)),
+                    )
+                }
+                Spacer(Modifier.size(12.dp))
+                Text(
+                    text = character?.name ?: stringResource(R.string.account_guest),
+                    style = MaterialTheme.typography.titleMedium,
+                    color = MaterialTheme.colorScheme.onSurface,
+                )
+            }
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Text(
+                    text = stringResource(R.string.account_user_id) + ": " + (userId ?: "…"),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.weight(1f),
+                )
+                TextButton(
+                    onClick = {
+                        userId?.let { id ->
+                            clipboard.setText(AnnotatedString(id))
+                            container.postSnackbar(context.getString(R.string.account_user_id_copied))
+                        }
+                    },
+                ) {
+                    Text(stringResource(R.string.account_copy))
+                }
+            }
+            Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                OutlinedButton(onClick = { logoutDialog = true }) {
+                    Text(stringResource(R.string.account_logout))
+                }
+                OutlinedButton(onClick = { resetDialog = true }) {
+                    Text(
+                        text = stringResource(R.string.account_reset),
+                        color = MaterialTheme.colorScheme.error,
+                    )
+                }
+            }
+        }
+        if (logoutDialog) {
+            AlertDialog(
+                onDismissRequest = { logoutDialog = false },
+                title = { Text(stringResource(R.string.account_logout_title)) },
+                text = { Text(stringResource(R.string.account_logout_body)) },
+                confirmButton = {
+                    TextButton(
+                        onClick = {
+                            logoutDialog = false
+                            scope.launch {
+                                container.logout()
+                                container.postSnackbar(context.getString(R.string.account_logged_out))
+                            }
+                        },
+                    ) { Text(stringResource(R.string.account_logout)) }
+                },
+                dismissButton = {
+                    TextButton(onClick = { logoutDialog = false }) {
+                        Text(stringResource(R.string.action_cancel))
+                    }
+                },
+            )
+        }
+        if (resetDialog) {
+            AlertDialog(
+                onDismissRequest = { resetDialog = false },
+                title = { Text(stringResource(R.string.account_reset_title)) },
+                text = { Text(stringResource(R.string.account_reset_body)) },
+                confirmButton = {
+                    TextButton(
+                        onClick = {
+                            resetDialog = false
+                            scope.launch {
+                                container.resetAllData()
+                                context.imageLoader.memoryCache?.clear()
+                                withContext(Dispatchers.IO) {
+                                    runCatching { context.imageLoader.diskCache?.clear() }
+                                }
+                                cacheSizeBytes = 0L
+                                userId = settings.ensureUserId()
+                                container.postSnackbar(context.getString(R.string.account_reset_done))
+                            }
+                        },
+                    ) {
+                        Text(
+                            text = stringResource(R.string.account_reset),
+                            color = MaterialTheme.colorScheme.error,
+                        )
+                    }
+                },
+                dismissButton = {
+                    TextButton(onClick = { resetDialog = false }) {
+                        Text(stringResource(R.string.action_cancel))
+                    }
+                },
+            )
+        }
+
+        // ------------------------------------------------ language (real switching)
+        val appLanguage by settings.appLanguage.collectAsState(initial = UserSettings.DEFAULT_LANGUAGE)
         SettingsCard(title = stringResource(R.string.settings_language)) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                RadioButton(selected = true, onClick = { /* English is the active language. */ })
-                Text(stringResource(R.string.language_english), color = MaterialTheme.colorScheme.onSurface)
-            }
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                RadioButton(selected = false, onClick = {}, enabled = false)
-                Text(
-                    text = stringResource(R.string.language_hindi) + " · " +
-                        stringResource(R.string.coming_soon),
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                )
-            }
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                RadioButton(selected = false, onClick = {}, enabled = false)
-                Text(
-                    text = stringResource(R.string.language_bangla) + " · " +
-                        stringResource(R.string.coming_soon),
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                )
+            UserSettings.LANGUAGE_CODES.forEach { code ->
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    RadioButton(
+                        selected = appLanguage == code,
+                        onClick = {
+                            if (appLanguage != code) {
+                                scope.launch {
+                                    settings.setAppLanguage(code)
+                                    (context as? Activity)?.recreate()
+                                }
+                            }
+                        },
+                    )
+                    Text(
+                        text = stringResource(languageLabelRes(code)),
+                        color = MaterialTheme.colorScheme.onSurface,
+                    )
+                }
             }
         }
 
@@ -160,7 +288,7 @@ fun SettingsScreen(onOpenPro: () -> Unit) {
         }
 
         // ------------------------------------------------ plan
-        val plan by app.container.entitlements.plan.collectAsState(initial = Plan.FREE)
+        val plan by container.entitlements.plan.collectAsState(initial = Plan.FREE)
         SettingsCard(title = stringResource(R.string.sub_title)) {
             Text(
                 text = stringResource(
@@ -181,70 +309,19 @@ fun SettingsScreen(onOpenPro: () -> Unit) {
             }
         }
 
-        // ------------------------------------------------ AI engine / Gemini key
-        val geminiKey by settings.geminiKey.collectAsState(initial = null)
-        var keyInput by remember { mutableStateOf("") }
-        var keySavedNote by remember { mutableStateOf(false) }
+        // ------------------------------------------------ AI (built in, no setup)
         SettingsCard(title = stringResource(R.string.settings_ai)) {
             Text(
-                text = stringResource(R.string.settings_gemini_explain),
+                text = stringResource(R.string.settings_ai_note),
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
-            Text(
-                text = stringResource(
-                    if (geminiKey != null) {
-                        R.string.settings_ai_engine_gemini
-                    } else {
-                        R.string.settings_ai_engine_free
-                    },
-                ),
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurface,
-            )
-            OutlinedTextField(
-                value = keyInput,
-                onValueChange = { keyInput = it; keySavedNote = false },
-                label = { Text(stringResource(R.string.settings_gemini_label)) },
-                placeholder = { Text(stringResource(R.string.settings_gemini_hint)) },
-                singleLine = true,
-                visualTransformation = PasswordVisualTransformation(),
-                modifier = Modifier.fillMaxWidth(),
-            )
-            Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                OutlinedButton(
-                    onClick = {
-                        val toSave = keyInput.trim()
-                        if (toSave.isNotEmpty()) {
-                            scope.launch {
-                                settings.setGeminiKey(toSave)
-                                keyInput = ""
-                                keySavedNote = true
-                            }
-                        }
-                    },
-                ) {
-                    Text(stringResource(R.string.settings_gemini_save))
-                }
-                if (geminiKey != null) {
-                    OutlinedButton(
-                        onClick = {
-                            scope.launch {
-                                settings.setGeminiKey(null)
-                                keySavedNote = false
-                            }
-                        },
-                    ) {
-                        Text(stringResource(R.string.settings_gemini_clear))
-                    }
-                }
-            }
-            if (keySavedNote) {
-                Text(
-                    text = stringResource(R.string.settings_gemini_saved),
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                )
+        }
+
+        // ------------------------------------------------ tutorial
+        SettingsCard(title = stringResource(R.string.settings_tutorial)) {
+            TextButton(onClick = onReplayTutorial) {
+                Text(stringResource(R.string.tut_replay))
             }
         }
 
@@ -264,7 +341,7 @@ fun SettingsScreen(onOpenPro: () -> Unit) {
                     scope.launch {
                         withContext(Dispatchers.IO) {
                             runCatching { context.imageLoader.diskCache?.clear() }
-                            runCatching { app.container.skinRepository.httpClient.cache?.evictAll() }
+                            runCatching { container.skinRepository.httpClient.cache?.evictAll() }
                         }
                         cacheSizeBytes = 0L
                         clearedNote = true
@@ -331,6 +408,16 @@ fun SettingsScreen(onOpenPro: () -> Unit) {
 
         Spacer(Modifier.height(8.dp))
     }
+}
+
+/** Native display name for each supported language code. */
+private fun languageLabelRes(code: String): Int = when (code) {
+    "hi" -> R.string.language_hindi
+    "bn" -> R.string.language_bangla
+    "ur" -> R.string.language_urdu
+    "es" -> R.string.language_spanish
+    "id" -> R.string.language_indonesian
+    else -> R.string.language_english
 }
 
 @Composable

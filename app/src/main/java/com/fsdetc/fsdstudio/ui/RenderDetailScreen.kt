@@ -1,8 +1,8 @@
 package com.fsdetc.fsdstudio.ui
 
 import android.graphics.BitmapFactory
-import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -113,7 +113,7 @@ private fun DownloadsLeftLine(mainVm: MainViewModel) {
     )
 }
 
-/** Shared outcome handling for every gated download button. */
+/** Shared outcome handling for every gated download button (bottom snackbar). */
 private fun CoroutineScope.launchGatedDownload(
     mainVm: MainViewModel,
     context: android.content.Context,
@@ -126,14 +126,12 @@ private fun CoroutineScope.launchGatedDownload(
         val outcome = mainVm.downloadGate.saveWithGate(save)
         onBusyChange(false)
         when (outcome) {
-            DownloadOutcome.Saved -> Toast.makeText(
-                context, R.string.saved_to_gallery, Toast.LENGTH_SHORT,
-            ).show()
-            DownloadOutcome.Failed -> Toast.makeText(
-                context, R.string.saved_failed, Toast.LENGTH_SHORT,
-            ).show()
+            DownloadOutcome.Saved ->
+                mainVm.postSnackbar(context.getString(R.string.saved_to_gallery))
+            DownloadOutcome.Failed ->
+                mainVm.postSnackbar(context.getString(R.string.saved_failed))
             DownloadOutcome.LimitReached -> {
-                Toast.makeText(context, R.string.dl_limit_reached, Toast.LENGTH_LONG).show()
+                mainVm.postSnackbar(context.getString(R.string.dl_limit_reached))
                 onOpenPro()
             }
         }
@@ -163,7 +161,10 @@ private fun RemoteDetail(
     var attempt by remember { mutableIntStateOf(0) }
 
     val effectiveSize = size.coerceAtMost(maxSize)
-    val url = Api.renderUrl(req.renderId, "body", effectiveSize, pose = req.poseId, bgHex = bg.hex)
+    val url = Api.renderUrl(
+        req.renderId, req.renderType, effectiveSize,
+        bgHex = bg.hex, extra = req.extraParams,
+    )
     val title = "Pose render"
     val loadFailedText = stringResource(R.string.error_load_failed)
 
@@ -174,21 +175,27 @@ private fun RemoteDetail(
         verticalArrangement = Arrangement.spacedBy(12.dp),
     ) {
         key(attempt) {
-            FramedImage(
-                model = url,
-                bg = bg,
-                modifier = Modifier
+            Box(
+                Modifier
                     .fillMaxWidth()
                     .weight(1f),
-                onSuccess = {
-                    loadError = null
-                    if (recordedUrl != url) {
-                        recordedUrl = url
-                        mainVm.recordRemoteInBackground(url, title, req.poseLabel, req.charName)
-                    }
-                },
-                onError = { loadError = loadFailedText },
-            )
+            ) {
+                FramedImage(
+                    model = url,
+                    bg = bg,
+                    modifier = Modifier.fillMaxSize(),
+                    onSuccess = {
+                        loadError = null
+                        if (recordedUrl != url) {
+                            recordedUrl = url
+                            mainVm.recordRemoteInBackground(url, title, req.poseLabel, req.charName)
+                        }
+                    },
+                    onError = { loadError = loadFailedText },
+                )
+                // Preview-only branding; the download below stays clean.
+                WatermarkOverlay(Modifier.fillMaxSize())
+            }
         }
         if (loadError != null) {
             Text(
@@ -299,23 +306,29 @@ private fun MobDetail(
         verticalArrangement = Arrangement.spacedBy(12.dp),
     ) {
         key(attempt) {
-            FramedImage(
-                model = url,
-                bg = bg,
-                modifier = Modifier
+            Box(
+                Modifier
                     .fillMaxWidth()
                     .weight(1f),
-                onSuccess = {
-                    loadError = null
-                    if (recordedUrl != url) {
-                        recordedUrl = url
-                        mainVm.recordRemoteInBackground(
-                            url, title, poseLabel, req.mobLabel, kind = "MOB",
-                        )
-                    }
-                },
-                onError = { loadError = loadFailedText },
-            )
+            ) {
+                FramedImage(
+                    model = url,
+                    bg = bg,
+                    modifier = Modifier.fillMaxSize(),
+                    onSuccess = {
+                        loadError = null
+                        if (recordedUrl != url) {
+                            recordedUrl = url
+                            mainVm.recordRemoteInBackground(
+                                url, title, poseLabel, req.mobLabel, kind = "MOB",
+                            )
+                        }
+                    },
+                    onError = { loadError = loadFailedText },
+                )
+                // Preview-only branding; the download below stays clean.
+                WatermarkOverlay(Modifier.fillMaxSize())
+            }
         }
         if (loadError != null) {
             Text(
@@ -431,13 +444,19 @@ private fun LocalDetail(
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp),
     ) {
-        FramedImage(
-            model = srcFile,
-            bg = bg,
-            modifier = Modifier
+        Box(
+            Modifier
                 .fillMaxWidth()
                 .weight(1f),
-        )
+        ) {
+            FramedImage(
+                model = srcFile,
+                bg = bg,
+                modifier = Modifier.fillMaxSize(),
+            )
+            // Preview-only branding; the download below stays clean.
+            WatermarkOverlay(Modifier.fillMaxSize())
+        }
         Text(
             text = listOf(req.title, req.subtitle, req.sourceName)
                 .filter { it.isNotBlank() }

@@ -34,6 +34,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -71,7 +72,26 @@ fun SubscriptionScreen(onBack: () -> Unit) {
     val app = context.applicationContext as FsdStudioApp
     val plan by app.container.entitlements.plan.collectAsState(initial = Plan.FREE)
 
-    var billing by remember { mutableStateOf(Billing.MONTHLY) }
+    // ONE hoisted billing-period state drives BOTH cards: price and period
+    // label are derived from it in exactly one place, so the Pro and Max
+    // cards can never disagree (the old per-card remember wiring could drop
+    // the state and leave the cards showing different periods).
+    var billingPeriod by rememberSaveable { mutableStateOf(Billing.MONTHLY) }
+    val proPriceRes = if (billingPeriod == Billing.WEEKLY) {
+        R.string.plan_price_pro_weekly
+    } else {
+        R.string.plan_price_pro_monthly
+    }
+    val maxPriceRes = if (billingPeriod == Billing.WEEKLY) {
+        R.string.plan_price_max_weekly
+    } else {
+        R.string.plan_price_max_monthly
+    }
+    val periodRes = if (billingPeriod == Billing.WEEKLY) {
+        R.string.sub_per_week
+    } else {
+        R.string.sub_per_month
+    }
     var dialogPlan by remember { mutableStateOf<Plan?>(null) }
 
     Scaffold(
@@ -114,13 +134,13 @@ fun SubscriptionScreen(onBack: () -> Unit) {
             // ------------------------------------------------ billing toggle
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 FilterChip(
-                    selected = billing == Billing.WEEKLY,
-                    onClick = { billing = Billing.WEEKLY },
+                    selected = billingPeriod == Billing.WEEKLY,
+                    onClick = { billingPeriod = Billing.WEEKLY },
                     label = { Text(stringResource(R.string.sub_billing_weekly)) },
                 )
                 FilterChip(
-                    selected = billing == Billing.MONTHLY,
-                    onClick = { billing = Billing.MONTHLY },
+                    selected = billingPeriod == Billing.MONTHLY,
+                    onClick = { billingPeriod = Billing.MONTHLY },
                     label = { Text(stringResource(R.string.sub_billing_monthly)) },
                 )
             }
@@ -128,12 +148,8 @@ fun SubscriptionScreen(onBack: () -> Unit) {
             // ------------------------------------------------ plan cards
             PlanCard(
                 nameRes = R.string.plan_name_pro,
-                priceRes = if (billing == Billing.WEEKLY) {
-                    R.string.plan_price_pro_weekly
-                } else {
-                    R.string.plan_price_pro_monthly
-                },
-                periodRes = if (billing == Billing.WEEKLY) R.string.sub_per_week else R.string.sub_per_month,
+                priceRes = proPriceRes,
+                periodRes = periodRes,
                 rows = planRows(R.string.sub_feat_ai_pro_value),
                 gradient = false,
                 best = false,
@@ -143,12 +159,8 @@ fun SubscriptionScreen(onBack: () -> Unit) {
             )
             PlanCard(
                 nameRes = R.string.plan_name_max,
-                priceRes = if (billing == Billing.WEEKLY) {
-                    R.string.plan_price_max_weekly
-                } else {
-                    R.string.plan_price_max_monthly
-                },
-                periodRes = if (billing == Billing.WEEKLY) R.string.sub_per_week else R.string.sub_per_month,
+                priceRes = maxPriceRes,
+                periodRes = periodRes,
                 rows = planRows(R.string.sub_feat_ai_max_value),
                 gradient = true,
                 best = true,
@@ -318,7 +330,7 @@ private fun CompareTable() {
                 ),
                 header = true,
             )
-            CompareRow(stringResource(R.string.cmp_poses), listOf("10", "18", "18"))
+            CompareRow(stringResource(R.string.cmp_poses), listOf("12", "30", "30"))
             CompareRow(stringResource(R.string.cmp_hd), listOf("—", "✓", "✓"))
             CompareRow(stringResource(R.string.cmp_downloads), listOf("5", "∞", "∞"))
             CompareRow(stringResource(R.string.cmp_ai), listOf("3", "3", "50"))

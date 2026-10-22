@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Lock
@@ -28,6 +27,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -38,6 +38,8 @@ import com.fsdetc.fsdstudio.R
 import com.fsdetc.fsdstudio.data.Api
 import com.fsdetc.fsdstudio.data.CharacterSource
 import com.fsdetc.fsdstudio.data.DetailRequest
+import com.fsdetc.fsdstudio.data.PoseCatalog
+import com.fsdetc.fsdstudio.data.PoseDef
 import com.fsdetc.fsdstudio.data.SkinBitmaps
 import com.fsdetc.fsdstudio.viewmodel.MainViewModel
 import java.io.File
@@ -90,10 +92,12 @@ fun PosesScreen(
                     verticalArrangement = Arrangement.spacedBy(10.dp),
                     modifier = Modifier.fillMaxSize(),
                 ) {
-                    itemsIndexed(Api.POSES, key = { _, pose -> pose.id }) { index, pose ->
-                        val locked = index >= mainVm.entitlements.maxPoseIndex(plan)
+                    items(PoseCatalog.POSES, key = { pose -> pose.id }) { pose ->
+                        val locked = !mainVm.entitlements.poseUnlocked(pose, plan)
+                        val poseLabel = stringResource(pose.labelRes)
                         PoseCell(
                             pose = pose,
+                            poseLabel = poseLabel,
                             renderId = renderId,
                             locked = locked,
                             onClick = {
@@ -104,8 +108,10 @@ fun PosesScreen(
                                         DetailRequest.RemotePose(
                                             renderId = renderId,
                                             poseId = pose.id,
-                                            poseLabel = pose.label,
+                                            poseLabel = poseLabel,
                                             charName = ch.name,
+                                            renderType = pose.renderType,
+                                            extraParams = pose.params,
                                         ),
                                     )
                                 }
@@ -158,7 +164,8 @@ fun PosesScreen(
 
 @Composable
 private fun PoseCell(
-    pose: Api.Pose,
+    pose: PoseDef,
+    poseLabel: String,
     renderId: String,
     locked: Boolean,
     onClick: () -> Unit,
@@ -179,28 +186,38 @@ private fun PoseCell(
                     .background(MaterialTheme.colorScheme.surfaceVariant),
                 contentAlignment = Alignment.Center,
             ) {
+                // Locked poses still LOAD the real render — the user sees a
+                // dimmed preview of what is inside; only the tap is locked.
+                GridThumb(
+                    model = Api.renderUrl(
+                        renderId, pose.renderType, 320, extra = pose.params,
+                    ),
+                    contentDescription = poseLabel,
+                    modifier = Modifier.fillMaxSize(),
+                )
                 if (locked) {
-                    Icon(
-                        Icons.Filled.Lock,
-                        contentDescription = null,
-                        tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                    )
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .background(Color.Black.copy(alpha = 0.6f)),
+                        contentAlignment = Alignment.Center,
+                    ) {
+                        Icon(
+                            Icons.Filled.Lock,
+                            contentDescription = null,
+                            tint = Color.White,
+                        )
+                    }
                     ProChip(
                         modifier = Modifier
                             .align(Alignment.TopEnd)
                             .padding(4.dp),
                     )
-                } else {
-                    GridThumb(
-                        model = Api.renderUrl(renderId, "body", 320, pose = pose.id),
-                        contentDescription = pose.label,
-                        modifier = Modifier.fillMaxSize(),
-                    )
                 }
             }
             Spacer(Modifier.height(6.dp))
             Text(
-                text = pose.label,
+                text = poseLabel,
                 style = MaterialTheme.typography.labelMedium,
                 color = MaterialTheme.colorScheme.onSurface,
                 maxLines = 1,

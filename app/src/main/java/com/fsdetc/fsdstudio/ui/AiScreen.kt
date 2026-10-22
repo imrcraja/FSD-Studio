@@ -1,7 +1,7 @@
 package com.fsdetc.fsdstudio.ui
 
-import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -75,15 +75,26 @@ fun AiScreen(aiVm: AiViewModel, onOpenPro: () -> Unit) {
                     modifier = Modifier.padding(16.dp),
                 )
             }
-        } else {
+        } else if (ch.source == CharacterSource.USERNAME) {
+            // Edit mode: the current character's render is the edit source.
             Text(
-                text = stringResource(
-                    if (ch.source == CharacterSource.USERNAME) {
-                        R.string.ai_reference_note
-                    } else {
-                        R.string.ai_reference_upload_note
-                    },
-                ),
+                text = stringResource(R.string.ai_editing_this),
+                style = MaterialTheme.typography.titleMedium,
+                color = MaterialTheme.colorScheme.onSurface,
+            )
+            aiVm.sourceRenderUrl(ch)?.let { sourceUrl ->
+                FramedImage(
+                    model = sourceUrl,
+                    bg = BgOption.Transparent,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .aspectRatio(4f / 3f),
+                )
+            }
+        } else {
+            // Uploaded skins have no public render to edit — prompt-only, said honestly.
+            Text(
+                text = stringResource(R.string.ai_reference_upload_note),
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
@@ -134,19 +145,18 @@ fun AiScreen(aiVm: AiViewModel, onOpenPro: () -> Unit) {
         }
 
         aiVm.resultPath?.let { path ->
-            FramedImage(
-                model = File(path),
-                bg = BgOption.Transparent,
-                modifier = Modifier
+            Box(
+                Modifier
                     .fillMaxWidth()
                     .aspectRatio(1f),
-            )
-            aiVm.engineNote?.let { note ->
-                Text(
-                    text = note,
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+            ) {
+                FramedImage(
+                    model = File(path),
+                    bg = BgOption.Transparent,
+                    modifier = Modifier.fillMaxSize(),
                 )
+                // Preview-only branding; the download below stays clean.
+                WatermarkOverlay(Modifier.fillMaxSize())
             }
             Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                 Button(
@@ -160,16 +170,12 @@ fun AiScreen(aiVm: AiViewModel, onOpenPro: () -> Unit) {
                                 )
                             }
                             when (outcome) {
-                                DownloadOutcome.Saved -> Toast.makeText(
-                                    context, R.string.saved_to_gallery, Toast.LENGTH_SHORT,
-                                ).show()
-                                DownloadOutcome.Failed -> Toast.makeText(
-                                    context, R.string.saved_failed, Toast.LENGTH_SHORT,
-                                ).show()
+                                DownloadOutcome.Saved ->
+                                    aiVm.postSnackbar(context.getString(R.string.saved_to_gallery))
+                                DownloadOutcome.Failed ->
+                                    aiVm.postSnackbar(context.getString(R.string.saved_failed))
                                 DownloadOutcome.LimitReached -> {
-                                    Toast.makeText(
-                                        context, R.string.dl_limit_reached, Toast.LENGTH_LONG,
-                                    ).show()
+                                    aiVm.postSnackbar(context.getString(R.string.dl_limit_reached))
                                     onOpenPro()
                                 }
                             }
