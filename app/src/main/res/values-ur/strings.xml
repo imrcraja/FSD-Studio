@@ -30,6 +30,7 @@
     <string name="error_generic">کچھ غلط ہو گیا۔ دوبارہ کوشش کریں۔</string>
     <string name="error_load_failed">یہ رینڈر لوڈ نہیں ہو سکا۔ اپنا کنکشن چیک کریں اور دوبارہ کوشش کریں۔</string>
     <string name="action_retry">دوبارہ کوشش کریں</string>
+    <string name="action_back">واپس</string>
     <string name="lib_button">کردار لائبریری</string>
     <string name="lib_title">کردار لائبریری</string>
     <string name="lib_players">کھلاڑی</string>
