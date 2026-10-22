@@ -65,6 +65,29 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     /** The once-a-day gentle upgrade dialog (fired by the 3rd free download). */
     val showUpgradePopup = MutableStateFlow(false)
 
+    // ------------------------------------------------------------ snackbars
+
+    /** App-wide transient messages, shown by the nav host's bottom SnackbarHost. */
+    val snackbarMessages = container.snackbarMessages
+
+    fun postSnackbar(message: String) = container.postSnackbar(message)
+
+    // ------------------------------------------------------------ tutorial
+
+    /** null while the stored flag is still loading, then true/false. */
+    val seenTutorial: StateFlow<Boolean?> = container.userSettings.seenTutorial
+        .map { seen -> seen as Boolean? }
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), null)
+
+    fun markTutorialSeen() {
+        viewModelScope.launch { container.userSettings.setSeenTutorial(true) }
+    }
+
+    /** Settings → "Replay tutorial": the nav host shows the tutorial again. */
+    fun replayTutorial() {
+        viewModelScope.launch { container.userSettings.setSeenTutorial(false) }
+    }
+
     init {
         viewModelScope.launch {
             container.downloadGate.thirdDownloadEvents.collect {

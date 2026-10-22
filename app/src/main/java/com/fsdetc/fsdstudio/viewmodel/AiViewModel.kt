@@ -9,8 +9,6 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.fsdetc.fsdstudio.FsdStudioApp
 import com.fsdetc.fsdstudio.R
-import com.fsdetc.fsdstudio.data.AiEngineException
-import com.fsdetc.fsdstudio.data.AiError
 import com.fsdetc.fsdstudio.data.Api
 import com.fsdetc.fsdstudio.data.CharacterInfo
 import com.fsdetc.fsdstudio.data.CharacterSource
@@ -26,13 +24,14 @@ import kotlinx.coroutines.launch
 import java.io.IOException
 
 /**
- * AI tab state. Queue discipline: at most one generation in flight; the daily
- * counter is checked BEFORE any request is made and only incremented on success.
+ * AI tab state — EDIT mode. The tab edits the current character's render:
+ * the user's text is an edit instruction, sent to the one built-in engine
+ * (Pollinations) together with the render's public URL as the reference
+ * image; on failure the engine itself retries without the reference.
+ * Uploaded skins have no public render URL, so their edits run prompt-only.
  *
- * Engine selection: when the user has stored their own Gemini key, Gemini runs
- * first (best character likeness); ANY Gemini failure falls back to the free
- * built-in engine and surfaces a small note. Without a key, the free engine is
- * used directly.
+ * Queue discipline: at most one edit in flight; the daily counter is checked
+ * BEFORE any request is made and only incremented on success.
  */
 class AiViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -40,6 +39,9 @@ class AiViewModel(application: Application) : AndroidViewModel(application) {
     private val container = app.container
 
     val downloadGate: DownloadGate = container.downloadGate
+
+    /** Post a transient message to the nav host's bottom SnackbarHost. */
+    fun postSnackbar(message: String) = container.postSnackbar(message)
 
     val character: StateFlow<CharacterInfo?> = container.characterStore.character
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), null)
@@ -52,9 +54,6 @@ class AiViewModel(application: Application) : AndroidViewModel(application) {
     var prompt by mutableStateOf("")
     var generating by mutableStateOf(false)
     var error by mutableStateOf<String?>(null)
-
-    /** Small note under a successful result, e.g. when the free engine took over. */
-    var engineNote by mutableStateOf<String?>(null)
     var resultPath by mutableStateOf<String?>(null)
 
     init {
@@ -71,6 +70,16 @@ class AiViewModel(application: Application) : AndroidViewModel(application) {
             (container.entitlements.aiPerDay(plan.value) - used).coerceAtLeast(0)
     }
 
+    /**
+     * The render this tab edits: the current character's default body render
+     * (512 px). Null for uploaded skins — they have no public render URL.
+     */
+    fun sourceRenderUrl(ch: CharacterInfo?): String? {
+        if (ch == null || ch.source != CharacterSource.USERNAME) return null
+        val renderId = ch.renderId ?: return null
+        return Api.renderUrl(renderId, "body", 512)
+    }
+
     fun generate() {
         if (generating) return
         val userPrompt = prompt.trim()
@@ -79,7 +88,6 @@ class AiViewModel(application: Application) : AndroidViewModel(application) {
             return
         }
         error = null
-        engineNote = null
         viewModelScope.launch {
             if (remaining.value <= 0) {
                 refreshRemaining()
@@ -91,22 +99,28 @@ class AiViewModel(application: Application) : AndroidViewModel(application) {
             generating = true
             try {
                 val ch = character.value
-                val fullPrompt =
+                val referenceUrl = sourceRenderUrl(ch)
+                val fullPrompt = if (referenceUrl != null) {
+                    "Edit this Minecraft character render: $userPrompt. " +
+                        "Keep the same character, the same skin and outfit, and the " +
+                        "same Minecraft blocky style — only apply the requested change."
+                } else {
                     "$userPrompt, Minecraft blocky voxel character, full body, game render style"
-                val renderId = if (ch?.source == CharacterSource.USERNAME) ch.renderId else null
-                val referenceUrl = renderId?.let { Api.renderUrl(it, "body", 512) }
+                }
 
-                val rawBytes = generateWithEngineSelection(fullPrompt, referenceUrl, renderId)
+                val rawBytes = container.pollinationsEngine
+                    .generate(fullPrompt, referenceUrl)
+                    .getOrThrow()
 
-                // Engines return JPEG/PNG bytes; decode + re-encode to PNG so
-                // every history file is a real PNG.
+                // The engine returns JPEG/PNG bytes; decode + re-encode to PNG
+                // so every history file is a real PNG.
                 val bmp = BitmapFactory.decodeByteArray(rawBytes, 0, rawBytes.size)
                     ?: throw IOException("Bad image data")
                 val pngBytes = SkinBitmaps.bitmapToPngBytes(bmp)
                 val item = container.historyRepository.recordBytes(
                     pngBytes,
                     kind = "AI",
-                    title = "AI render",
+                    title = "AI edit",
                     subtitle = userPrompt,
                     sourceName = ch?.name ?: "Prompt only",
                     uniqueKey = "ai:${System.currentTimeMillis()}",
@@ -115,64 +129,10 @@ class AiViewModel(application: Application) : AndroidViewModel(application) {
                 refreshRemaining()
                 resultPath = item.filePath
             } catch (e: Exception) {
-                error = errorMessageFor(e)
+                error = app.getString(e.toErrorKind().messageRes)
             } finally {
                 generating = false
             }
         }
-    }
-
-    /**
-     * Gemini (user's key) first when a key exists; on ANY Gemini failure the
-     * free engine takes over and [engineNote] explains the switch. When both
-     * fail, the Gemini error wins if it is a quota/key problem, otherwise the
-     * free engine's failure is thrown.
-     */
-    private suspend fun generateWithEngineSelection(
-        fullPrompt: String,
-        referenceUrl: String?,
-        renderId: String?,
-    ): ByteArray {
-        val hasKey = container.userSettings.geminiKey() != null
-        if (!hasKey) {
-            return container.pollinationsEngine
-                .generate(fullPrompt, referenceUrl, null)
-                .getOrThrow()
-        }
-        val referenceBytes = renderId?.let { id ->
-            runCatching {
-                container.skinRepository.downloadBytes(Api.renderUrl(id, "body", 512))
-            }.getOrNull()
-        }
-        val geminiResult = container.geminiEngine.generate(fullPrompt, null, referenceBytes)
-        val geminiBytes = geminiResult.getOrNull()
-        if (geminiBytes != null) return geminiBytes
-
-        val geminiError = geminiResult.exceptionOrNull()
-        val freeResult = container.pollinationsEngine.generate(fullPrompt, referenceUrl, null)
-        val freeBytes = freeResult.getOrNull()
-        if (freeBytes != null) {
-            engineNote = app.getString(R.string.ai_fallback_note)
-            return freeBytes
-        }
-        // Both engines failed: prefer a quota/key explanation when there is one.
-        if (geminiError is AiEngineException &&
-            (geminiError.error == AiError.Quota || geminiError.error == AiError.BadKey)
-        ) {
-            throw geminiError
-        }
-        throw freeResult.exceptionOrNull() ?: geminiError ?: IOException("AI request failed")
-    }
-
-    private fun errorMessageFor(e: Throwable): String {
-        if (e is AiEngineException) {
-            return when (val err = e.error) {
-                AiError.Quota -> app.getString(R.string.ai_error_quota)
-                AiError.BadKey -> app.getString(R.string.ai_error_badkey)
-                AiError.Timeout -> app.getString(R.string.error_timeout)
-                is AiError.Other -> app.getString(err.cause.toErrorKind().messageRes)
-            }
-        }
-        return app.getString(e.toErrorKind().messageRes)
     }
 }
