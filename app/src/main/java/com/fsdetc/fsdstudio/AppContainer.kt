@@ -22,6 +22,14 @@ class AppContainer(context: Context) {
 
     val skinRepository: SkinRepository = SkinRepository(appContext)
     val characterStore: CharacterStore = CharacterStore(appContext)
+
+    /** Bundled premade-asset library for the Skin Editor (catalog + patches). */
+    val skinAssets: com.fsdetc.fsdstudio.data.SkinAssetRepository =
+        com.fsdetc.fsdstudio.data.SkinAssetRepository(appContext)
+
+    /** Saved finished skins from the Skin Editor. */
+    val wardrobe: com.fsdetc.fsdstudio.data.WardrobeStore =
+        com.fsdetc.fsdstudio.data.WardrobeStore(appContext)
     val entitlements: Entitlements = Entitlements(appContext)
     val userSettings: UserSettings = UserSettings(appContext)
     val downloadGate: DownloadGate = DownloadGate(entitlements)

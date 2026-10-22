@@ -47,7 +47,13 @@ class MainActivity : ComponentActivity() {
                 val mainVm: MainViewModel = viewModel()
                 val aiVm: AiViewModel = viewModel()
                 val historyVm: HistoryViewModel = viewModel()
-                FsdNavHost(mainVm = mainVm, aiVm = aiVm, historyVm = historyVm)
+                val editorVm: com.fsdetc.fsdstudio.viewmodel.SkinEditorViewModel = viewModel()
+                FsdNavHost(
+                    mainVm = mainVm,
+                    aiVm = aiVm,
+                    historyVm = historyVm,
+                    editorVm = editorVm,
+                )
             }
         }
     }
