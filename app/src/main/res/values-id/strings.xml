@@ -36,6 +36,7 @@
     <string name="error_generic">Terjadi kesalahan. Coba lagi.</string>
     <string name="error_load_failed">Tidak dapat memuat render ini. Periksa koneksimu dan coba lagi.</string>
     <string name="action_retry">Coba lagi</string>
+    <string name="action_back">Kembali</string>
 
     <!-- Library -->
     <string name="lib_button">Pustaka karakter</string>
