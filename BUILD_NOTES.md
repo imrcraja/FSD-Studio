@@ -411,3 +411,65 @@ the preview renderer uses the classic arm boxes.
   in all six values files (editor_*, tool_*, part_*, section_*, slot_*,
   home_editor_*, detail_edit_skin, action_save). versionCode / versionName
   NOT bumped (parent does it at build time).
+
+## V4.1 changes (shipping inside the V4 build, 2026-10-22)
+
+Owner testing feedback on V3.1: in the Studio tab the preview sat at the top
+of one long scrolling column and the sliders far below it — every adjustment
+meant scroll down → adjust → scroll up → check. Plus a bounded small-polish
+pass. No version bump here (rides inside the V4 build).
+
+### Studio tab — sticky preview + debounced live rendering
+- **Layout:** `StudioEditor` is now a `BoxWithConstraints` column: a PINNED
+  preview box at the top with height = **0.38 × available height** (never
+  scrolls), and below it a `LazyColumn` (weight 1, 12 dp spaced,
+  12/16 dp content padding) holding ALL controls — BgSelector, pose chips,
+  camera sliders, position sliders, the expandable joints section, the
+  shadow/cape/overlay toggles, the downloads-left line and the
+  Export/Reset row. Slider and result are now in the same view.
+- The preview keeps its render image + `WatermarkOverlay`; the no-character
+  and UPLOAD-source branches above the editor are untouched (upload skins
+  still get the honest flat preview). Entitlements (locked pose chips →
+  Plans), the export flow (still `DownloadGate.saveWithGate`, still built
+  from the LIVE draft values via `currentParams()`, never the snapshot) and
+  snackbar outcomes are unchanged — verified by diff against the pre-change
+  file.
+- **Debounce design:** `StudioSlider` is now fully controlled — it reports
+  every change, so the draft state (and value labels) update live while
+  dragging. The preview URL is built only from a snapshot
+  (`renderParams`/`renderBg`) refreshed by a `LaunchedEffect` keyed on the
+  full draft-parameter map + bg after a **350 ms** settle delay. Rationale:
+  one render request per settled position instead of one per drag frame —
+  the API-discipline rule survives, but the interaction feels live; settled
+  URLs are immutable so repeats hit Coil's cache. The old release-only
+  comments were replaced accordingly.
+
+### Polish fixes (one line each)
+- **PosesScreen:** upload-source flats grid items got a stable key
+  (`key = { it.first }`) — it was the only lazy list without one.
+- **LibraryScreen:** back-arrow content description was a hardcoded
+  `"Back"` literal; now `R.string.action_back` (localised).
+- **RenderDetailScreen:** same hardcoded `"Back"` literal →
+  `R.string.action_back`.
+- **SettingsScreen:** the account-card avatar `AsyncImage` had no
+  placeholder while the face render loads; it now sits on a themed
+  `surfaceVariant` background (clipped with the image).
+
+### Strings
+- ONE new key `action_back` ("Back" / वापस / পেছনে / واپس / Atrás /
+  Kembali), inserted after `action_retry` at the identical position in all
+  6 values files → **334 keys per file**, identical key order (verified by
+  hash), all XML parses, zero missing `R.string.*` (the single grep hit is
+  the pre-existing framework `android.R.string.ok`).
+
+### Deliberately left alone
+- HomeScreen / HistoryScreen cell images: they already sit on themed
+  `surfaceVariant` placeholder boxes, so no placeholder was added there.
+- `FramedImage` (Studio/detail previews) keeps plain `AsyncImage`: its
+  background (checkerboard/solid) is the placeholder and its onSuccess/
+  onError contract drives history recording — swapping in a loading
+  composable would be a behaviour change, out of scope for polish.
+- Settings radio rows (language/theme) still respond to the radio button
+  only, not the whole row — a behaviour change, not a spacing/placeholder
+  fix; noted, not touched.
+- DownloadGate.kt / Entitlements.kt untouched (mtimes predate this round).
