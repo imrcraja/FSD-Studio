@@ -30,6 +30,7 @@
     <string name="error_generic">Algo salió mal. Inténtalo de nuevo.</string>
     <string name="error_load_failed">No se pudo cargar este render. Revisa tu conexión y reinténtalo.</string>
     <string name="action_retry">Reintentar</string>
+    <string name="action_back">Atrás</string>
     <string name="lib_button">Biblioteca de personajes</string>
     <string name="lib_title">Biblioteca de personajes</string>
     <string name="lib_players">Jugadores</string>
