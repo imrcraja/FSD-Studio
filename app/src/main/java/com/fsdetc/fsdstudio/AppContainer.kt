@@ -3,9 +3,13 @@ package com.fsdetc.fsdstudio
 import android.content.Context
 import androidx.room.Room
 import com.fsdetc.fsdstudio.data.CharacterStore
+import com.fsdetc.fsdstudio.data.DownloadGate
 import com.fsdetc.fsdstudio.data.Entitlements
+import com.fsdetc.fsdstudio.data.GeminiEngine
 import com.fsdetc.fsdstudio.data.HistoryRepository
+import com.fsdetc.fsdstudio.data.PollinationsEngine
 import com.fsdetc.fsdstudio.data.SkinRepository
+import com.fsdetc.fsdstudio.data.UserSettings
 import com.fsdetc.fsdstudio.data.db.AppDatabase
 
 /** Tiny manual dependency container — no Hilt in V1, everything is created once here. */
@@ -16,6 +20,12 @@ class AppContainer(context: Context) {
     val skinRepository: SkinRepository = SkinRepository(appContext)
     val characterStore: CharacterStore = CharacterStore(appContext)
     val entitlements: Entitlements = Entitlements(appContext)
+    val userSettings: UserSettings = UserSettings(appContext)
+    val downloadGate: DownloadGate = DownloadGate(entitlements)
+
+    /** AI engines share the repository's long-timeout client. */
+    val pollinationsEngine: PollinationsEngine = PollinationsEngine(skinRepository.aiClient)
+    val geminiEngine: GeminiEngine = GeminiEngine(skinRepository.aiClient, userSettings)
 
     val database: AppDatabase by lazy {
         Room.databaseBuilder(appContext, AppDatabase::class.java, "fsd_studio.db").build()
