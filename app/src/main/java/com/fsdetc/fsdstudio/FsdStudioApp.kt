@@ -27,7 +27,8 @@ class FsdStudioApp : Application(), ImageLoaderFactory {
                     .maxSizeBytes(50L * 1024 * 1024)
                     .build()
             }
-            .crossfade(true)
+            // Avoid per-image crossfade animations to reduce extra compositing on low-end phones.
+            .crossfade(false)
             .build()
     }
 }
