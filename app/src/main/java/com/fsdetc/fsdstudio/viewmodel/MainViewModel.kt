@@ -8,13 +8,18 @@ import com.fsdetc.fsdstudio.FsdStudioApp
 import com.fsdetc.fsdstudio.R
 import com.fsdetc.fsdstudio.data.CharacterInfo
 import com.fsdetc.fsdstudio.data.DetailRequest
+import com.fsdetc.fsdstudio.data.DownloadGate
+import com.fsdetc.fsdstudio.data.Entitlements
 import com.fsdetc.fsdstudio.data.InvalidSkinException
+import com.fsdetc.fsdstudio.data.Plan
 import com.fsdetc.fsdstudio.data.PlayerNotFoundException
 import com.fsdetc.fsdstudio.data.SkinBitmaps
 import com.fsdetc.fsdstudio.data.db.HistoryItem
+import com.fsdetc.fsdstudio.data.toErrorKind
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
@@ -26,15 +31,51 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     private val app = application as FsdStudioApp
     private val container = app.container
 
+    /** Shared services the screens read limits/defaults from. */
+    val entitlements: Entitlements = container.entitlements
+    val downloadGate: DownloadGate = container.downloadGate
+
     val character: StateFlow<CharacterInfo?> = container.characterStore.character
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), null)
 
-    val isPro: StateFlow<Boolean> = container.entitlements.isPro
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), false)
+    val plan: StateFlow<Plan> = container.entitlements.plan
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), Plan.FREE)
+
+    /** Downloads left today; null = unlimited (paid plan). */
+    val downloadsLeft: StateFlow<Int?> = combine(
+        container.entitlements.plan,
+        container.entitlements.downloadsToday,
+    ) { plan, used ->
+        val limit = container.entitlements.downloadsPerDay(plan)
+        if (limit == Int.MAX_VALUE) null else (limit - used).coerceAtLeast(0)
+    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), null)
+
+    val defaultBgName: StateFlow<String> = container.userSettings.defaultBgName
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), "Transparent")
+
+    val defaultRenderSize: StateFlow<Int> = container.userSettings.defaultSize
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), 512)
 
     val recentHistory: StateFlow<List<HistoryItem>> = container.historyRepository.items
         .map { it.take(4) }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
+
+    // ------------------------------------------------------------ upgrade pop-up
+
+    /** The once-a-day gentle upgrade dialog (fired by the 3rd free download). */
+    val showUpgradePopup = MutableStateFlow(false)
+
+    init {
+        viewModelScope.launch {
+            container.downloadGate.thirdDownloadEvents.collect {
+                showUpgradePopup.value = true
+            }
+        }
+    }
+
+    fun dismissUpgradePopup() {
+        showUpgradePopup.value = false
+    }
 
     sealed interface SearchState {
         data object Idle : SearchState
@@ -66,9 +107,14 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             } catch (e: PlayerNotFoundException) {
                 searchState.value = SearchState.Error(app.getString(R.string.error_player_not_found))
             } catch (e: Exception) {
-                searchState.value = SearchState.Error(app.getString(R.string.error_network))
+                searchState.value = SearchState.Error(app.getString(e.toErrorKind().messageRes))
             }
         }
+    }
+
+    /** Library: a static character (Mr FSD / Steve / Alex) becomes current directly. */
+    fun selectCharacter(info: CharacterInfo) {
+        viewModelScope.launch { container.characterStore.save(info) }
     }
 
     fun importSkin(uri: Uri) {
@@ -96,11 +142,12 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         title: String,
         subtitle: String,
         sourceName: String,
+        kind: String = "POSE",
     ): HistoryItem {
         val bytes = container.skinRepository.downloadBytes(url)
         return container.historyRepository.recordBytes(
             bytes,
-            kind = "POSE",
+            kind = kind,
             title = title,
             subtitle = subtitle,
             sourceName = sourceName,
@@ -108,9 +155,15 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         )
     }
 
-    fun recordRemoteInBackground(url: String, title: String, subtitle: String, sourceName: String) {
+    fun recordRemoteInBackground(
+        url: String,
+        title: String,
+        subtitle: String,
+        sourceName: String,
+        kind: String = "POSE",
+    ) {
         viewModelScope.launch {
-            runCatching { ensureRemoteHistory(url, title, subtitle, sourceName) }
+            runCatching { ensureRemoteHistory(url, title, subtitle, sourceName, kind) }
         }
     }
 
