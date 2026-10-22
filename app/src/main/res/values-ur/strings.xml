@@ -336,4 +336,30 @@
     <string name="editor_switch_title">دوبارہ شروع کریں؟</string>
     <string name="editor_switch_body">اس سے آپ کی موجودہ پینٹنگ اور لباس بدل جائے گا۔</string>
     <string name="editor_switch_confirm">بدل دیں</string>
+    <!-- Totem Maker (V5) -->
+    <string name="home_totem_title">ٹوٹم میکر</string>
+    <string name="home_totem_subtitle">کسی بھی اسکن کو اپنا ٹوٹم آف انڈائنگ بنائیں</string>
+    <string name="totem_title">ٹوٹم میکر</string>
+    <string name="totem_source_title">اسکن</string>
+    <string name="totem_use_current">موجودہ کردار استعمال کریں</string>
+    <string name="totem_upload">اسکن PNG اپ لوڈ کریں</string>
+    <string name="totem_username_label">Minecraft صارف نام</string>
+    <string name="totem_fetch">حاصل کریں</string>
+    <string name="totem_fetching">لائی جا رہی ہے…</string>
+    <string name="totem_need_skin">موب ماڈل ٹوٹم نہیں بن سکتے — کوئی پلیئر اسکن منتخب کریں یا اپ لوڈ کریں۔</string>
+    <string name="totem_no_skin">ابھی کوئی اسکن نہیں — شروع کرنے کے لیے صارف نام حاصل کریں یا اسکن اپ لوڈ کریں۔</string>
+    <string name="totem_style_title">انداز</string>
+    <string name="totem_style_mini">منی می</string>
+    <string name="totem_style_full">پورا جسم</string>
+    <string name="totem_preview_title">پیش نظارہ</string>
+    <string name="totem_download_png">PNG ڈاؤن لوڈ کریں</string>
+    <string name="totem_pack_title">ٹیکسچر پیک</string>
+    <string name="totem_edition_title">ایڈیشن</string>
+    <string name="totem_edition_java">Java</string>
+    <string name="totem_edition_bedrock">Bedrock · Beta</string>
+    <string name="totem_version_title">Minecraft ورژن</string>
+    <string name="totem_download_pack">پیک ڈاؤن لوڈ کریں</string>
+    <string name="totem_pack_pro_note">پیک Pro اور Max کی سہولت ہے — اوپر والا PNG ڈاؤن لوڈ سب کے لیے مفت رہتا ہے۔</string>
+    <string name="totem_saved_downloads">Downloads/FSD Studio میں محفوظ ہو گیا</string>
+    <string name="totem_loading">اسکن لوڈ ہو رہی ہے…</string>
 </resources>
