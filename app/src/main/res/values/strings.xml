@@ -93,4 +93,22 @@
     <string name="about_version">FSD Studio v%1$s (V1 test build)</string>
     <string name="about_credits">Renders: skinrender.dev free API · AI images: Pollinations free tier · Skins &amp; profiles: Mojang</string>
     <string name="about_disclaimer">Unofficial fan-made tool. Not affiliated with Mojang AB or Microsoft.</string>
+
+    <!-- Pro benefits -->
+    <string name="pro_headline">Unlock the full studio</string>
+    <string name="pro_all_poses">All 18 poses unlocked</string>
+    <string name="pro_hd">HD renders up to 1024 px</string>
+    <string name="pro_ai_50">50 AI renders every day</string>
+    <string name="pro_multi">Multi-character scenes (coming soon)</string>
+    <string name="pro_backgrounds">Premium background pack</string>
+    <string name="pro_pfp">PFP Pack — Discord, YouTube and WhatsApp sizes (coming soon)</string>
+    <string name="pro_noads">No ads (at launch)</string>
+
+    <!-- Language + settings extras -->
+    <string name="language_english">English</string>
+    <string name="language_hindi">Hindi</string>
+    <string name="language_bangla">Bangla</string>
+    <string name="settings_theme_note">FSD purple dark theme</string>
+    <string name="settings_cache_size">Cache size: %1$s</string>
+    <string name="settings_cache_clear">Clear image cache</string>
 </resources>
