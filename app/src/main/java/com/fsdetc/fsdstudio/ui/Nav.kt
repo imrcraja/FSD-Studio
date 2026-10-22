@@ -50,6 +50,7 @@ object Routes {
     const val DETAIL = "detail"
     const val LIBRARY = "library"
     const val EDITOR = "editor"
+    const val TOTEM = "totem"
 }
 
 private data class Tab(val route: String, val labelRes: Int, val icon: ImageVector)
@@ -69,6 +70,7 @@ fun FsdNavHost(
     aiVm: AiViewModel,
     historyVm: HistoryViewModel,
     editorVm: com.fsdetc.fsdstudio.viewmodel.SkinEditorViewModel,
+    totemVm: com.fsdetc.fsdstudio.viewmodel.TotemViewModel,
 ) {
     val nav = rememberNavController()
     val backStack by nav.currentBackStackEntryAsState()
@@ -135,6 +137,7 @@ fun FsdNavHost(
                             onOpenPro = { nav.navigate(Routes.PRO) },
                             onOpenLibrary = { nav.navigate(Routes.LIBRARY) },
                             onOpenEditor = { nav.navigate(Routes.EDITOR) },
+                            onOpenTotem = { nav.navigate(Routes.TOTEM) },
                         )
                     }
                     composable(Routes.POSES) {
@@ -211,6 +214,14 @@ fun FsdNavHost(
                         SkinEditorScreen(
                             mainVm = mainVm,
                             editorVm = editorVm,
+                            onBack = { nav.popBackStack() },
+                            onOpenPro = { nav.navigate(Routes.PRO) },
+                        )
+                    }
+                    composable(Routes.TOTEM) {
+                        TotemMakerScreen(
+                            mainVm = mainVm,
+                            totemVm = totemVm,
                             onBack = { nav.popBackStack() },
                             onOpenPro = { nav.navigate(Routes.PRO) },
                         )
