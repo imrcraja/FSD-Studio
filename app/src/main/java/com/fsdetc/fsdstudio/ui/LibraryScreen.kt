@@ -100,6 +100,20 @@ fun LibraryScreen(
                     onClick = { onSelectMob(mob) },
                 )
             }
+            item(span = { GridItemSpan(maxLineSpan) }) {
+                SectionTitle(
+                    stringResource(R.string.lib_mobs_more),
+                    modifier = Modifier.padding(top = 10.dp),
+                )
+            }
+            items(LibraryCatalog.MOB_CHARACTERS, key = { "mobchar:${it.label}" }) { player ->
+                LibraryCell(
+                    thumbModel = Api.renderUrl(player.thumbId, "body", 256),
+                    label = player.label,
+                    badge = player.badge,
+                    onClick = { onSelectPlayer(player) },
+                )
+            }
         }
     }
 }

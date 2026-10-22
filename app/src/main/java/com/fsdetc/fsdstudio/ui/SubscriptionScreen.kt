@@ -330,7 +330,7 @@ private fun CompareTable() {
                 ),
                 header = true,
             )
-            CompareRow(stringResource(R.string.cmp_poses), listOf("12", "30", "30"))
+            CompareRow(stringResource(R.string.cmp_poses), listOf("18", "60", "60"))
             CompareRow(stringResource(R.string.cmp_hd), listOf("—", "✓", "✓"))
             CompareRow(stringResource(R.string.cmp_downloads), listOf("5", "∞", "∞"))
             CompareRow(stringResource(R.string.cmp_ai), listOf("3", "3", "50"))
