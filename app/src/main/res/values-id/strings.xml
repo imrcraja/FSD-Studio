@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">FSD Studio</string>
+    <string name="app_tagline">Studio Skin Minecraft</string>
+
+    <!-- Bottom navigation -->
+    <string name="tab_home">Beranda</string>
+    <string name="tab_poses">Pose</string>
+    <string name="tab_ai">AI</string>
+    <string name="tab_history">Riwayat</string>
+    <string name="tab_settings">Pengaturan</string>
+
+    <!-- Home -->
+    <string name="home_username_label">Nama pengguna Minecraft</string>
+    <string name="home_username_hint">cth. Mr_FSD</string>
+    <string name="home_search">Cari</string>
+    <string name="home_upload">Unggah skin</string>
+    <string name="home_or">atau</string>
+    <string name="home_empty_title">Mulai dengan karakter</string>
+    <string name="home_empty_body">Cari nama pengguna Minecraft apa pun untuk memuat skin mereka, atau unggah file skin 64×64 milikmu sendiri. Lalu buat render pose dan karya AI dari karakter itu.</string>
+    <string name="home_current_character">Karakter saat ini</string>
+    <string name="home_recent">Render terbaru</string>
+    <string name="home_searching">Mencari…</string>
+    <string name="error_player_not_found">Pemain tidak ditemukan. Periksa ejaan dan coba lagi.</string>
+    <string name="error_upload_invalid">File itu bukan skin Minecraft yang valid (butuh PNG 64×64 atau 64×32).</string>
+    <string name="error_upload_failed">Tidak dapat membaca file itu.</string>
+    <string name="source_username">Nama pengguna</string>
+    <string name="source_upload">Diunggah</string>
+    <string name="model_classic">Klasik</string>
+    <string name="model_slim">Ramping</string>
+
+    <!-- Errors -->
+    <string name="error_offline">Tidak ada koneksi internet. Periksa Wi-Fi atau data seluler dan coba lagi.</string>
+    <string name="error_timeout">Server terlalu lama merespons. Coba lagi.</string>
+    <string name="error_server_busy">Layanan render sedang sibuk saat ini. Tunggu sebentar dan coba lagi.</string>
+    <string name="error_generic">Terjadi kesalahan. Coba lagi.</string>
+    <string name="error_load_failed">Tidak dapat memuat render ini. Periksa koneksimu dan coba lagi.</string>
+    <string name="action_retry">Coba lagi</string>
+
+    <!-- Library -->
+    <string name="lib_button">Pustaka karakter</string>
+    <string name="lib_title">Pustaka Karakter</string>
+    <string name="lib_players">Pemain</string>
+    <string name="lib_mobs">Mob</string>
+
+    <!-- Poses -->
+    <string name="poses_title">Pose</string>
+    <string name="poses_no_character">Muat karakter di tab Beranda dulu — cari nama pengguna atau unggah skin.</string>
+    <string name="poses_upload_note">Skin yang diunggah menampilkan render datar. Render pose dan referensi karakter AI membutuhkan skin publik dari nama pengguna.</string>
+    <string name="flat_front">Depan</string>
+    <string name="flat_back">Belakang</string>
+    <string name="flat_face">Wajah</string>
+    <string name="pro_badge">PRO</string>
+
+    <!-- Render detail -->
+    <string name="detail_background">Latar belakang</string>
+    <string name="detail_size">Ukuran</string>
+    <string name="detail_pose">Pose</string>
+    <string name="bg_transparent">Transparan</string>
+    <string name="bg_dark">Gelap</string>
+    <string name="bg_purple">Ungu</string>
+    <string name="bg_white">Putih</string>
+    <string name="action_download">Unduh</string>
+    <string name="action_share">Bagikan</string>
+    <string name="action_delete">Hapus</string>
+    <string name="saved_to_gallery">Disimpan ke Pictures/FSD Studio</string>
+    <string name="saved_failed">Tidak dapat menyimpan gambar.</string>
+    <string name="pro_locked_size">HD 1024 butuh Pro atau Max</string>
+
+    <!-- Downloads -->
+    <string name="dl_left_today">Sisa %1$d unduhan hari ini</string>
+    <string name="dl_unlimited">Unduhan tanpa batas</string>
+    <string name="dl_limit_reached">Unduhan gratis harian sudah habis. Gratis mencakup 5 unduhan sehari — Pro dan Max tanpa batas.</string>
+
+    <!-- Upgrade pop-up -->
+    <string name="popup_title">Menikmati FSD Studio?</string>
+    <string name="popup_body">Pro memberimu unduhan tanpa batas, semua 30 pose dan HD.</string>
+    <string name="popup_see_plans">Lihat paket</string>
+    <string name="popup_not_now">Nanti saja</string>
+
+    <!-- AI -->
+    <string name="ai_title">Edit AI</string>
+    <string name="ai_prompt_label">Jelaskan editmu</string>
+    <string name="ai_prompt_hint">cth. tambahkan pedang berlian di tangan, latar matahari terbenam</string>
+    <string name="ai_generate">Terapkan edit</string>
+    <string name="ai_generating">Menerapkan editmu… ini bisa memakan waktu hingga satu menit</string>
+    <string name="ai_remaining">Sisa %1$d edit AI gratis hari ini</string>
+    <string name="ai_limit_reached">Batas edit AI harian tercapai. Max menaikkannya menjadi 50 per hari.</string>
+    <string name="ai_reference_note">Karaktermu saat ini digunakan sebagai referensi visual.</string>
+    <string name="ai_reference_upload_note">Skin yang diunggah: edit hanya dari deskripsimu (tidak ada render karakter untuk diedit).</string>
+    <string name="ai_error">Edit gagal. Layanan AI gratis mungkin sibuk — coba lagi.</string>
+    <string name="ai_retry">Coba lagi</string>
+    <string name="ai_need_character">Muat karakter di tab Beranda dulu.</string>
+    <string name="ai_need_prompt">Jelaskan editmu dulu.</string>
+
+    <!-- History -->
+    <string name="history_title">Riwayat</string>
+    <string name="history_empty">Belum ada render. Buka pose atau buat karya AI dan akan muncul di sini.</string>
+
+    <!-- Plans / subscription -->
+    <string name="pro_headline">Buka kunci studio lengkap</string>
+    <string name="coming_soon">Segera hadir</string>
+    <string name="sub_title">Paket FSD Studio</string>
+    <string name="sub_current_plan">Paket saat ini: %1$s</string>
+    <string name="sub_billing_weekly">Mingguan</string>
+    <string name="sub_billing_monthly">Bulanan</string>
+    <string name="sub_per_week">/minggu</string>
+    <string name="sub_per_month">/bulan</string>
+    <string name="sub_best_badge">Terbaik</string>
+    <string name="sub_current_badge">Saat ini</string>
+    <string name="sub_choose_pro">Pilih Pro</string>
+    <string name="sub_choose_max">Pilih Max</string>
+    <string name="sub_view_plans">Lihat paket</string>
+    <string name="sub_purchase_note">Pembelian dibuka saat peluncuran. Build uji ini menjaga paket tetap terkunci — tidak ada pembayaran yang diambil.</string>
+    <string name="sub_compare">Bandingkan paket</string>
+    <string name="sub_feat_poses">Semua 30 pose</string>
+    <string name="sub_feat_hd">Render HD (1024 px)</string>
+    <string name="sub_feat_downloads">Unduhan tanpa batas</string>
+    <string name="sub_feat_backgrounds">Latar belakang premium</string>
+    <string name="sub_feat_ai">Render AI</string>
+    <string name="sub_feat_ai_pro_value">3/hari (dasar)</string>
+    <string name="sub_feat_ai_max_value">50/hari + prioritas</string>
+    <string name="sub_feat_noads">Tanpa iklan</string>
+    <string name="sub_at_launch">(saat peluncuran)</string>
+    <string name="plan_name_free">Gratis</string>
+    <string name="plan_name_pro">Pro</string>
+    <string name="plan_name_max">Max</string>
+    <string name="plan_price_pro_weekly">৳49</string>
+    <string name="plan_price_pro_monthly">৳99</string>
+    <string name="plan_price_max_weekly">৳79</string>
+    <string name="plan_price_max_monthly">৳169</string>
+    <string name="cmp_poses">Pose</string>
+    <string name="cmp_hd">HD 1024</string>
+    <string name="cmp_downloads">Unduhan / hari</string>
+    <string name="cmp_ai">Render AI / hari</string>
+
+    <!-- Settings -->
+    <string name="settings_title">Pengaturan</string>
+    <string name="settings_language">Bahasa</string>
+    <string name="settings_theme">Tema</string>
+    <string name="theme_purple">Ungu FSD</string>
+    <string name="theme_midnight">Tengah Malam</string>
+    <string name="theme_light">Terang</string>
+    <string name="settings_defaults">Default render</string>
+    <string name="settings_default_bg">Latar belakang default</string>
+    <string name="settings_default_size">Ukuran default</string>
+    <string name="settings_ai">AI</string>
+    <string name="settings_cache">Cache gambar</string>
+    <string name="settings_cache_cleared">Cache dibersihkan</string>
+    <string name="settings_about">Tentang</string>
+    <string name="settings_links">FSD ETC</string>
+    <string name="link_youtube">YouTube</string>
+    <string name="link_discord">Discord</string>
+    <string name="link_website">Situs web</string>
+    <string name="about_version">FSD Studio v%1$s (build uji)</string>
+    <string name="about_credits">Render: API gratis skinrender.dev · Gambar AI: tier gratis Pollinations · Skin &amp; profil: Mojang</string>
+    <string name="about_disclaimer">Alat tidak resmi buatan penggemar. Tidak berafiliasi dengan Mojang AB atau Microsoft.</string>
+
+    <!-- Language + settings extras -->
+    <string name="language_english">English</string>
+    <string name="language_hindi">हिन्दी</string>
+    <string name="language_bangla">বাংলা</string>
+    <string name="settings_cache_size">Ukuran cache: %1$s</string>
+    <string name="settings_cache_clear">Bersihkan cache gambar</string>
+
+    <!-- Studio tab -->
+    <string name="tab_studio">Studio</string>
+    <string name="studio_title">Studio Karakter</string>
+    <string name="studio_go_home">Ke Beranda</string>
+    <string name="studio_upload_note">Studio membutuhkan skin online. Skin yang diunggah menampilkan pratinjau datar di sini — muat karakter nama pengguna untuk memodelkan pose, kamera, dan sendi.</string>
+    <string name="studio_pose">Pose</string>
+    <string name="studio_camera">Kamera</string>
+    <string name="studio_position">Posisi</string>
+    <string name="studio_advanced">Sendi tubuh</string>
+    <string name="studio_yaw">Yaw</string>
+    <string name="studio_pitch">Pitch</string>
+    <string name="studio_roll">Roll</string>
+    <string name="studio_zoom">Zoom</string>
+    <string name="studio_offset_x">Offset X</string>
+    <string name="studio_offset_y">Offset Y</string>
+    <string name="studio_head_yaw">Yaw kepala</string>
+    <string name="studio_head_pitch">Pitch kepala</string>
+    <string name="studio_arm_left">Pitch lengan kiri</string>
+    <string name="studio_arm_right">Pitch lengan kanan</string>
+    <string name="studio_leg_left">Pitch kaki kiri</string>
+    <string name="studio_leg_right">Pitch kaki kanan</string>
+    <string name="studio_shadow">Bayangan</string>
+    <string name="studio_cape">Jubah</string>
+    <string name="studio_layers">Lapisan skin</string>
+    <string name="studio_reset">Atur ulang</string>
+    <string name="studio_export">Ekspor ke galeri</string>
+
+    <!-- Pose library labels -->
+    <string name="pose_default">Default</string>
+    <string name="pose_walk">Berjalan</string>
+    <string name="pose_run">Berlari</string>
+    <string name="pose_wave">Melambai</string>
+    <string name="pose_sit">Duduk</string>
+    <string name="pose_sneak">Menyusup</string>
+    <string name="pose_point">Menunjuk</string>
+    <string name="pose_dab">Dab</string>
+    <string name="pose_zombie">Zombie</string>
+    <string name="pose_tpose">T-Pose</string>
+    <string name="pose_cheer">Bersorak</string>
+    <string name="pose_think">Berpikir</string>
+    <string name="pose_flex">Pamer Otot</string>
+    <string name="pose_salute">Hormat</string>
+    <string name="pose_dance">Menari</string>
+    <string name="pose_punch">Memukul</string>
+    <string name="pose_shrug">Mengangkat Bahu</string>
+    <string name="pose_jump">Melompat</string>
+    <string name="pose_hero_closeup">Close-Up Pahlawan</string>
+    <string name="pose_side_profile">Profil Samping</string>
+    <string name="pose_back_view">Tampak Belakang</string>
+    <string name="pose_walk_stride">Langkah Berjalan</string>
+    <string name="pose_run_stride">Langkah Berlari</string>
+    <string name="pose_dance_freeze">Beku Menari</string>
+    <string name="pose_look_left">Lihat Kiri</string>
+    <string name="pose_look_right">Lihat Kanan</string>
+    <string name="pose_look_up">Lihat Atas</string>
+    <string name="pose_hero_angle">Sudut Pahlawan</string>
+    <string name="pose_top_view">Tampak Atas</string>
+    <string name="pose_shadow_stand">Berdiri Bayangan</string>
+
+    <!-- Account (Settings) -->
+    <string name="settings_account">Akun</string>
+    <string name="account_guest">Kreator tamu</string>
+    <string name="account_user_id">User ID</string>
+    <string name="account_copy">Salin</string>
+    <string name="account_user_id_copied">User ID disalin</string>
+    <string name="account_logout">Keluar</string>
+    <string name="account_logout_title">Keluar?</string>
+    <string name="account_logout_body">Karakter, paket, dan pengaturanmu kembali ke default. Riwayat, penghitung unduhan, dan User ID kamu tetap disimpan.</string>
+    <string name="account_logged_out">Sudah keluar</string>
+    <string name="account_reset">Atur ulang data aplikasi</string>
+    <string name="account_reset_title">Atur ulang semua data aplikasi?</string>
+    <string name="account_reset_body">Ini menghapus semuanya — karakter, paket, riwayat, pengaturan, dan cache. Ini tidak dapat dibatalkan.</string>
+    <string name="account_reset_done">Data aplikasi dibersihkan</string>
+    <string name="action_cancel">Batal</string>
+    <string name="settings_ai_note">Edit AI sudah bawaan — tidak perlu pengaturan.</string>
+    <string name="ai_editing_this">Mengedit render ini</string>
+
+    <!-- Tutorial -->
+    <string name="settings_tutorial">Tutorial</string>
+    <string name="tut_replay">Putar ulang tutorial</string>
+    <string name="tut_skip">Lewati</string>
+    <string name="tut_next">Berikutnya</string>
+    <string name="tut_start">Mulai</string>
+    <string name="tut1_title">Selamat datang di FSD Studio</string>
+    <string name="tut1_body">Buat render pose dan karya AI dari karakter Minecraft apa pun — langsung dari ponselmu.</string>
+    <string name="tut2_title">Temukan karaktermu</string>
+    <string name="tut2_body">Cari nama pengguna Minecraft apa pun di tab Beranda, atau unggah file skin milikmu sendiri.</string>
+    <string name="tut3_title">Pose &amp; Studio</string>
+    <string name="tut3_body">Buka pose untuk merendernya, atau gunakan tab Studio untuk memposekan karaktermu sendiri — kamera, sendi, dan lainnya.</string>
+    <string name="tut4_title">AI &amp; unduhan</string>
+    <string name="tut4_body">Buat karya AI di tab AI. Kamu mendapat 5 unduhan gratis sehari — Pro dan Max membuka unduhan tanpa batas, semua pose, dan lebih banyak AI.</string>
+
+    <!-- More languages (native names, identical in every locale file) -->
+    <string name="language_urdu">اردو</string>
+    <string name="language_spanish">Español</string>
+    <string name="language_indonesian">Bahasa Indonesia</string>
+</resources>
