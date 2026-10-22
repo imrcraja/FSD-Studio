@@ -12,22 +12,10 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
-/** The three subscription tiers. Prices are display-only in Settings/subscription copy. */
+/** Subscription tiers retained for compatibility; every tier is unlocked in this build. */
 enum class Plan { FREE, PRO, MAX }
 
-/**
- * The single entitlement switch for the whole app, plus the local daily counters
- * (AI generations and gallery downloads).
- *
- * The plan is stored in DataStore key `plan` (default [Plan.FREE]). There is
- * deliberately no purchase flow in this build — purchases open at launch and
- * every locked UI reads this one flow.
- *
- * V1 migration: the old `is_pro` boolean is honoured when no `plan` value exists
- * yet (is_pro = true → PRO).
- *
- * Counters are date-keyed (local date) and reset automatically at local midnight.
- */
+/** All in-app features are unlocked. Daily counters remain for local usage history only. */
 class Entitlements(private val context: Context) {
 
     private val planKey = stringPreferencesKey("plan")
@@ -35,19 +23,11 @@ class Entitlements(private val context: Context) {
     private val aiDateKey = stringPreferencesKey("ai_count_date")
     private val aiCountKey = intPreferencesKey("ai_count")
 
-    val plan: Flow<Plan> = context.dataStore.data.map { p ->
-        val stored = p[planKey]
-        when {
-            stored != null -> runCatching { Plan.valueOf(stored) }.getOrDefault(Plan.FREE)
-            // V1 → V2 migration: a stored is_pro=true becomes the PRO tier.
-            p[legacyIsProKey] == true -> Plan.PRO
-            else -> Plan.FREE
-        }
-    }
+    /** Existing screens keep working, while every feature gate sees MAX access. */
+    val plan: Flow<Plan> = context.dataStore.data.map { Plan.MAX }
 
-    suspend fun currentPlan(): Plan = plan.first()
+    suspend fun currentPlan(): Plan = Plan.MAX
 
-    /** Forget the stored plan (log out) — the next read falls back to FREE. */
     suspend fun resetPlan() {
         context.dataStore.edit { p ->
             p.remove(planKey)
@@ -55,33 +35,16 @@ class Entitlements(private val context: Context) {
         }
     }
 
-    // ------------------------------------------------------------ plan limits
+    fun poseUnlocked(pose: PoseDef, plan: Plan): Boolean = true
 
-    /**
-     * Pose access is data-driven since V3: a [PoseDef] carries its own `free`
-     * flag — FREE-plan users get exactly the free poses, Pro/Max get all.
-     */
-    fun poseUnlocked(pose: PoseDef, plan: Plan): Boolean =
-        pose.free || plan != Plan.FREE
+    /** Highest practical render size supported by the existing render service. */
+    fun maxRenderSize(plan: Plan): Int = 1024
 
-    /** Largest render size the plan may request. */
-    fun maxRenderSize(plan: Plan): Int = if (plan == Plan.FREE) 512 else 1024
+    fun downloadsPerDay(plan: Plan): Int = Int.MAX_VALUE
 
-    /** Gallery downloads per day; paid plans are unlimited. */
-    fun downloadsPerDay(plan: Plan): Int =
-        if (plan == Plan.FREE) FREE_DOWNLOADS_PER_DAY else Int.MAX_VALUE
+    fun aiPerDay(plan: Plan): Int = Int.MAX_VALUE
 
-    /** AI generations per day: FREE 3, PRO 3 (basic), MAX 50. */
-    fun aiPerDay(plan: Plan): Int = when (plan) {
-        Plan.FREE -> 3
-        Plan.PRO -> 3
-        Plan.MAX -> 50
-    }
-
-    /** Priority/boost AI treatment is a MAX-only perk. */
-    fun canUseAiBoost(plan: Plan): Boolean = plan == Plan.MAX
-
-    // ------------------------------------------------------------ AI counter
+    fun canUseAiBoost(plan: Plan): Boolean = true
 
     private fun today(): String = SimpleDateFormat("yyyy-MM-dd", Locale.US).format(Date())
 
@@ -99,18 +62,14 @@ class Entitlements(private val context: Context) {
         }
     }
 
-    // ------------------------------------------------------------ download counter
-
     private fun dlKey(date: String) = intPreferencesKey("dl_$date")
     private fun popupKey(date: String) = booleanPreferencesKey("popup_$date")
 
-    /** Today's successful gallery downloads (0 once the date rolls over). */
     val downloadsToday: Flow<Int> = context.dataStore.data.map { it[dlKey(today())] ?: 0 }
 
     suspend fun downloadsUsedToday(): Int =
         context.dataStore.data.first()[dlKey(today())] ?: 0
 
-    /** Increment today's counter and return the new total. */
     suspend fun recordDownload(): Int {
         val key = dlKey(today())
         var total = 0
@@ -130,6 +89,6 @@ class Entitlements(private val context: Context) {
     }
 
     companion object {
-        const val FREE_DOWNLOADS_PER_DAY = 5
+        const val FREE_DOWNLOADS_PER_DAY = Int.MAX_VALUE
     }
 }
