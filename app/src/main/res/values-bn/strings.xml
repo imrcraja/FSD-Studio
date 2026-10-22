@@ -42,6 +42,7 @@
     <string name="lib_title">ক্যারেক্টর লাইব্রেরি</string>
     <string name="lib_players">প্লেয়ার্স</string>
     <string name="lib_mobs">মবস</string>
+    <string name="lib_mobs_more">মবস ও আরও</string>
 
     <!-- Poses -->
     <string name="poses_title">পোজ</string>
@@ -74,7 +75,7 @@
 
     <!-- Upgrade pop-up -->
     <string name="popup_title">FSD Studio ভালো লাগছে?</string>
-    <string name="popup_body">Pro আপনাকে আনলিমিটেড ডাউনলোড, সব 30টি পোজ ও HD দেয়।</string>
+    <string name="popup_body">Pro আপনাকে আনলিমিটেড ডাউনলোড, সব 60টি পোজ ও HD দেয়।</string>
     <string name="popup_see_plans">প্ল্যান দেখুন</string>
     <string name="popup_not_now">এখন নয়</string>
 
@@ -113,7 +114,7 @@
     <string name="sub_view_plans">প্ল্যান দেখুন</string>
     <string name="sub_purchase_note">লঞ্চে কেনাকাটা খুলবে। এই টেস্ট বিল্ড প্ল্যান লক রাখে — কোনো পেমেন্ট নেওয়া হয় না।</string>
     <string name="sub_compare">প্ল্যান তুলনা করুন</string>
-    <string name="sub_feat_poses">সব 30টি পোজ</string>
+    <string name="sub_feat_poses">সব 60টি পোজ</string>
     <string name="sub_feat_hd">HD রেন্ডার (1024 px)</string>
     <string name="sub_feat_downloads">আনলিমিটেড ডাউনলোড</string>
     <string name="sub_feat_backgrounds">প্রিমিয়াম ব্যাকগ্রাউন্ড</string>
@@ -221,6 +222,36 @@
     <string name="pose_hero_angle">হিরো অ্যাঙ্গেল</string>
     <string name="pose_top_view">উপরের দৃশ্য</string>
     <string name="pose_shadow_stand">শ্যাডো স্ট্যান্ড</string>
+    <string name="pose_walk_quarter">হাঁটার ধাপ</string>
+    <string name="pose_run_start">দৌড়ের শুরু</string>
+    <string name="pose_look_down">নিচে তাকান</string>
+    <string name="pose_three_quarter">তির্যক দৃশ্য</string>
+    <string name="pose_sit_relaxed">আরামে বসা</string>
+    <string name="pose_greet_bust">অভিবাদন ক্লোজ-আপ</string>
+    <string name="pose_walk_late">লম্বা পদক্ষেপ</string>
+    <string name="pose_run_late">শেষ স্প্রিন্ট</string>
+    <string name="pose_dance_quarter">নাচের বিট</string>
+    <string name="pose_dance_late">নাচের সমাপ্তি</string>
+    <string name="pose_zombie_walk">জম্বি হাঁটা</string>
+    <string name="pose_jump_peak">লাফের চূড়া</string>
+    <string name="pose_sneak_peek">উঁকি</string>
+    <string name="pose_hero_low">নিচ থেকে হিরো</string>
+    <string name="pose_flex_bust">ফ্লেক্স ক্লোজ-আপ</string>
+    <string name="pose_think_bust">চিন্তকের ক্লোজ-আপ</string>
+    <string name="pose_salute_bust">স্যালুট ক্লোজ-আপ</string>
+    <string name="pose_point_bust">ইশারা ক্লোজ-আপ</string>
+    <string name="pose_dab_bust">ড্যাব ক্লোজ-আপ</string>
+    <string name="pose_shrug_bust">শ্রাগ ক্লোজ-আপ</string>
+    <string name="pose_face_closeup">মুখের ক্লোজ-আপ</string>
+    <string name="pose_back_quarter">পেছনের তির্যক দৃশ্য</string>
+    <string name="pose_over_shoulder">কাঁধের উপর দিয়ে</string>
+    <string name="pose_tiny">ছোট্ট</string>
+    <string name="pose_action_tilt">অ্যাকশন টিল্ট</string>
+    <string name="pose_spin_tpose">ঘূর্ণন টি-পোজ</string>
+    <string name="pose_shadow_dance">ছায়া নাচ</string>
+    <string name="pose_power_punch">পাওয়ার পাঞ্চ</string>
+    <string name="pose_big_cheer">বড় উল্লাস</string>
+    <string name="pose_sit_view">বসা দৃশ্য</string>
 
     <!-- Account (Settings) -->
     <string name="settings_account">অ্যাকাউন্ট</string>
