@@ -105,3 +105,137 @@ resource references the diamond or the unchosen flat-F image.
   at the ViewModel boundary so IO failures surface as UI errors, not crashes.
 - No fake claims: no R8/shrink tuning or baseline profiles were added in V2;
   the wins above are the request-size, cache and error-handling changes.
+
+## V2 CI result (2026-10-22)
+- 30 changed/new files uploaded via web UI (8 "V2 update" commits), ProScreen.kt deleted (9d7ead1). Final run #13 (39703789301): SUCCESS in 1m 27s.
+- V2 APK verified locally and delivered as ~/workspace/your_files/FSD-Studio-V2.apk. Gemini verdict stands: free-tier image quota returns 429 on the owner's key (tested gemini-2.5-flash-image, gemini-3.1-flash-image, gemini-3.1-flash-lite-image) — V2 ships Pollinations as the free engine + optional user-supplied Gemini key in Settings.
+
+## V3 changes (versionCode 3 / versionName "1.2", 2026-10-22)
+
+Owner testing feedback round + a spec amendment (owner decision) that removed
+the user-supplied Gemini key and turned the AI tab into edit mode.
+
+### Bug fixes
+- **Monthly price bug (SubscriptionScreen):** the billing toggle's state was
+  wired per-card, so tapping "Monthly" could leave prices showing the weekly
+  values. Now ONE hoisted `billingPeriod` (rememberSaveable) drives all four
+  values — Pro ৳49/Max ৳79 "/week" or Pro ৳99/Max ৳169 "/month" — derived in
+  exactly one place for both cards. Compare table pose counts updated to
+  12 / 30 / 30; "All 30 poses" copy.
+- **Message placement:** transient messages (saved / failed / limit) no longer
+  appear as top banners or Toasts over content (the limit message used to hide
+  the Max card's name + "Best" badge). AppContainer now has a snackbar bus;
+  the Nav Scaffold shows a bottom-anchored SnackbarHost above the bottom bar.
+  Limit-hit still posts the message AND navigates to Plans. All Toasts removed.
+- **Locked pose previews (PosesScreen):** locked cells now LOAD the real
+  320 px render under a 60% black scrim + centered lock icon + PRO chip —
+  never blank. Only the tap stays locked (→ Plans).
+
+### Watermark (previews only)
+- `WatermarkOverlay` (ui/components.kt): Canvas overlay, "FSD Studio" tiled
+  diagonally (-30°, white ~14% alpha, bold, clipped to 16 dp rounded shape).
+- Applied over the big previews in RenderDetailScreen (player, mob AND local
+  modes), the AiScreen result, and the StudioScreen preview.
+- Downloads stay clean: verified every gallery save uses raw downloaded
+  bytes/files (never a composited bitmap), all behind DownloadGate.saveWithGate.
+
+### Poses library — the main feature, now 30
+- New `data/PoseCatalog.kt`: `PoseDef(id, @StringRes labelRes, renderType,
+  params, free)`; catalog order = display order; 12 FREE first (default, walk,
+  wave, sit, dab, hero_closeup [bust], look_left, run, sneak, cheer, dance,
+  side_profile), then 18 locked (originals + back_view, walk_stride,
+  run_stride, dance_freeze, look_right, look_up, hero_angle, top_view,
+  shadow_stand). Recipes use only documented params (pose, frame, yaw, pitch,
+  headYaw, headPitch, shadow).
+- `Api.renderUrl` gained an `extra: Map<String,String>` merged into the query;
+  the hard-coded `Api.POSES` list is gone. `DetailRequest.RemotePose` carries
+  renderType + extraParams. `Entitlements.maxPoseIndex` replaced by
+  `poseUnlocked(pose, plan)` (free poses for everyone; all for Pro/Max).
+
+### Studio tab (NEW, free) — ui/StudioScreen.kt, 6th bottom tab
+- Works on the current character. No character → empty state with Home /
+  Library buttons. UPLOAD source → flat preview + honest note (Studio needs an
+  online skin) — no fake controls.
+- Preview: body render (512) built from committed state, WatermarkOverlay +
+  BgSelector. Controls: full pose-chip catalog (locked → Plans; selecting a
+  pose initialises camera/joints FROM that pose's recipe), camera sliders
+  (yaw -180..180, pitch -60..60, roll -45..45, zoom 0.5..2.5), position
+  (offsetX/offsetY -0.5..0.5), expandable advanced joints (headYaw/headPitch
+  -90..90, arm pitches -120..120, leg pitches -90..90), toggles
+  shadow/cape/overlay, Reset.
+- API discipline: sliders edit a local value while dragging; the render URL
+  (Coil key) changes ONLY on slider release or chip/toggle tap.
+- Export: plan size (512 free / 1024 paid) → DownloadGate → gallery + History
+  record kind "STUDIO", title includes the pose label. Downloads-left shown.
+
+### Languages — real in-app switching (6)
+- Full translations created: values-hi, values-bn, values-ur, values-es,
+  values-id — every key translated (first-pass), placeholders preserved,
+  brand terms kept. Verified: 223 keys in each of the 6 files, identical key
+  order, zero %1$s/%1$d mismatches, all XML parses.
+- Mechanism: DataStore `app_language` mirrored into SharedPreferences
+  ("fsd_prefs") for synchronous reads; MainActivity.attachBaseContext wraps
+  the context with that Locale. Settings language rows are real radios for
+  English / हिन्दी / বাংলা / اردو / Español / Bahasa Indonesia — selecting
+  one saves and recreates the activity. No "coming soon" rows remain.
+
+### Account, User ID, Log out, Reset (Settings)
+- New Account card at top: avatar = current character's face render (else the
+  app logo), name = character name or "Guest creator", User ID row — the id is
+  "FSD-" + 10 uppercase hex chars from a UUID, generated once into DataStore
+  `user_id` — with a Copy button (clipboard + "User ID copied" snackbar).
+  The owner can use this ID server-side later to manage plans/bans.
+- Log out (confirm dialog): clears character, plan (→ FREE), theme / render
+  defaults / language; KEEPS history, daily counters and the user id.
+- Reset app data (danger, confirm dialog): wipes all DataStore prefs, Room
+  history rows + history files, Coil + OkHttp caches; user id regenerates.
+- "Replay tutorial" row added (see below).
+
+### First-time tutorial — ui/TutorialScreen.kt
+- 4 pages (Welcome / Find your character / Poses & Studio / AI & downloads),
+  simple state-based page switcher (no new dependency), Skip + Next /
+  "Get started", dot indicators. Shown from the Nav host only while
+  `seen_tutorial` is not true (null-loading state shows a blank frame, never
+  an app flash); finishing/skipping sets it. It calls no API and consumes no
+  limits. Settings replay sets the flag false.
+
+### AMENDMENT (owner decision): Gemini key REMOVED, AI = built-in edit mode
+- The "Your Gemini API key" feature is removed completely: no key field in
+  Settings, no Save/Clear UI, no `gemini_key` anywhere, no GeminiEngine, no
+  engine selection. The Settings AI section is a single info row: "AI edits
+  are built in — no setup needed." AI runs on ONE built-in engine
+  (Pollinations, keyless) with no user setup. Log out no longer touches any
+  key (there is none).
+- AI tab = EDIT MODE: the source is the current character's body render
+  (512 px; the app does not persist a last-viewed pose render, so the default
+  body render is the source), shown at the top labelled "Editing this
+  render". The user's text is an EDIT instruction; the outgoing prompt is
+  "Edit this Minecraft character render: <text>. Keep the same character, the
+  same skin and outfit, and the same Minecraft blocky style — only apply the
+  requested change." sent through Pollinations WITH the reference URL
+  (image= param) first; the engine retries without the reference on failure.
+  UPLOAD-source characters fall back to prompt-only with an honest one-line
+  label. Kept: daily counters (FREE 3 / PRO 3 / MAX 50), one-in-flight,
+  typed errors, result → History (kind AI, title "AI edit"), watermark on
+  the result preview, gated download. Strings reframed: "Describe your
+  edit", button "Apply edit".
+
+### NOT implemented (honest note)
+- **Item in hand (feedback #9):** skinrender.dev has NO item/equipment
+  parameter — verified against the API's documented parameter set — so a
+  held item cannot be rendered by the pose/Studio pipeline. Not faked.
+  (The AI edit mode can *depict* an item from a text instruction, but that
+  is AI artwork, not a render feature.)
+
+### Self-checks (V3)
+- (a) R.string.* used vs defined in values/strings.xml: zero missing (the one
+  regex hit "ok" is android.R.string.ok, a framework string).
+- (b) Key counts equal across values / -hi / -bn / -ur / -es / -id: 223 each,
+  same order, placeholders intact.
+- (c) No "coming soon" language rows remain (language card is real radios);
+  no one-time/lifetime purchase copy anywhere.
+- (d) DownloadGate.saveWithGate guards every gallery save: RenderDetail
+  (player/mob/local via the shared helper), History items (they open through
+  LocalDetail), AI download, Studio export, Library/mob (through the mob
+  detail). No direct saveToGallery call exists outside a gate lambda.
+- (e) No Toast and no "gemini" references remain in Kotlin or strings.
