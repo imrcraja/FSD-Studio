@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">FSD Studio</string>
+    <string name="app_tagline">Minecraft स्किन Studio</string>
+
+    <!-- Bottom navigation -->
+    <string name="tab_home">होम</string>
+    <string name="tab_poses">पोज़</string>
+    <string name="tab_ai">AI</string>
+    <string name="tab_history">इतिहास</string>
+    <string name="tab_settings">सेटिंग्स</string>
+
+    <!-- Home -->
+    <string name="home_username_label">Minecraft यूज़रनेम</string>
+    <string name="home_username_hint">जैसे Mr_FSD</string>
+    <string name="home_search">खोजें</string>
+    <string name="home_upload">स्किन अपलोड करें</string>
+    <string name="home_or">या</string>
+    <string name="home_empty_title">एक कैरेक्टर से शुरू करें</string>
+    <string name="home_empty_body">किसी भी Minecraft यूज़रनेम को खोजकर उनकी स्किन लोड करें, या अपनी 64×64 स्किन फ़ाइल अपलोड करें। फिर उस कैरेक्टर के पोज़ रेंडर और AI आर्टवर्क बनाएँ।</string>
+    <string name="home_current_character">वर्तमान कैरेक्टर</string>
+    <string name="home_recent">हाल के रेंडर</string>
+    <string name="home_searching">खोज रहे हैं…</string>
+    <string name="error_player_not_found">प्लेयर नहीं मिला। स्पेलिंग जाँचें और फिर से कोशिश करें।</string>
+    <string name="error_upload_invalid">वह फ़ाइल मान्य Minecraft स्किन नहीं है (64×64 या 64×32 PNG चाहिए)।</string>
+    <string name="error_upload_failed">वह फ़ाइल पढ़ी नहीं जा सकी।</string>
+    <string name="source_username">यूज़रनेम</string>
+    <string name="source_upload">अपलोड की गई</string>
+    <string name="model_classic">क्लासिक</string>
+    <string name="model_slim">स्लिम</string>
+
+    <!-- Errors -->
+    <string name="error_offline">इंटरनेट कनेक्शन नहीं है। Wi-Fi या मोबाइल डेटा जाँचें और फिर से कोशिश करें।</string>
+    <string name="error_timeout">सर्वर ने जवाब देने में बहुत समय लिया। फिर से कोशिश करें।</string>
+    <string name="error_server_busy">रेंडर सेवा अभी व्यस्त है। थोड़ी देर रुककर फिर से कोशिश करें।</string>
+    <string name="error_generic">कुछ गड़बड़ हो गई। फिर से कोशिश करें।</string>
+    <string name="error_load_failed">यह रेंडर लोड नहीं हो सका। अपना कनेक्शन जाँचें और फिर से कोशिश करें।</string>
+    <string name="action_retry">फिर से कोशिश करें</string>
+
+    <!-- Library -->
+    <string name="lib_button">कैरेक्टर लाइब्रेरी</string>
+    <string name="lib_title">कैरेक्टर लाइब्रेरी</string>
+    <string name="lib_players">प्लेयर्स</string>
+    <string name="lib_mobs">मॉब्स</string>
+
+    <!-- Poses -->
+    <string name="poses_title">पोज़</string>
+    <string name="poses_no_character">पहले Home टैब पर एक कैरेक्टर लोड करें — यूज़रनेम खोजें या स्किन अपलोड करें।</string>
+    <string name="poses_upload_note">अपलोड की गई स्किन फ्लैट रेंडर दिखाती हैं। पोज़ रेंडर और AI कैरेक्टर रेफ़रेंस के लिए यूज़रनेम से पब्लिक स्किन चाहिए।</string>
+    <string name="flat_front">सामने</string>
+    <string name="flat_back">पीछे</string>
+    <string name="flat_face">चेहरा</string>
+    <string name="pro_badge">PRO</string>
+
+    <!-- Render detail -->
+    <string name="detail_background">बैकग्राउंड</string>
+    <string name="detail_size">साइज़</string>
+    <string name="detail_pose">पोज़</string>
+    <string name="bg_transparent">पारदर्शी</string>
+    <string name="bg_dark">डार्क</string>
+    <string name="bg_purple">बैंगनी</string>
+    <string name="bg_white">सफ़ेद</string>
+    <string name="action_download">डाउनलोड</string>
+    <string name="action_share">शेयर</string>
+    <string name="action_delete">हटाएँ</string>
+    <string name="saved_to_gallery">Pictures/FSD Studio में सेव हुआ</string>
+    <string name="saved_failed">इमेज सेव नहीं हो सकी।</string>
+    <string name="pro_locked_size">HD 1024 के लिए Pro या Max चाहिए</string>
+
+    <!-- Downloads -->
+    <string name="dl_left_today">आज %1$d डाउनलोड बचे हैं</string>
+    <string name="dl_unlimited">अनलिमिटेड डाउनलोड</string>
+    <string name="dl_limit_reached">आज के मुफ़्त डाउनलोड ख़त्म हो गए। मुफ़्त में रोज़ 5 डाउनलोड मिलते हैं — Pro और Max अनलिमिटेड हैं।</string>
+
+    <!-- Upgrade pop-up -->
+    <string name="popup_title">FSD Studio पसंद आ रहा है?</string>
+    <string name="popup_body">Pro आपको अनलिमिटेड डाउनलोड, सभी 30 पोज़ और HD देता है।</string>
+    <string name="popup_see_plans">प्लान देखें</string>
+    <string name="popup_not_now">अभी नहीं</string>
+
+    <!-- AI -->
+    <string name="ai_title">AI एडिट</string>
+    <string name="ai_prompt_label">अपना एडिट बताएँ</string>
+    <string name="ai_prompt_hint">जैसे हाथ में डायमंड तलवार जोड़ें, सनसेट बैकग्राउंड</string>
+    <string name="ai_generate">एडिट लागू करें</string>
+    <string name="ai_generating">आपका एडिट लागू हो रहा है… इसमें एक मिनट तक लग सकता है</string>
+    <string name="ai_remaining">आज %1$d मुफ़्त AI एडिट बचे हैं</string>
+    <string name="ai_limit_reached">रोज़ की AI एडिट सीमा पूरी हो गई। Max इसे रोज़ 50 तक बढ़ा देता है।</string>
+    <string name="ai_reference_note">आपका वर्तमान कैरेक्टर विज़ुअल रेफ़रेंस के रूप में इस्तेमाल होता है।</string>
+    <string name="ai_reference_upload_note">अपलोड की गई स्किन: एडिट सिर्फ़ आपके विवरण से चलते हैं (एडिट करने के लिए कोई कैरेक्टर रेंडर नहीं)।</string>
+    <string name="ai_error">एडिट विफल हुआ। मुफ़्त AI सेवा व्यस्त हो सकती है — फिर से कोशिश करें।</string>
+    <string name="ai_retry">फिर से कोशिश करें</string>
+    <string name="ai_need_character">पहले Home टैब पर एक कैरेक्टर लोड करें।</string>
+    <string name="ai_need_prompt">पहले अपना एडिट बताएँ।</string>
+
+    <!-- History -->
+    <string name="history_title">इतिहास</string>
+    <string name="history_empty">अभी कोई रेंडर नहीं। एक पोज़ खोलें या AI आर्टवर्क बनाएँ और यह यहाँ दिखाई देगा।</string>
+
+    <!-- Plans / subscription -->
+    <string name="pro_headline">पूरा Studio अनलॉक करें</string>
+    <string name="coming_soon">जल्द आ रहा है</string>
+    <string name="sub_title">FSD Studio प्लान</string>
+    <string name="sub_current_plan">वर्तमान प्लान: %1$s</string>
+    <string name="sub_billing_weekly">साप्ताहिक</string>
+    <string name="sub_billing_monthly">मासिक</string>
+    <string name="sub_per_week">/सप्ताह</string>
+    <string name="sub_per_month">/महीना</string>
+    <string name="sub_best_badge">सबसे अच्छा</string>
+    <string name="sub_current_badge">वर्तमान</string>
+    <string name="sub_choose_pro">Pro चुनें</string>
+    <string name="sub_choose_max">Max चुनें</string>
+    <string name="sub_view_plans">प्लान देखें</string>
+    <string name="sub_purchase_note">खरीद लॉन्च पर खुलेगी। यह टेस्ट बिल्ड प्लान लॉक रखता है — कोई भुगतान नहीं लिया जाता।</string>
+    <string name="sub_compare">प्लान की तुलना करें</string>
+    <string name="sub_feat_poses">सभी 30 पोज़</string>
+    <string name="sub_feat_hd">HD रेंडर (1024 px)</string>
+    <string name="sub_feat_downloads">अनलिमिटेड डाउनलोड</string>
+    <string name="sub_feat_backgrounds">प्रीमियम बैकग्राउंड</string>
+    <string name="sub_feat_ai">AI रेंडर</string>
+    <string name="sub_feat_ai_pro_value">3/दिन (बेसिक)</string>
+    <string name="sub_feat_ai_max_value">50/दिन + प्राथमिकता</string>
+    <string name="sub_feat_noads">कोई विज्ञापन नहीं</string>
+    <string name="sub_at_launch">(लॉन्च पर)</string>
+    <string name="plan_name_free">मुफ़्त</string>
+    <string name="plan_name_pro">Pro</string>
+    <string name="plan_name_max">Max</string>
+    <string name="plan_price_pro_weekly">৳49</string>
+    <string name="plan_price_pro_monthly">৳99</string>
+    <string name="plan_price_max_weekly">৳79</string>
+    <string name="plan_price_max_monthly">৳169</string>
+    <string name="cmp_poses">पोज़</string>
+    <string name="cmp_hd">HD 1024</string>
+    <string name="cmp_downloads">डाउनलोड / दिन</string>
+    <string name="cmp_ai">AI रेंडर / दिन</string>
+
+    <!-- Settings -->
+    <string name="settings_title">सेटिंग्स</string>
+    <string name="settings_language">भाषा</string>
+    <string name="settings_theme">थीम</string>
+    <string name="theme_purple">FSD बैंगनी</string>
+    <string name="theme_midnight">मिडनाइट</string>
+    <string name="theme_light">लाइट</string>
+    <string name="settings_defaults">रेंडर डिफ़ॉल्ट</string>
+    <string name="settings_default_bg">डिफ़ॉल्ट बैकग्राउंड</string>
+    <string name="settings_default_size">डिफ़ॉल्ट साइज़</string>
+    <string name="settings_ai">AI</string>
+    <string name="settings_cache">इमेज कैश</string>
+    <string name="settings_cache_cleared">कैश साफ़ हो गया</string>
+    <string name="settings_about">बारे में</string>
+    <string name="settings_links">FSD ETC</string>
+    <string name="link_youtube">YouTube</string>
+    <string name="link_discord">Discord</string>
+    <string name="link_website">वेबसाइट</string>
+    <string name="about_version">FSD Studio v%1$s (टेस्ट बिल्ड)</string>
+    <string name="about_credits">रेंडर: skinrender.dev मुफ़्त API · AI इमेज: Pollinations मुफ़्त टियर · स्किन और प्रोफ़ाइल: Mojang</string>
+    <string name="about_disclaimer">अनौपचारिक फ़ैन-निर्मित टूल। Mojang AB या Microsoft से संबद्ध नहीं है।</string>
+
+    <!-- Language + settings extras -->
+    <string name="language_english">English</string>
+    <string name="language_hindi">हिन्दी</string>
+    <string name="language_bangla">বাংলা</string>
+    <string name="settings_cache_size">कैश साइज़: %1$s</string>
+    <string name="settings_cache_clear">इमेज कैश साफ़ करें</string>
+
+    <!-- Studio tab -->
+    <string name="tab_studio">Studio</string>
+    <string name="studio_title">कैरेक्टर Studio</string>
+    <string name="studio_go_home">Home पर जाएँ</string>
+    <string name="studio_upload_note">Studio को ऑनलाइन स्किन चाहिए। अपलोड की गई स्किन यहाँ फ्लैट प्रीव्यू दिखाती हैं — पोज़, कैमरा और जॉइंट मॉडल करने के लिए यूज़रनेम कैरेक्टर लोड करें।</string>
+    <string name="studio_pose">पोज़</string>
+    <string name="studio_camera">कैमरा</string>
+    <string name="studio_position">स्थिति</string>
+    <string name="studio_advanced">शरीर के जॉइंट</string>
+    <string name="studio_yaw">Yaw</string>
+    <string name="studio_pitch">Pitch</string>
+    <string name="studio_roll">Roll</string>
+    <string name="studio_zoom">ज़ूम</string>
+    <string name="studio_offset_x">ऑफ़सेट X</string>
+    <string name="studio_offset_y">ऑफ़सेट Y</string>
+    <string name="studio_head_yaw">सिर Yaw</string>
+    <string name="studio_head_pitch">सिर Pitch</string>
+    <string name="studio_arm_left">बायाँ हाथ Pitch</string>
+    <string name="studio_arm_right">दायाँ हाथ Pitch</string>
+    <string name="studio_leg_left">बायाँ पैर Pitch</string>
+    <string name="studio_leg_right">दायाँ पैर Pitch</string>
+    <string name="studio_shadow">परछाई</string>
+    <string name="studio_cape">केप</string>
+    <string name="studio_layers">स्किन लेयर्स</string>
+    <string name="studio_reset">रीसेट</string>
+    <string name="studio_export">गैलरी में एक्सपोर्ट करें</string>
+
+    <!-- Pose library labels -->
+    <string name="pose_default">डिफ़ॉल्ट</string>
+    <string name="pose_walk">चलना</string>
+    <string name="pose_run">दौड़ना</string>
+    <string name="pose_wave">हाथ हिलाना</string>
+    <string name="pose_sit">बैठना</string>
+    <string name="pose_sneak">चुपके चलना</string>
+    <string name="pose_point">इशारा</string>
+    <string name="pose_dab">Dab</string>
+    <string name="pose_zombie">ज़ॉम्बी</string>
+    <string name="pose_tpose">T-Pose</string>
+    <string name="pose_cheer">जयकार</string>
+    <string name="pose_think">सोचना</string>
+    <string name="pose_flex">फ़्लेक्स</string>
+    <string name="pose_salute">सलामी</string>
+    <string name="pose_dance">नाच</string>
+    <string name="pose_punch">मुक्का</string>
+    <string name="pose_shrug">कंधे उचकाना</string>
+    <string name="pose_jump">कूदना</string>
+    <string name="pose_hero_closeup">हीरो क्लोज़-अप</string>
+    <string name="pose_side_profile">साइड प्रोफ़ाइल</string>
+    <string name="pose_back_view">पीछे का दृश्य</string>
+    <string name="pose_walk_stride">चलने की चाल</string>
+    <string name="pose_run_stride">दौड़ने की चाल</string>
+    <string name="pose_dance_freeze">डांस फ़्रीज़</string>
+    <string name="pose_look_left">बाईं ओर देखें</string>
+    <string name="pose_look_right">दाईं ओर देखें</string>
+    <string name="pose_look_up">ऊपर देखें</string>
+    <string name="pose_hero_angle">हीरो एंगल</string>
+    <string name="pose_top_view">ऊपर का दृश्य</string>
+    <string name="pose_shadow_stand">शैडो स्टैंड</string>
+
+    <!-- Account (Settings) -->
+    <string name="settings_account">खाता</string>
+    <string name="account_guest">गेस्ट क्रिएटर</string>
+    <string name="account_user_id">User ID</string>
+    <string name="account_copy">कॉपी</string>
+    <string name="account_user_id_copied">User ID कॉपी हो गया</string>
+    <string name="account_logout">लॉग आउट</string>
+    <string name="account_logout_title">लॉग आउट करें?</string>
+    <string name="account_logout_body">आपका कैरेक्टर, प्लान और सेटिंग्स डिफ़ॉल्ट पर वापस चले जाएँगे। इतिहास, डाउनलोड काउंटर और आपकी User ID बनी रहेगी।</string>
+    <string name="account_logged_out">लॉग आउट हो गया</string>
+    <string name="account_reset">ऐप डेटा रीसेट करें</string>
+    <string name="account_reset_title">सारा ऐप डेटा रीसेट करें?</string>
+    <string name="account_reset_body">यह सब कुछ साफ़ कर देगा — कैरेक्टर, प्लान, इतिहास, सेटिंग्स और कैश। यह वापस नहीं किया जा सकता।</string>
+    <string name="account_reset_done">ऐप डेटा साफ़ हो गया</string>
+    <string name="action_cancel">रद्द करें</string>
+    <string name="settings_ai_note">AI एडिट बिल्ट-इन हैं — कोई सेटअप ज़रूरी नहीं।</string>
+    <string name="ai_editing_this">इस रेंडर को एडिट कर रहे हैं</string>
+
+    <!-- Tutorial -->
+    <string name="settings_tutorial">ट्यूटोरियल</string>
+    <string name="tut_replay">ट्यूटोरियल फिर से देखें</string>
+    <string name="tut_skip">छोड़ें</string>
+    <string name="tut_next">आगे</string>
+    <string name="tut_start">शुरू करें</string>
+    <string name="tut1_title">FSD Studio में आपका स्वागत है</string>
+    <string name="tut1_body">किसी भी Minecraft कैरेक्टर के पोज़ रेंडर और AI आर्टवर्क बनाएँ — सीधे अपने फ़ोन से।</string>
+    <string name="tut2_title">अपना कैरेक्टर खोजें</string>
+    <string name="tut2_body">Home टैब पर कोई भी Minecraft यूज़रनेम खोजें, या अपनी स्किन फ़ाइल अपलोड करें।</string>
+    <string name="tut3_title">पोज़ और Studio</string>
+    <string name="tut3_body">रेंडर करने के लिए एक पोज़ खोलें, या Studio टैब का उपयोग करके अपने कैरेक्टर को ख़ुद पोज़ दें — कैमरा, जॉइंट और बहुत कुछ।</string>
+    <string name="tut4_title">AI और डाउनलोड</string>
+    <string name="tut4_body">AI टैब पर AI आर्टवर्क बनाएँ। आपको रोज़ 5 मुफ़्त डाउनलोड मिलते हैं — Pro और Max अनलिमिटेड डाउनलोड, सभी पोज़ और ज़्यादा AI अनलॉक करते हैं।</string>
+
+    <!-- More languages (native names, identical in every locale file) -->
+    <string name="language_urdu">اردو</string>
+    <string name="language_spanish">Español</string>
+    <string name="language_indonesian">Bahasa Indonesia</string>
+</resources>
