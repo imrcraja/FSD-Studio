@@ -473,3 +473,120 @@ pass. No version bump here (rides inside the V4 build).
   only, not the whole row — a behaviour change, not a spacing/placeholder
   fix; noted, not touched.
 - DownloadGate.kt / Entitlements.kt untouched (mtimes predate this round).
+
+## V5 changes — Custom Totem Maker (2026-10-22, local — version bump at build time)
+
+The owner's point 14, modelled on skinmc.net/totem: pick a skin, pick a
+style, get a totem of undying that IS your character. Entry: a "Totem
+Maker" card on Home + a `totem` Nav detail route (bottom nav unchanged at
+6 tabs). Kept deliberately simple: one source card, one style selector,
+one preview, two outputs.
+
+### Sources
+- Default: the current character — username/library skins via their
+  texture URL (or the render API's `skin` type for Steve/Alex), uploads
+  via their local file; the same resolution the Skin Editor uses.
+- In-screen alternatives: upload a different skin PNG (SAF; decoded via
+  `SkinBitmaps.decodeSkinBytes`, so 64×32 legacy files convert as
+  everywhere else) and fetch-by-username (the normal profile flow →
+  texture URL → texture bytes). Fetching does NOT change the app's
+  current character — the totem keeps its own source.
+- Mob models are out of scope: they never become the current character
+  (they exist only as render-detail requests), so the reachable
+  "can't make a totem" state is an absent/unresolvable character — the
+  screen then shows the mob note and the upload/username options. (The
+  Library's MHF "mob characters" are real player profiles with real
+  skins, so they work as totem sources, correctly.)
+
+### Preview artwork (local, no API)
+- `data/TotemArt.kt` composes the front artwork from the skin bitmap:
+  each part's FRONT face (base + overlay composited, the same regions
+  as `SkinBitmaps.renderFront`) at the style's proportions,
+  nearest-neighbour, transparent background.
+- FULL BODY = the classic flat front render (16×32 units).
+- MINI ME = a chibi layout (16×26 units): head drawn 12 wide × 13 tall —
+  exactly as tall as torso (7) + legs (6) combined.
+- The big preview sits on the transparency checkerboard with the
+  standard `WatermarkOverlay`; ALL downloads use the clean artwork.
+
+### Output 1 — PNG (FREE)
+- Export at 48 px/unit (768 px wide). Routed through
+  `DownloadGate.saveWithGate` like every other render download (counts
+  toward the free 5/day; Pro/Max unlimited), saved to Pictures/FSD
+  Studio, recorded in History as kind "TOTEM".
+
+### Output 2 — Java texture pack (Pro/Max only)
+- `data/JavaTotemPack.kt` builds the ZIP: `pack.mcmeta` +
+  `assets/minecraft/textures/item/totem_skin.png` (the 64×64 skin,
+  base+overlay as-is) + `assets/minecraft/models/item/totem_of_undying.json`.
+- The model is a real 3D model: one box element per part (head, torso,
+  both arms, both legs) plus a +0.5-inflated overlay twin per part
+  (hat/jacket/sleeves/pants), `"texture_size": [64, 64]`, `textures`
+  `0` + `particle` → `minecraft:item/totem_skin`.
+- UV approach: face rects come from `SkinTemplate.faceRects` (the
+  canonical layout shared with the editor and flat renders), mapped
+  front→north, back→south, part-right→east, part-left→west, top→up,
+  bottom→down; UV arrays are the rect's pixel corners. Verified by a
+  Python mirror against the known layout (head front (8,8,8,8), hat
+  front (40,8), left-arm overlay front (52,52,4,12), …).
+- Geometry: FULL BODY stands 32 tall on y=0, centred x=8/z=8 (torso
+  z 6..10, arms at its sides, head x 4..12). MINI ME: legs 6, torso 7,
+  head 13 tall × 12 wide/deep (x 2..14, z 2..14), total 26.
+- One reconciliation: the full-body head overlay would peak at
+  y = 32.5, past the item-model hard bound of 32 — inflated corners
+  are clamped into [-16, 32], which touches only that crown plane.
+- Display transforms: the renderer centres the 16-unit model space
+  before applying them; GUI uses rotation [0, 180, 0] (brings the north
+  face — the character's front — toward the viewer), scale 0.45 (full)
+  / 0.55 (mini), and a small negative Y translation re-centring the
+  scaled figure; ground/hand slots share the scale with a +2 lift.
+- Version → pack_format: 1.20.1 → 15, 1.20.4 → 22, 1.21.1 → 34,
+  1.21.4 → 46 (selector in the UI, default 1.20.1).
+- Saved via the new `data/FileSaver.kt` (MediaStore Downloads →
+  Downloads/FSD Studio, `.zip`; app-dir fallback pre-Q).
+
+### Output 3 — Bedrock .mcpack (Pro/Max, "Beta" in the UI)
+- **Decision: SHIPPED as Beta.** The standard format could be produced
+  confidently: `data/BedrockTotemPack.kt` emits `manifest.json`
+  (format_version 2, one "resources" module, fresh UUIDs per pack),
+  `textures/entity/totem_skin.png`, `models/entity/totem_skin.geo.json`
+  (format_version "1.12.0", one "totem" bone whose cubes mirror the
+  Java boxes — Bedrock centres x/z on 0, so origins shift by (−8,0,−8);
+  same +0.5 overlays, same 64×64 UV layout with per-face uv/uv_size)
+  and `attachables/totem_of_undying.json` (format_version "1.10.0",
+  identifier `minecraft:totem_of_undying`, entity_alphatest material,
+  `controller.render.item_default`). It is labelled Beta because the
+  in-hand placement cannot be device-verified from here.
+- Every JSON in both packs is built with org.json and parsed back
+  before zipping — validity is structural, not hopeful.
+
+### The "3D model" style decision
+- **SKIPPED, per the owner's drop rule.** The reference site's third
+  style is a true extruded 3D model; the app has no honest way to
+  generate one locally, so the style selector offers exactly the two
+  styles that work (Mini me / Full body). Note the Java/Bedrock packs
+  themselves DO contain a genuine 3D box model (above) — what was
+  dropped is only the third 2D-preview style.
+
+### Gating audit
+- Plan checks exist ONLY in `TotemViewModel.downloadJavaPack` /
+  `downloadBedrockPack` (FREE → Locked → Plans; also enforced in the
+  VM, not just the button). The PNG path uses DownloadGate exactly as
+  specified. Nothing else in the feature consults the plan.
+- History: pack downloads record kind "TOTEM" with the PREVIEW artwork
+  as the entry image (History entries are image-backed; the entry shows
+  what the pack looks like — the pack file itself is in Downloads).
+
+### Files
+- Created: `data/TotemModel.kt` (styles/editions/versions, part boxes,
+  face mapping, ZIP writer), `data/TotemArt.kt`, `data/JavaTotemPack.kt`,
+  `data/BedrockTotemPack.kt`, `data/FileSaver.kt`,
+  `viewmodel/TotemViewModel.kt`, `ui/TotemMakerScreen.kt`.
+- Modified: `ui/Nav.kt` (Routes.TOTEM + wiring), `MainActivity.kt`
+  (totemVm), `ui/HomeScreen.kt` (Totem Maker card).
+- Strings: **25 new keys × 6 locales → 359 keys per file**, identical
+  order (home_totem_*, totem_*), all XML parses, zero missing
+  `R.string.*`. versionCode / versionName NOT bumped (parent does it
+  at build time).
+- Caveat kept from the rest of the app: proportions/UVs use the classic
+  (non-slim) arm mapping, like the flat renders and the Skin Editor.
