@@ -21,10 +21,13 @@ data class PoseDef(
 )
 
 /**
- * The pose library — the app's main feature. Catalog order IS display order,
- * and the 12 free poses come first so the grid leads with what everyone can
- * use. 30 entries: the original 18 API poses plus 12 camera/joint recipes
- * built from documented parameters (yaw/pitch/headYaw/headPitch/frame/shadow).
+ * The pose library — the app's main feature. Catalog order IS display order.
+ * 60 entries: the V3 set (the original 18 API poses plus 12 camera/joint
+ * recipes) followed by the V3.1 expansion block (30 more frame / camera /
+ * close-up recipes built from the same documented parameters). The first 12
+ * entries are free and lead the grid; the expansion block adds 6 more free
+ * recipes at its head. Entitlement is per-entry via [PoseDef.free]
+ * (see [Entitlements.poseUnlocked]), never position-based.
  */
 object PoseCatalog {
 
@@ -80,6 +83,65 @@ object PoseCatalog {
         pose("hero_angle", R.string.pose_hero_angle, "flex", free = false, extra = arrayOf("pitch" to "-18")),
         pose("top_view", R.string.pose_top_view, "default", free = false, extra = arrayOf("pitch" to "55")),
         pose("shadow_stand", R.string.pose_shadow_stand, "default", free = false, extra = arrayOf("shadow" to "true")),
+
+        // --------------------------------------- V3.1 expansion (30 more)
+        // Free additions (6) — basic frame/camera variants everyone can use.
+        pose("walk_quarter", R.string.pose_walk_quarter, "walk", free = true, extra = arrayOf("frame" to "0.25")),
+        pose("run_start", R.string.pose_run_start, "run", free = true, extra = arrayOf("frame" to "0.25")),
+        pose("look_down", R.string.pose_look_down, "default", free = true, extra = arrayOf("headPitch" to "35")),
+        pose("three_quarter", R.string.pose_three_quarter, "default", free = true, extra = arrayOf("yaw" to "-35")),
+        pose(
+            "sit_relaxed", R.string.pose_sit_relaxed, "sit",
+            free = true, extra = arrayOf("headPitch" to "18", "headYaw" to "-15"),
+        ),
+        pose(
+            "greet_bust", R.string.pose_greet_bust, "wave",
+            free = true, renderType = "bust", extra = arrayOf("zoom" to "1.3"),
+        ),
+
+        // Locked additions (24) — animation frames, close-ups, dramatic angles.
+        pose("walk_late", R.string.pose_walk_late, "walk", free = false, extra = arrayOf("frame" to "0.75")),
+        pose("run_late", R.string.pose_run_late, "run", free = false, extra = arrayOf("frame" to "0.75")),
+        pose("dance_quarter", R.string.pose_dance_quarter, "dance", free = false, extra = arrayOf("frame" to "0.25")),
+        pose("dance_late", R.string.pose_dance_late, "dance", free = false, extra = arrayOf("frame" to "0.75")),
+        pose("zombie_walk", R.string.pose_zombie_walk, "zombie", free = false, extra = arrayOf("frame" to "0.5")),
+        pose("jump_peak", R.string.pose_jump_peak, "jump", free = false, extra = arrayOf("frame" to "0.5")),
+        pose("sneak_peek", R.string.pose_sneak_peek, "sneak", free = false, extra = arrayOf("headYaw" to "45")),
+        pose(
+            "hero_low", R.string.pose_hero_low, "flex",
+            free = false, extra = arrayOf("pitch" to "-30", "shadow" to "true"),
+        ),
+        pose(
+            "flex_bust", R.string.pose_flex_bust, "flex",
+            free = false, renderType = "bust", extra = arrayOf("zoom" to "1.3"),
+        ),
+        pose("think_bust", R.string.pose_think_bust, "think", free = false, renderType = "bust"),
+        pose("salute_bust", R.string.pose_salute_bust, "salute", free = false, renderType = "bust"),
+        pose("point_bust", R.string.pose_point_bust, "point", free = false, renderType = "bust"),
+        pose("dab_bust", R.string.pose_dab_bust, "dab", free = false, renderType = "bust"),
+        pose(
+            "shrug_bust", R.string.pose_shrug_bust, "shrug",
+            free = false, renderType = "bust", extra = arrayOf("headPitch" to "10"),
+        ),
+        pose(
+            "face_closeup", R.string.pose_face_closeup, "default",
+            free = false, renderType = "bust", extra = arrayOf("zoom" to "1.8"),
+        ),
+        pose("back_quarter", R.string.pose_back_quarter, "default", free = false, extra = arrayOf("yaw" to "135")),
+        pose(
+            "over_shoulder", R.string.pose_over_shoulder, "default",
+            free = false, extra = arrayOf("yaw" to "160", "headYaw" to "-50"),
+        ),
+        pose("tiny", R.string.pose_tiny, "default", free = false, extra = arrayOf("zoom" to "0.5")),
+        pose("action_tilt", R.string.pose_action_tilt, "run", free = false, extra = arrayOf("roll" to "18")),
+        pose("spin_tpose", R.string.pose_spin_tpose, "tpose", free = false, extra = arrayOf("yaw" to "45")),
+        pose("shadow_dance", R.string.pose_shadow_dance, "dance", free = false, extra = arrayOf("shadow" to "true")),
+        pose(
+            "power_punch", R.string.pose_power_punch, "punch",
+            free = false, extra = arrayOf("roll" to "-12", "frame" to "0.5"),
+        ),
+        pose("big_cheer", R.string.pose_big_cheer, "cheer", free = false, extra = arrayOf("pitch" to "-15")),
+        pose("sit_view", R.string.pose_sit_view, "sit", free = false, extra = arrayOf("pitch" to "30")),
     )
 
     fun byId(id: String): PoseDef? = POSES.firstOrNull { it.id == id }

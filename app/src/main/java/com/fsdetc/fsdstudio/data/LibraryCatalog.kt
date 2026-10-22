@@ -76,6 +76,51 @@ object LibraryCatalog {
         ),
         LibraryPlayer(label = "Notch", badge = null, character = null, searchName = "Notch"),
         LibraryPlayer(label = "Dream", badge = null, character = null, searchName = "Dream"),
+        // V3.1 expansion — every username below verified against the profile
+        // API (HTTP 200 + uuid) on 2026-10-22 before being added.
+        LibraryPlayer(label = "Technoblade", badge = null, character = null, searchName = "Technoblade"),
+        LibraryPlayer(label = "GeorgeNotFound", badge = null, character = null, searchName = "GeorgeNotFound"),
+        LibraryPlayer(label = "Sapnap", badge = null, character = null, searchName = "Sapnap"),
+        LibraryPlayer(label = "TommyInnit", badge = null, character = null, searchName = "TommyInnit"),
+        LibraryPlayer(label = "WilburSoot", badge = null, character = null, searchName = "WilburSoot"),
+        LibraryPlayer(label = "Philza", badge = null, character = null, searchName = "Philza"),
+        LibraryPlayer(label = "CaptainSparklez", badge = null, character = null, searchName = "CaptainSparklez"),
+        LibraryPlayer(label = "DanTDM", badge = null, character = null, searchName = "DanTDM"),
+        LibraryPlayer(label = "PewDiePie", badge = null, character = null, searchName = "PewDiePie"),
+        LibraryPlayer(label = "jeb_", badge = null, character = null, searchName = "jeb_"),
+        LibraryPlayer(label = "Dinnerbone", badge = null, character = null, searchName = "Dinnerbone"),
+        LibraryPlayer(label = "Herobrine", badge = null, character = null, searchName = "Herobrine"),
+        LibraryPlayer(label = "MHF Steve", badge = null, character = null, searchName = "MHF_Steve"),
+        LibraryPlayer(label = "MHF Alex", badge = null, character = null, searchName = "MHF_Alex"),
+    )
+
+    /**
+     * Mob characters — Mojang's official MHF accounts: real player profiles
+     * whose skins ARE the mobs, so they render through the normal character
+     * pipeline (username search → character RenderDetail), unlike the true
+     * mob models in [MOBS]. Shown as the Library's "Mobs & More" section.
+     * Every account was verified against the profile API on 2026-10-22;
+     * MHF_MagmaCube returned 404 (no such account) — the Magma Cube account
+     * is MHF_LavaSlime.
+     */
+    val MOB_CHARACTERS: List<LibraryPlayer> = listOf(
+        LibraryPlayer(label = "Blaze", badge = null, character = null, searchName = "MHF_Blaze"),
+        LibraryPlayer(label = "Ghast", badge = null, character = null, searchName = "MHF_Ghast"),
+        LibraryPlayer(label = "Slime", badge = null, character = null, searchName = "MHF_Slime"),
+        LibraryPlayer(label = "Cave Spider", badge = null, character = null, searchName = "MHF_CaveSpider"),
+        LibraryPlayer(label = "Enderman", badge = null, character = null, searchName = "MHF_Enderman"),
+        LibraryPlayer(label = "Iron Golem", badge = null, character = null, searchName = "MHF_Golem"),
+        LibraryPlayer(label = "Squid", badge = null, character = null, searchName = "MHF_Squid"),
+        LibraryPlayer(label = "Mooshroom", badge = null, character = null, searchName = "MHF_MushroomCow"),
+        LibraryPlayer(label = "Ocelot", badge = null, character = null, searchName = "MHF_Ocelot"),
+        LibraryPlayer(label = "Zombie Pigman", badge = null, character = null, searchName = "MHF_PigZombie"),
+        LibraryPlayer(label = "Wither Skeleton", badge = null, character = null, searchName = "MHF_WSkeleton"),
+        LibraryPlayer(label = "Wither", badge = null, character = null, searchName = "MHF_Wither"),
+        LibraryPlayer(label = "Witch", badge = null, character = null, searchName = "MHF_Witch"),
+        LibraryPlayer(label = "Snow Golem", badge = null, character = null, searchName = "MHF_SnowGolem"),
+        LibraryPlayer(label = "Magma Cube", badge = null, character = null, searchName = "MHF_LavaSlime"),
+        LibraryPlayer(label = "Chicken", badge = null, character = null, searchName = "MHF_Chicken"),
+        LibraryPlayer(label = "Spider", badge = null, character = null, searchName = "MHF_Spider"),
     )
 
     private fun poses(vararg pairs: Pair<String, String>): List<Api.Pose> =
