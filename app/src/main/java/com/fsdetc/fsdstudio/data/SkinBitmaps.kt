@@ -69,7 +69,80 @@ object SkinBitmaps {
         )
     }
 
+    /**
+     * Decode raw skin bytes into a mutable 64×64 bitmap (legacy 64×32 files are
+     * converted). Returns null for anything that is not a usable skin image.
+     * Used by the Skin Editor to load upload files and downloaded textures.
+     */
+    fun decodeSkinBytes(bytes: ByteArray): Bitmap? {
+        val bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.size) ?: return null
+        if (!(bmp.width == 64 && (bmp.height == 64 || bmp.height == 32))) return null
+        val normalized = if (bmp.height == 32) convertLegacy(bmp) else bmp
+        return normalized.copy(Bitmap.Config.ARGB_8888, true)
+    }
+
+    /** Decode a stored skin file (see [decodeSkinBytes]). */
+    fun decodeSkinFile(file: File): Bitmap? =
+        runCatching { decodeSkinBytes(file.readBytes()) }.getOrNull()
+
+    /**
+     * Save an edited 64×64 skin as a new uploaded character — the same on-disk
+     * treatment [importSkin] gives a picked file (filesDir/skins + flat
+     * renders), so Poses / Studio / History treat it exactly like an upload.
+     */
+    suspend fun importEditedSkin(context: Context, bitmap: Bitmap, displayName: String): CharacterInfo =
+        withContext(Dispatchers.IO) {
+            val bytes = bitmapToPngBytes(bitmap)
+            val sha = sha256Hex(bytes)
+            val skinsDir = File(context.filesDir, "skins").apply { mkdirs() }
+            File(context.filesDir, "flats").apply { mkdirs() }
+            val skinFile = File(skinsDir, "$sha.png")
+            if (!skinFile.exists()) skinFile.writeBytes(bytes)
+            val normalized = bitmap.copy(Bitmap.Config.ARGB_8888, false)
+            val front = flatFile(context, sha, "front")
+            val back = flatFile(context, sha, "back")
+            val face = flatFile(context, sha, "face")
+            if (!front.exists()) writePng(renderFront(normalized), front)
+            if (!back.exists()) writePng(renderBack(normalized), back)
+            if (!face.exists()) writePng(renderFace(normalized), face)
+            CharacterInfo(
+                name = displayName,
+                uuid = null,
+                model = null,
+                skinHash = sha,
+                skinUrl = null,
+                localSkinPath = skinFile.absolutePath,
+                source = CharacterSource.UPLOAD,
+            )
+        }
+
     // ------------------------------------------------------------------ renders
+
+    /** Flat front view at an arbitrary pixel scale (unit = [scale] px). */
+    fun renderFrontScaled(skin: Bitmap, scale: Int): Bitmap {
+        val out = Bitmap.createBitmap(16 * scale, 32 * scale, Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(out)
+        place(canvas, part(skin, 8, 8, 40, 8, 8, 8), 4, 0, scale) // head + hat
+        place(canvas, part(skin, 20, 20, 20, 36, 8, 12), 4, 8, scale) // torso + jacket
+        place(canvas, part(skin, 44, 20, 44, 36, 4, 12), 0, 8, scale) // right arm + sleeve
+        place(canvas, part(skin, 36, 52, 52, 52, 4, 12), 12, 8, scale) // left arm + sleeve
+        place(canvas, part(skin, 4, 20, 4, 36, 4, 12), 4, 20, scale) // right leg + pants
+        place(canvas, part(skin, 20, 52, 4, 52, 4, 12), 8, 20, scale) // left leg + pants
+        return out
+    }
+
+    /** Flat back view at an arbitrary pixel scale (unit = [scale] px). */
+    fun renderBackScaled(skin: Bitmap, scale: Int): Bitmap {
+        val out = Bitmap.createBitmap(16 * scale, 32 * scale, Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(out)
+        place(canvas, part(skin, 24, 8, 56, 8, 8, 8), 4, 0, scale) // head back + hat
+        place(canvas, part(skin, 32, 20, 32, 36, 8, 12), 4, 8, scale) // torso back + jacket
+        place(canvas, part(skin, 52, 20, 52, 36, 4, 12), 12, 8, scale) // right arm back
+        place(canvas, part(skin, 44, 52, 60, 52, 4, 12), 0, 8, scale) // left arm back
+        place(canvas, part(skin, 12, 20, 12, 36, 4, 12), 8, 20, scale) // right leg back
+        place(canvas, part(skin, 28, 52, 12, 52, 4, 12), 4, 20, scale) // left leg back
+        return out
+    }
 
     /** Flat front view: 16×32 skin units at 32× scale (512×1024), transparent background. */
     fun renderFront(skin: Bitmap): Bitmap {
