@@ -74,31 +74,28 @@
 
     <!-- Upgrade pop-up -->
     <string name="popup_title">Enjoying FSD Studio?</string>
-    <string name="popup_body">Pro gives you unlimited downloads, all poses and HD.</string>
+    <string name="popup_body">Pro gives you unlimited downloads, all 30 poses and HD.</string>
     <string name="popup_see_plans">See plans</string>
     <string name="popup_not_now">Not now</string>
 
     <!-- AI -->
-    <string name="ai_title">AI Artwork</string>
-    <string name="ai_prompt_label">Describe the scene</string>
-    <string name="ai_prompt_hint">e.g. standing on a castle wall at sunset, holding a diamond sword</string>
-    <string name="ai_generate">Generate</string>
-    <string name="ai_generating">Generating… this can take up to a minute</string>
-    <string name="ai_remaining">%1$d free AI renders left today</string>
-    <string name="ai_limit_reached">Daily AI limit reached. Max raises it to 50 per day.</string>
+    <string name="ai_title">AI Edit</string>
+    <string name="ai_prompt_label">Describe your edit</string>
+    <string name="ai_prompt_hint">e.g. add a diamond sword in the hand, sunset background</string>
+    <string name="ai_generate">Apply edit</string>
+    <string name="ai_generating">Applying your edit… this can take up to a minute</string>
+    <string name="ai_remaining">%1$d free AI edits left today</string>
+    <string name="ai_limit_reached">Daily AI edit limit reached. Max raises it to 50 per day.</string>
     <string name="ai_reference_note">Your current character is used as the visual reference.</string>
-    <string name="ai_reference_upload_note">Uploaded skin: AI runs from your prompt only (no character reference).</string>
-    <string name="ai_error">Generation failed. The free AI service may be busy — try again.</string>
+    <string name="ai_reference_upload_note">Uploaded skin: edits run from your description only (no character render to edit).</string>
+    <string name="ai_error">Edit failed. The free AI service may be busy — try again.</string>
     <string name="ai_retry">Retry</string>
     <string name="ai_need_character">Load a character on the Home tab first.</string>
-    <string name="ai_need_prompt">Write a prompt first.</string>
-    <string name="ai_fallback_note">Gemini unavailable — used free engine</string>
-    <string name="ai_error_quota">Your Gemini key\'s free quota is finished. Remove the key in Settings to use the free engine, or try tomorrow.</string>
-    <string name="ai_error_badkey">That Gemini API key was rejected. Check the key in Settings.</string>
+    <string name="ai_need_prompt">Describe your edit first.</string>
 
     <!-- History -->
     <string name="history_title">History</string>
-    <string name="history_empty">No renders yet. Open a pose or generate AI artwork and it will appear here.</string>
+    <string name="history_empty">No renders yet. Open a pose or create AI artwork and it will appear here.</string>
 
     <!-- Plans / subscription -->
     <string name="pro_headline">Unlock the full studio</string>
@@ -116,7 +113,7 @@
     <string name="sub_view_plans">View plans</string>
     <string name="sub_purchase_note">Purchases open at launch. This test build keeps plans locked — no payment is taken.</string>
     <string name="sub_compare">Compare plans</string>
-    <string name="sub_feat_poses">All 18 poses</string>
+    <string name="sub_feat_poses">All 30 poses</string>
     <string name="sub_feat_hd">HD renders (1024 px)</string>
     <string name="sub_feat_downloads">Unlimited downloads</string>
     <string name="sub_feat_backgrounds">Premium backgrounds</string>
@@ -147,15 +144,7 @@
     <string name="settings_defaults">Render defaults</string>
     <string name="settings_default_bg">Default background</string>
     <string name="settings_default_size">Default size</string>
-    <string name="settings_ai">AI engine</string>
-    <string name="settings_gemini_label">Your Gemini API key (optional)</string>
-    <string name="settings_gemini_hint">Paste your Google AI Studio key</string>
-    <string name="settings_gemini_explain">With your own Google AI Studio key, AI renders use Gemini for best character likeness. Without a key, the free built-in engine is used.</string>
-    <string name="settings_gemini_save">Save key</string>
-    <string name="settings_gemini_clear">Clear key</string>
-    <string name="settings_gemini_saved">Key saved</string>
-    <string name="settings_ai_engine_gemini">Active engine: Gemini (your key)</string>
-    <string name="settings_ai_engine_free">Active engine: free built-in engine</string>
+    <string name="settings_ai">AI</string>
     <string name="settings_cache">Image cache</string>
     <string name="settings_cache_cleared">Cache cleared</string>
     <string name="settings_about">About</string>
@@ -164,13 +153,110 @@
     <string name="link_discord">Discord</string>
     <string name="link_website">Website</string>
     <string name="about_version">FSD Studio v%1$s (test build)</string>
-    <string name="about_credits">Renders: skinrender.dev free API · AI images: Pollinations free tier or your Gemini key · Skins &amp; profiles: Mojang</string>
+    <string name="about_credits">Renders: skinrender.dev free API · AI images: Pollinations free tier · Skins &amp; profiles: Mojang</string>
     <string name="about_disclaimer">Unofficial fan-made tool. Not affiliated with Mojang AB or Microsoft.</string>
 
     <!-- Language + settings extras -->
     <string name="language_english">English</string>
-    <string name="language_hindi">Hindi</string>
-    <string name="language_bangla">Bangla</string>
+    <string name="language_hindi">हिन्दी</string>
+    <string name="language_bangla">বাংলা</string>
     <string name="settings_cache_size">Cache size: %1$s</string>
     <string name="settings_cache_clear">Clear image cache</string>
+
+    <!-- Studio tab -->
+    <string name="tab_studio">Studio</string>
+    <string name="studio_title">Character Studio</string>
+    <string name="studio_go_home">Go to Home</string>
+    <string name="studio_upload_note">The Studio needs an online skin. Uploaded skins show a flat preview here — load a username character to model poses, camera and joints.</string>
+    <string name="studio_pose">Pose</string>
+    <string name="studio_camera">Camera</string>
+    <string name="studio_position">Position</string>
+    <string name="studio_advanced">Body joints</string>
+    <string name="studio_yaw">Yaw</string>
+    <string name="studio_pitch">Pitch</string>
+    <string name="studio_roll">Roll</string>
+    <string name="studio_zoom">Zoom</string>
+    <string name="studio_offset_x">Offset X</string>
+    <string name="studio_offset_y">Offset Y</string>
+    <string name="studio_head_yaw">Head yaw</string>
+    <string name="studio_head_pitch">Head pitch</string>
+    <string name="studio_arm_left">Left arm pitch</string>
+    <string name="studio_arm_right">Right arm pitch</string>
+    <string name="studio_leg_left">Left leg pitch</string>
+    <string name="studio_leg_right">Right leg pitch</string>
+    <string name="studio_shadow">Shadow</string>
+    <string name="studio_cape">Cape</string>
+    <string name="studio_layers">Skin layers</string>
+    <string name="studio_reset">Reset</string>
+    <string name="studio_export">Export to gallery</string>
+
+    <!-- Pose library labels -->
+    <string name="pose_default">Default</string>
+    <string name="pose_walk">Walk</string>
+    <string name="pose_run">Run</string>
+    <string name="pose_wave">Wave</string>
+    <string name="pose_sit">Sit</string>
+    <string name="pose_sneak">Sneak</string>
+    <string name="pose_point">Point</string>
+    <string name="pose_dab">Dab</string>
+    <string name="pose_zombie">Zombie</string>
+    <string name="pose_tpose">T-Pose</string>
+    <string name="pose_cheer">Cheer</string>
+    <string name="pose_think">Think</string>
+    <string name="pose_flex">Flex</string>
+    <string name="pose_salute">Salute</string>
+    <string name="pose_dance">Dance</string>
+    <string name="pose_punch">Punch</string>
+    <string name="pose_shrug">Shrug</string>
+    <string name="pose_jump">Jump</string>
+    <string name="pose_hero_closeup">Hero Close-Up</string>
+    <string name="pose_side_profile">Side Profile</string>
+    <string name="pose_back_view">Back View</string>
+    <string name="pose_walk_stride">Walk Stride</string>
+    <string name="pose_run_stride">Run Stride</string>
+    <string name="pose_dance_freeze">Dance Freeze</string>
+    <string name="pose_look_left">Look Left</string>
+    <string name="pose_look_right">Look Right</string>
+    <string name="pose_look_up">Look Up</string>
+    <string name="pose_hero_angle">Hero Angle</string>
+    <string name="pose_top_view">Top View</string>
+    <string name="pose_shadow_stand">Shadow Stand</string>
+
+    <!-- Account (Settings) -->
+    <string name="settings_account">Account</string>
+    <string name="account_guest">Guest creator</string>
+    <string name="account_user_id">User ID</string>
+    <string name="account_copy">Copy</string>
+    <string name="account_user_id_copied">User ID copied</string>
+    <string name="account_logout">Log out</string>
+    <string name="account_logout_title">Log out?</string>
+    <string name="account_logout_body">Your character, plan and settings go back to defaults. History, download counters and your user ID are kept.</string>
+    <string name="account_logged_out">Logged out</string>
+    <string name="account_reset">Reset app data</string>
+    <string name="account_reset_title">Reset all app data?</string>
+    <string name="account_reset_body">This clears everything — character, plan, history, settings and caches. This cannot be undone.</string>
+    <string name="account_reset_done">App data cleared</string>
+    <string name="action_cancel">Cancel</string>
+    <string name="settings_ai_note">AI edits are built in — no setup needed.</string>
+    <string name="ai_editing_this">Editing this render</string>
+
+    <!-- Tutorial -->
+    <string name="settings_tutorial">Tutorial</string>
+    <string name="tut_replay">Replay tutorial</string>
+    <string name="tut_skip">Skip</string>
+    <string name="tut_next">Next</string>
+    <string name="tut_start">Get started</string>
+    <string name="tut1_title">Welcome to FSD Studio</string>
+    <string name="tut1_body">Make pose renders and AI artwork of any Minecraft character — right from your phone.</string>
+    <string name="tut2_title">Find your character</string>
+    <string name="tut2_body">Search any Minecraft username on the Home tab, or upload your own skin file.</string>
+    <string name="tut3_title">Poses &amp; Studio</string>
+    <string name="tut3_body">Open a pose to render it, or use the Studio tab to pose your character yourself — camera, joints and more.</string>
+    <string name="tut4_title">AI &amp; downloads</string>
+    <string name="tut4_body">Create AI artwork on the AI tab. You get 5 free downloads a day — Pro and Max unlock unlimited downloads, all poses and more AI.</string>
+
+    <!-- More languages (native names, identical in every locale file) -->
+    <string name="language_urdu">اردو</string>
+    <string name="language_spanish">Español</string>
+    <string name="language_indonesian">Bahasa Indonesia</string>
 </resources>
