@@ -6,6 +6,7 @@ import android.text.format.Formatter
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -207,7 +208,7 @@ fun SettingsScreen(onOpenPro: () -> Unit) {
 @Composable
 private fun SettingsCard(
     title: String,
-    content: @Composable Column.() -> Unit,
+    content: @Composable ColumnScope.() -> Unit,
 ) {
     Card(
         colors = CardDefaults.cardColors(containerColor = FsdSurface),
