@@ -1,0 +1,1172 @@
+[
+  {
+    "id": "beanie",
+    "section": "hats",
+    "name": "Beanie",
+    "free": true,
+    "tintable": true,
+    "defaultColor": "#7A4FD0",
+    "patchFile": "patches/beanie.png"
+  },
+  {
+    "id": "cap",
+    "section": "hats",
+    "name": "Cap",
+    "free": true,
+    "tintable": true,
+    "defaultColor": "#2E7FC2",
+    "patchFile": "patches/cap.png"
+  },
+  {
+    "id": "crown",
+    "section": "hats",
+    "name": "Crown",
+    "free": false,
+    "tintable": false,
+    "defaultColor": "#F0B41E",
+    "patchFile": "patches/crown.png"
+  },
+  {
+    "id": "santa_hat",
+    "section": "hats",
+    "name": "Santa Hat",
+    "free": false,
+    "tintable": false,
+    "defaultColor": "#D0342C",
+    "patchFile": "patches/santa_hat.png"
+  },
+  {
+    "id": "headphones",
+    "section": "hats",
+    "name": "Headphones",
+    "free": false,
+    "tintable": true,
+    "defaultColor": "#5865D8",
+    "patchFile": "patches/headphones.png"
+  },
+  {
+    "id": "halo",
+    "section": "hats",
+    "name": "Halo",
+    "free": false,
+    "tintable": false,
+    "defaultColor": "#F0B41E",
+    "patchFile": "patches/halo.png"
+  },
+  {
+    "id": "flower_crown",
+    "section": "hats",
+    "name": "Flower Crown",
+    "free": false,
+    "tintable": false,
+    "defaultColor": "#F28BB4",
+    "patchFile": "patches/flower_crown.png"
+  },
+  {
+    "id": "wizard_hat",
+    "section": "hats",
+    "name": "Wizard Hat",
+    "free": false,
+    "tintable": true,
+    "defaultColor": "#5B38A3",
+    "patchFile": "patches/wizard_hat.png"
+  },
+  {
+    "id": "backwards_cap",
+    "section": "hats",
+    "name": "Backwards Cap",
+    "free": true,
+    "tintable": true,
+    "defaultColor": "#D8544A",
+    "patchFile": "patches/backwards_cap.png"
+  },
+  {
+    "id": "headband",
+    "section": "hats",
+    "name": "Headband",
+    "free": true,
+    "tintable": true,
+    "defaultColor": "#E2574C",
+    "patchFile": "patches/headband.png"
+  },
+  {
+    "id": "cowboy_hat",
+    "section": "hats",
+    "name": "Cowboy Hat",
+    "free": false,
+    "tintable": false,
+    "defaultColor": "#8A5A33",
+    "patchFile": "patches/cowboy_hat.png"
+  },
+  {
+    "id": "police_cap",
+    "section": "hats",
+    "name": "Police Cap",
+    "free": false,
+    "tintable": false,
+    "defaultColor": "#2A3D66",
+    "patchFile": "patches/police_cap.png"
+  },
+  {
+    "id": "chef_hat",
+    "section": "hats",
+    "name": "Chef Hat",
+    "free": false,
+    "tintable": false,
+    "defaultColor": "#F4F4F6",
+    "patchFile": "patches/chef_hat.png"
+  },
+  {
+    "id": "party_hat",
+    "section": "hats",
+    "name": "Party Hat",
+    "free": false,
+    "tintable": true,
+    "defaultColor": "#B45CE0",
+    "patchFile": "patches/party_hat.png"
+  },
+  {
+    "id": "viking_helmet",
+    "section": "hats",
+    "name": "Viking Helmet",
+    "free": false,
+    "tintable": false,
+    "defaultColor": "#9AA3B2",
+    "patchFile": "patches/viking_helmet.png"
+  },
+  {
+    "id": "knight_helmet",
+    "section": "hats",
+    "name": "Knight Helmet",
+    "free": false,
+    "tintable": false,
+    "defaultColor": "#8B93A1",
+    "patchFile": "patches/knight_helmet.png"
+  },
+  {
+    "id": "pirate_bandana",
+    "section": "hats",
+    "name": "Pirate Bandana",
+    "free": false,
+    "tintable": true,
+    "defaultColor": "#B03A48",
+    "patchFile": "patches/pirate_bandana.png"
+  },
+  {
+    "id": "top_hat",
+    "section": "hats",
+    "name": "Top Hat",
+    "free": false,
+    "tintable": false,
+    "defaultColor": "#1E1F24",
+    "patchFile": "patches/top_hat.png"
+  },
+  {
+    "id": "cat_ears",
+    "section": "hats",
+    "name": "Cat Ears",
+    "free": false,
+    "tintable": true,
+    "defaultColor": "#4A4A55",
+    "patchFile": "patches/cat_ears.png"
+  },
+  {
+    "id": "frog_hat",
+    "section": "hats",
+    "name": "Frog Hat",
+    "free": false,
+    "tintable": false,
+    "defaultColor": "#57A639",
+    "patchFile": "patches/frog_hat.png"
+  },
+  {
+    "id": "mushroom_hat",
+    "section": "hats",
+    "name": "Mushroom Hat",
+    "free": false,
+    "tintable": false,
+    "defaultColor": "#D0342C",
+    "patchFile": "patches/mushroom_hat.png"
+  },
+  {
+    "id": "ushanka",
+    "section": "hats",
+    "name": "Ushanka",
+    "free": false,
+    "tintable": true,
+    "defaultColor": "#6B4A2F",
+    "patchFile": "patches/ushanka.png"
+  },
+  {
+    "id": "sunglasses",
+    "section": "glasses",
+    "name": "Sunglasses",
+    "free": true,
+    "tintable": false,
+    "defaultColor": "#17181C",
+    "patchFile": "patches/sunglasses.png"
+  },
+  {
+    "id": "eyepatch",
+    "section": "glasses",
+    "name": "Eyepatch",
+    "free": true,
+    "tintable": false,
+    "defaultColor": "#17181C",
+    "patchFile": "patches/eyepatch.png"
+  },
+  {
+    "id": "round_glasses",
+    "section": "glasses",
+    "name": "Round Glasses",
+    "free": false,
+    "tintable": false,
+    "defaultColor": "#3A2E28",
+    "patchFile": "patches/round_glasses.png"
+  },
+  {
+    "id": "star_shades",
+    "section": "glasses",
+    "name": "Star Shades",
+    "free": false,
+    "tintable": false,
+    "defaultColor": "#F0B41E",
+    "patchFile": "patches/star_shades.png"
+  },
+  {
+    "id": "glasses_3d",
+    "section": "glasses",
+    "name": "3D Glasses",
+    "free": false,
+    "tintable": false,
+    "defaultColor": "#F0564A",
+    "patchFile": "patches/glasses_3d.png"
+  },
+  {
+    "id": "vr_headset",
+    "section": "glasses",
+    "name": "VR Headset",
+    "free": false,
+    "tintable": true,
+    "defaultColor": "#46506B",
+    "patchFile": "patches/vr_headset.png"
+  },
+  {
+    "id": "heart_glasses",
+    "section": "glasses",
+    "name": "Heart Glasses",
+    "free": true,
+    "tintable": true,
+    "defaultColor": "#F28BB4",
+    "patchFile": "patches/heart_glasses.png"
+  },
+  {
+    "id": "aviators",
+    "section": "glasses",
+    "name": "Aviators",
+    "free": false,
+    "tintable": false,
+    "defaultColor": "#F0B41E",
+    "patchFile": "patches/aviators.png"
+  },
+  {
+    "id": "monocle",
+    "section": "glasses",
+    "name": "Monocle",
+    "free": false,
+    "tintable": false,
+    "defaultColor": "#F0B41E",
+    "patchFile": "patches/monocle.png"
+  },
+  {
+    "id": "ski_goggles",
+    "section": "glasses",
+    "name": "Ski Goggles",
+    "free": false,
+    "tintable": true,
+    "defaultColor": "#E2574C",
+    "patchFile": "patches/ski_goggles.png"
+  },
+  {
+    "id": "blindfold",
+    "section": "glasses",
+    "name": "Blindfold",
+    "free": false,
+    "tintable": true,
+    "defaultColor": "#3A3A44",
+    "patchFile": "patches/blindfold.png"
+  },
+  {
+    "id": "tiny_glasses",
+    "section": "glasses",
+    "name": "Tiny Glasses",
+    "free": true,
+    "tintable": false,
+    "defaultColor": "#26262B",
+    "patchFile": "patches/tiny_glasses.png"
+  },
+  {
+    "id": "creeper_mask",
+    "section": "masks",
+    "name": "Creeper Mask",
+    "free": true,
+    "tintable": false,
+    "defaultColor": "#57A639",
+    "patchFile": "patches/creeper_mask.png"
+  },
+  {
+    "id": "zombie_mask",
+    "section": "masks",
+    "name": "Zombie Mask",
+    "free": false,
+    "tintable": false,
+    "defaultColor": "#5A7A4A",
+    "patchFile": "patches/zombie_mask.png"
+  },
+  {
+    "id": "skeleton_mask",
+    "section": "masks",
+    "name": "Skeleton Mask",
+    "free": false,
+    "tintable": false,
+    "defaultColor": "#F2EEE2",
+    "patchFile": "patches/skeleton_mask.png"
+  },
+  {
+    "id": "enderman_mask",
+    "section": "masks",
+    "name": "Enderman Mask",
+    "free": false,
+    "tintable": false,
+    "defaultColor": "#14161D",
+    "patchFile": "patches/enderman_mask.png"
+  },
+  {
+    "id": "pumpkin_mask",
+    "section": "masks",
+    "name": "Pumpkin Mask",
+    "free": false,
+    "tintable": false,
+    "defaultColor": "#E8833A",
+    "patchFile": "patches/pumpkin_mask.png"
+  },
+  {
+    "id": "phantom_mask",
+    "section": "masks",
+    "name": "Phantom Mask",
+    "free": false,
+    "tintable": false,
+    "defaultColor": "#F2EEE2",
+    "patchFile": "patches/phantom_mask.png"
+  },
+  {
+    "id": "basic_tee",
+    "section": "tops",
+    "name": "Basic Tee",
+    "free": true,
+    "tintable": true,
+    "defaultColor": "#7A4FD0",
+    "patchFile": "patches/basic_tee.png"
+  },
+  {
+    "id": "hoodie",
+    "section": "tops",
+    "name": "Hoodie",
+    "free": true,
+    "tintable": true,
+    "defaultColor": "#3E7CB1",
+    "patchFile": "patches/hoodie.png"
+  },
+  {
+    "id": "tank_top",
+    "section": "tops",
+    "name": "Tank Top",
+    "free": true,
+    "tintable": true,
+    "defaultColor": "#4FAE62",
+    "patchFile": "patches/tank_top.png"
+  },
+  {
+    "id": "striped_sweater",
+    "section": "tops",
+    "name": "Striped Sweater",
+    "free": false,
+    "tintable": true,
+    "defaultColor": "#B03A48",
+    "patchFile": "patches/striped_sweater.png"
+  },
+  {
+    "id": "suit_tie",
+    "section": "tops",
+    "name": "Suit & Tie",
+    "free": false,
+    "tintable": false,
+    "defaultColor": "#23242A",
+    "patchFile": "patches/suit_tie.png"
+  },
+  {
+    "id": "denim_jacket",
+    "section": "tops",
+    "name": "Denim Jacket",
+    "free": false,
+    "tintable": false,
+    "defaultColor": "#3C5A80",
+    "patchFile": "patches/denim_jacket.png"
+  },
+  {
+    "id": "creeper_hoodie",
+    "section": "tops",
+    "name": "Creeper Hoodie",
+    "free": false,
+    "tintable": false,
+    "defaultColor": "#57A639",
+    "patchFile": "patches/creeper_hoodie.png"
+  },
+  {
+    "id": "royal_robe",
+    "section": "tops",
+    "name": "Royal Robe",
+    "free": false,
+    "tintable": false,
+    "defaultColor": "#4B2E83",
+    "patchFile": "patches/royal_robe.png"
+  },
+  {
+    "id": "camo_top",
+    "section": "tops",
+    "name": "Camo Top",
+    "free": false,
+    "tintable": false,
+    "defaultColor": "#5A6B3F",
+    "patchFile": "patches/camo_top.png"
+  },
+  {
+    "id": "polo_shirt",
+    "section": "tops",
+    "name": "Polo Shirt",
+    "free": true,
+    "tintable": true,
+    "defaultColor": "#4A7FD8",
+    "patchFile": "patches/polo_shirt.png"
+  },
+  {
+    "id": "check_shirt",
+    "section": "tops",
+    "name": "Check Shirt",
+    "free": true,
+    "tintable": false,
+    "defaultColor": "#B03A48",
+    "patchFile": "patches/check_shirt.png"
+  },
+  {
+    "id": "track_jacket",
+    "section": "tops",
+    "name": "Track Jacket",
+    "free": true,
+    "tintable": true,
+    "defaultColor": "#2E9E6B",
+    "patchFile": "patches/track_jacket.png"
+  },
+  {
+    "id": "fsd_hoodie",
+    "section": "tops",
+    "name": "FSD Hoodie",
+    "free": false,
+    "tintable": false,
+    "defaultColor": "#7A4FD0",
+    "patchFile": "patches/fsd_hoodie.png"
+  },
+  {
+    "id": "leather_jacket",
+    "section": "tops",
+    "name": "Leather Jacket",
+    "free": false,
+    "tintable": false,
+    "defaultColor": "#3E342C",
+    "patchFile": "patches/leather_jacket.png"
+  },
+  {
+    "id": "lab_coat",
+    "section": "tops",
+    "name": "Lab Coat",
+    "free": false,
+    "tintable": false,
+    "defaultColor": "#ECECF0",
+    "patchFile": "patches/lab_coat.png"
+  },
+  {
+    "id": "pirate_coat",
+    "section": "tops",
+    "name": "Pirate Coat",
+    "free": false,
+    "tintable": false,
+    "defaultColor": "#6E1423",
+    "patchFile": "patches/pirate_coat.png"
+  },
+  {
+    "id": "knight_armor",
+    "section": "tops",
+    "name": "Knight Armor",
+    "free": false,
+    "tintable": false,
+    "defaultColor": "#8B93A1",
+    "patchFile": "patches/knight_armor.png"
+  },
+  {
+    "id": "diamond_armor",
+    "section": "tops",
+    "name": "Diamond Armor",
+    "free": false,
+    "tintable": false,
+    "defaultColor": "#57CCE8",
+    "patchFile": "patches/diamond_armor.png"
+  },
+  {
+    "id": "netherite_armor",
+    "section": "tops",
+    "name": "Netherite Armor",
+    "free": false,
+    "tintable": false,
+    "defaultColor": "#443A3E",
+    "patchFile": "patches/netherite_armor.png"
+  },
+  {
+    "id": "tuxedo",
+    "section": "tops",
+    "name": "Tuxedo",
+    "free": false,
+    "tintable": false,
+    "defaultColor": "#23242A",
+    "patchFile": "patches/tuxedo.png"
+  },
+  {
+    "id": "angel_robe",
+    "section": "tops",
+    "name": "Angel Robe",
+    "free": false,
+    "tintable": false,
+    "defaultColor": "#F2EEE2",
+    "patchFile": "patches/angel_robe.png"
+  },
+  {
+    "id": "demon_jacket",
+    "section": "tops",
+    "name": "Demon Jacket",
+    "free": false,
+    "tintable": false,
+    "defaultColor": "#1E1F24",
+    "patchFile": "patches/demon_jacket.png"
+  },
+  {
+    "id": "raincoat",
+    "section": "tops",
+    "name": "Raincoat",
+    "free": false,
+    "tintable": false,
+    "defaultColor": "#F0B41E",
+    "patchFile": "patches/raincoat.png"
+  },
+  {
+    "id": "turtleneck",
+    "section": "tops",
+    "name": "Turtleneck",
+    "free": false,
+    "tintable": true,
+    "defaultColor": "#8A7A68",
+    "patchFile": "patches/turtleneck.png"
+  },
+  {
+    "id": "hawaiian_shirt",
+    "section": "tops",
+    "name": "Hawaiian Shirt",
+    "free": false,
+    "tintable": false,
+    "defaultColor": "#F0764A",
+    "patchFile": "patches/hawaiian_shirt.png"
+  },
+  {
+    "id": "jeans",
+    "section": "pants",
+    "name": "Jeans",
+    "free": true,
+    "tintable": false,
+    "defaultColor": "#42588F",
+    "patchFile": "patches/jeans.png"
+  },
+  {
+    "id": "shorts",
+    "section": "pants",
+    "name": "Shorts",
+    "free": true,
+    "tintable": true,
+    "defaultColor": "#C96F35",
+    "patchFile": "patches/shorts.png"
+  },
+  {
+    "id": "sweatpants",
+    "section": "pants",
+    "name": "Sweatpants",
+    "free": true,
+    "tintable": true,
+    "defaultColor": "#8A8F98",
+    "patchFile": "patches/sweatpants.png"
+  },
+  {
+    "id": "black_pants",
+    "section": "pants",
+    "name": "Black Pants",
+    "free": false,
+    "tintable": false,
+    "defaultColor": "#1E1F24",
+    "patchFile": "patches/black_pants.png"
+  },
+  {
+    "id": "cargo_pants",
+    "section": "pants",
+    "name": "Cargo Pants",
+    "free": false,
+    "tintable": true,
+    "defaultColor": "#6B7A4F",
+    "patchFile": "patches/cargo_pants.png"
+  },
+  {
+    "id": "ripped_jeans",
+    "section": "pants",
+    "name": "Ripped Jeans",
+    "free": false,
+    "tintable": false,
+    "defaultColor": "#42588F",
+    "patchFile": "patches/ripped_jeans.png"
+  },
+  {
+    "id": "camo_pants",
+    "section": "pants",
+    "name": "Camo Pants",
+    "free": false,
+    "tintable": false,
+    "defaultColor": "#5A6B3F",
+    "patchFile": "patches/camo_pants.png"
+  },
+  {
+    "id": "formal_trousers",
+    "section": "pants",
+    "name": "Formal Trousers",
+    "free": true,
+    "tintable": true,
+    "defaultColor": "#3A3F4A",
+    "patchFile": "patches/formal_trousers.png"
+  },
+  {
+    "id": "track_pants",
+    "section": "pants",
+    "name": "Track Pants",
+    "free": true,
+    "tintable": true,
+    "defaultColor": "#2E9E6B",
+    "patchFile": "patches/track_pants.png"
+  },
+  {
+    "id": "white_pants",
+    "section": "pants",
+    "name": "White Pants",
+    "free": true,
+    "tintable": false,
+    "defaultColor": "#EDEDF0",
+    "patchFile": "patches/white_pants.png"
+  },
+  {
+    "id": "knight_leggings",
+    "section": "pants",
+    "name": "Knight Leggings",
+    "free": false,
+    "tintable": false,
+    "defaultColor": "#8B93A1",
+    "patchFile": "patches/knight_leggings.png"
+  },
+  {
+    "id": "diamond_leggings",
+    "section": "pants",
+    "name": "Diamond Leggings",
+    "free": false,
+    "tintable": false,
+    "defaultColor": "#57CCE8",
+    "patchFile": "patches/diamond_leggings.png"
+  },
+  {
+    "id": "netherite_leggings",
+    "section": "pants",
+    "name": "Netherite Leggings",
+    "free": false,
+    "tintable": false,
+    "defaultColor": "#443A3E",
+    "patchFile": "patches/netherite_leggings.png"
+  },
+  {
+    "id": "leather_pants",
+    "section": "pants",
+    "name": "Leather Pants",
+    "free": false,
+    "tintable": false,
+    "defaultColor": "#654A2C",
+    "patchFile": "patches/leather_pants.png"
+  },
+  {
+    "id": "pirate_pants",
+    "section": "pants",
+    "name": "Pirate Pants",
+    "free": false,
+    "tintable": false,
+    "defaultColor": "#3A3A44",
+    "patchFile": "patches/pirate_pants.png"
+  },
+  {
+    "id": "skirt",
+    "section": "pants",
+    "name": "Skirt",
+    "free": false,
+    "tintable": true,
+    "defaultColor": "#F28BB4",
+    "patchFile": "patches/skirt.png"
+  },
+  {
+    "id": "camo_shorts",
+    "section": "pants",
+    "name": "Camo Shorts",
+    "free": false,
+    "tintable": false,
+    "defaultColor": "#5A6B3F",
+    "patchFile": "patches/camo_shorts.png"
+  },
+  {
+    "id": "sneakers",
+    "section": "shoes",
+    "name": "Sneakers",
+    "free": true,
+    "tintable": true,
+    "defaultColor": "#D84A4A",
+    "patchFile": "patches/sneakers.png"
+  },
+  {
+    "id": "sandals",
+    "section": "shoes",
+    "name": "Sandals",
+    "free": true,
+    "tintable": false,
+    "defaultColor": "#8A6844",
+    "patchFile": "patches/sandals.png"
+  },
+  {
+    "id": "boots",
+    "section": "shoes",
+    "name": "Boots",
+    "free": true,
+    "tintable": true,
+    "defaultColor": "#7A5230",
+    "patchFile": "patches/boots.png"
+  },
+  {
+    "id": "purple_kicks",
+    "section": "shoes",
+    "name": "Purple Kicks",
+    "free": false,
+    "tintable": false,
+    "defaultColor": "#7A4FD0",
+    "patchFile": "patches/purple_kicks.png"
+  },
+  {
+    "id": "golden_shoes",
+    "section": "shoes",
+    "name": "Golden Shoes",
+    "free": false,
+    "tintable": false,
+    "defaultColor": "#F0B41E",
+    "patchFile": "patches/golden_shoes.png"
+  },
+  {
+    "id": "armored_boots",
+    "section": "shoes",
+    "name": "Armored Boots",
+    "free": false,
+    "tintable": false,
+    "defaultColor": "#8B93A1",
+    "patchFile": "patches/armored_boots.png"
+  },
+  {
+    "id": "running_shoes",
+    "section": "shoes",
+    "name": "Running Shoes",
+    "free": true,
+    "tintable": true,
+    "defaultColor": "#3E7CB1",
+    "patchFile": "patches/running_shoes.png"
+  },
+  {
+    "id": "slippers",
+    "section": "shoes",
+    "name": "Slippers",
+    "free": true,
+    "tintable": true,
+    "defaultColor": "#F28BB4",
+    "patchFile": "patches/slippers.png"
+  },
+  {
+    "id": "rain_boots",
+    "section": "shoes",
+    "name": "Rain Boots",
+    "free": false,
+    "tintable": true,
+    "defaultColor": "#F0B41E",
+    "patchFile": "patches/rain_boots.png"
+  },
+  {
+    "id": "diamond_boots",
+    "section": "shoes",
+    "name": "Diamond Boots",
+    "free": false,
+    "tintable": false,
+    "defaultColor": "#57CCE8",
+    "patchFile": "patches/diamond_boots.png"
+  },
+  {
+    "id": "netherite_boots",
+    "section": "shoes",
+    "name": "Netherite Boots",
+    "free": false,
+    "tintable": false,
+    "defaultColor": "#443A3E",
+    "patchFile": "patches/netherite_boots.png"
+  },
+  {
+    "id": "knight_boots",
+    "section": "shoes",
+    "name": "Knight Boots",
+    "free": false,
+    "tintable": false,
+    "defaultColor": "#8B93A1",
+    "patchFile": "patches/knight_boots.png"
+  },
+  {
+    "id": "fsd_shoes",
+    "section": "shoes",
+    "name": "FSD Shoes",
+    "free": false,
+    "tintable": false,
+    "defaultColor": "#7A4FD0",
+    "patchFile": "patches/fsd_shoes.png"
+  },
+  {
+    "id": "high_boots",
+    "section": "shoes",
+    "name": "High Boots",
+    "free": false,
+    "tintable": true,
+    "defaultColor": "#6B4A2F",
+    "patchFile": "patches/high_boots.png"
+  },
+  {
+    "id": "angel_wings",
+    "section": "wings",
+    "name": "Angel Wings",
+    "free": false,
+    "tintable": false,
+    "defaultColor": "#F4F1EA",
+    "patchFile": "patches/angel_wings.png"
+  },
+  {
+    "id": "demon_wings",
+    "section": "wings",
+    "name": "Demon Wings",
+    "free": false,
+    "tintable": false,
+    "defaultColor": "#6E1423",
+    "patchFile": "patches/demon_wings.png"
+  },
+  {
+    "id": "dragon_wings",
+    "section": "wings",
+    "name": "Dragon Wings",
+    "free": false,
+    "tintable": true,
+    "defaultColor": "#3E9B8F",
+    "patchFile": "patches/dragon_wings.png"
+  },
+  {
+    "id": "fairy_wings",
+    "section": "wings",
+    "name": "Fairy Wings",
+    "free": false,
+    "tintable": false,
+    "defaultColor": "#F6C9E8",
+    "patchFile": "patches/fairy_wings.png"
+  },
+  {
+    "id": "butterfly_wings",
+    "section": "wings",
+    "name": "Butterfly Wings",
+    "free": false,
+    "tintable": true,
+    "defaultColor": "#B45CE0",
+    "patchFile": "patches/butterfly_wings.png"
+  },
+  {
+    "id": "elytra",
+    "section": "wings",
+    "name": "Elytra",
+    "free": false,
+    "tintable": false,
+    "defaultColor": "#5E5A68",
+    "patchFile": "patches/elytra.png"
+  },
+  {
+    "id": "golden_wings",
+    "section": "wings",
+    "name": "Golden Wings",
+    "free": false,
+    "tintable": false,
+    "defaultColor": "#F0B41E",
+    "patchFile": "patches/golden_wings.png"
+  },
+  {
+    "id": "bat_wings",
+    "section": "wings",
+    "name": "Bat Wings",
+    "free": false,
+    "tintable": false,
+    "defaultColor": "#2E2145",
+    "patchFile": "patches/bat_wings.png"
+  },
+  {
+    "id": "backpack_basic",
+    "section": "bags",
+    "name": "Backpack",
+    "free": true,
+    "tintable": true,
+    "defaultColor": "#4A7FD8",
+    "patchFile": "patches/backpack_basic.png"
+  },
+  {
+    "id": "backpack_creeper",
+    "section": "bags",
+    "name": "Creeper Backpack",
+    "free": false,
+    "tintable": false,
+    "defaultColor": "#57A639",
+    "patchFile": "patches/backpack_creeper.png"
+  },
+  {
+    "id": "backpack_ender",
+    "section": "bags",
+    "name": "Ender Backpack",
+    "free": false,
+    "tintable": false,
+    "defaultColor": "#17181F",
+    "patchFile": "patches/backpack_ender.png"
+  },
+  {
+    "id": "school_bag",
+    "section": "bags",
+    "name": "School Bag",
+    "free": true,
+    "tintable": true,
+    "defaultColor": "#D8544A",
+    "patchFile": "patches/school_bag.png"
+  },
+  {
+    "id": "tnt_bag",
+    "section": "bags",
+    "name": "TNT Bag",
+    "free": false,
+    "tintable": false,
+    "defaultColor": "#D0342C",
+    "patchFile": "patches/tnt_bag.png"
+  },
+  {
+    "id": "ender_chest_bag",
+    "section": "bags",
+    "name": "Ender Chest Bag",
+    "free": false,
+    "tintable": false,
+    "defaultColor": "#1E1F24",
+    "patchFile": "patches/ender_chest_bag.png"
+  },
+  {
+    "id": "flower_bag",
+    "section": "bags",
+    "name": "Flower Bag",
+    "free": false,
+    "tintable": true,
+    "defaultColor": "#4FAE62",
+    "patchFile": "patches/flower_bag.png"
+  },
+  {
+    "id": "tech_bag",
+    "section": "bags",
+    "name": "Tech Bag",
+    "free": false,
+    "tintable": false,
+    "defaultColor": "#23242A",
+    "patchFile": "patches/tech_bag.png"
+  },
+  {
+    "id": "cape_purple",
+    "section": "capes",
+    "name": "Purple Cape",
+    "free": true,
+    "tintable": false,
+    "defaultColor": "#7A4FD0",
+    "patchFile": "patches/cape_purple.png"
+  },
+  {
+    "id": "cape_red",
+    "section": "capes",
+    "name": "Red Cape",
+    "free": false,
+    "tintable": false,
+    "defaultColor": "#B03030",
+    "patchFile": "patches/cape_red.png"
+  },
+  {
+    "id": "cape_black",
+    "section": "capes",
+    "name": "Black Cape",
+    "free": false,
+    "tintable": false,
+    "defaultColor": "#1E1F24",
+    "patchFile": "patches/cape_black.png"
+  },
+  {
+    "id": "cape_creeper",
+    "section": "capes",
+    "name": "Creeper Cape",
+    "free": false,
+    "tintable": false,
+    "defaultColor": "#57A639",
+    "patchFile": "patches/cape_creeper.png"
+  },
+  {
+    "id": "cape_gold",
+    "section": "capes",
+    "name": "Golden Cape",
+    "free": false,
+    "tintable": false,
+    "defaultColor": "#F0B41E",
+    "patchFile": "patches/cape_gold.png"
+  },
+  {
+    "id": "necklace_gold",
+    "section": "jewelry",
+    "name": "Gold Necklace",
+    "free": true,
+    "tintable": false,
+    "defaultColor": "#F0B41E",
+    "patchFile": "patches/necklace_gold.png"
+  },
+  {
+    "id": "necklace_diamond",
+    "section": "jewelry",
+    "name": "Diamond Necklace",
+    "free": false,
+    "tintable": false,
+    "defaultColor": "#8FE3FF",
+    "patchFile": "patches/necklace_diamond.png"
+  },
+  {
+    "id": "chain_silver",
+    "section": "jewelry",
+    "name": "Silver Chain",
+    "free": false,
+    "tintable": false,
+    "defaultColor": "#C9CEDA",
+    "patchFile": "patches/chain_silver.png"
+  },
+  {
+    "id": "ruby_necklace",
+    "section": "jewelry",
+    "name": "Ruby Necklace",
+    "free": false,
+    "tintable": false,
+    "defaultColor": "#E0314B",
+    "patchFile": "patches/ruby_necklace.png"
+  },
+  {
+    "id": "emerald_necklace",
+    "section": "jewelry",
+    "name": "Emerald Necklace",
+    "free": false,
+    "tintable": false,
+    "defaultColor": "#2FBF71",
+    "patchFile": "patches/emerald_necklace.png"
+  },
+  {
+    "id": "earrings",
+    "section": "jewelry",
+    "name": "Earrings",
+    "free": false,
+    "tintable": false,
+    "defaultColor": "#F0B41E",
+    "patchFile": "patches/earrings.png"
+  },
+  {
+    "id": "bracelet_pair",
+    "section": "jewelry",
+    "name": "Bracelet Pair",
+    "free": true,
+    "tintable": true,
+    "defaultColor": "#F0B41E",
+    "patchFile": "patches/bracelet_pair.png"
+  },
+  {
+    "id": "crown_pendant",
+    "section": "jewelry",
+    "name": "Crown Pendant",
+    "free": false,
+    "tintable": false,
+    "defaultColor": "#F0B41E",
+    "patchFile": "patches/crown_pendant.png"
+  },
+  {
+    "id": "santa_coat",
+    "section": "seasonal",
+    "name": "Santa Coat",
+    "free": false,
+    "tintable": false,
+    "defaultColor": "#D0342C",
+    "patchFile": "patches/santa_coat.png"
+  },
+  {
+    "id": "pumpkin_hat",
+    "section": "seasonal",
+    "name": "Pumpkin Hat",
+    "free": false,
+    "tintable": false,
+    "defaultColor": "#E8833A",
+    "patchFile": "patches/pumpkin_hat.png"
+  },
+  {
+    "id": "christmas_sweater",
+    "section": "seasonal",
+    "name": "Christmas Sweater",
+    "free": false,
+    "tintable": false,
+    "defaultColor": "#B03030",
+    "patchFile": "patches/christmas_sweater.png"
+  },
+  {
+    "id": "vampire_cape",
+    "section": "seasonal",
+    "name": "Vampire Cape",
+    "free": false,
+    "tintable": false,
+    "defaultColor": "#17181C",
+    "patchFile": "patches/vampire_cape.png"
+  },
+  {
+    "id": "bunny_ears",
+    "section": "seasonal",
+    "name": "Bunny Ears",
+    "free": false,
+    "tintable": true,
+    "defaultColor": "#F4F1EA",
+    "patchFile": "patches/bunny_ears.png"
+  }
+]
