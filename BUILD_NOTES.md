@@ -239,3 +239,76 @@ the user-supplied Gemini key and turned the AI tab into edit mode.
   LocalDetail), AI download, Studio export, Library/mob (through the mob
   detail). No direct saveToGallery call exists outside a gate lambda.
 - (e) No Toast and no "gemini" references remain in Kotlin or strings.
+
+## V3.1 content expansion (2026-10-22, local — version bump at build time)
+
+Owner's overnight instruction: posing and the character library must feel
+"huge". Pure content update on top of the V3 build; no version bump here.
+
+### Poses: 30 → 60 (free 12 → 18)
+- All 30 V3 entries unchanged and in place; 30 new `PoseDef` recipes appended
+  in `data/PoseCatalog.kt`, using only documented skinrender.dev params
+  (frame, yaw/pitch/roll, zoom, headYaw/headPitch, shadow, bust renderType).
+- 6 new FREE (lead the expansion block): walk_quarter (walk frame 0.25),
+  run_start (run 0.25), look_down (headPitch 35), three_quarter (yaw -35),
+  sit_relaxed (sit + headPitch 18/headYaw -15), greet_bust (wave bust,
+  zoom 1.3).
+- 24 new locked: walk_late, run_late, dance_quarter, dance_late, zombie_walk,
+  jump_peak (frame variants), sneak_peek (sneak + headYaw 45), hero_low
+  (flex, pitch -30 + shadow), flex_bust / think_bust / salute_bust /
+  point_bust / dab_bust / shrug_bust (bust close-ups), face_closeup (bust,
+  zoom 1.8), back_quarter (yaw 135), over_shoulder (yaw 160 + headYaw -50),
+  tiny (zoom 0.5), action_tilt (run + roll 18), spin_tpose (tpose + yaw 45),
+  shadow_dance (dance + shadow), power_punch (punch, roll -12, frame 0.5),
+  big_cheer (cheer, pitch -15), sit_view (sit, pitch 30).
+- Entitlement is the per-entry `free` flag (`Entitlements.poseUnlocked`);
+  PosesScreen iterates the catalog in order with no free-first assumption,
+  so the appended mixed block behaves correctly.
+- Labels: 30 new `pose_*` keys (+ `lib_mobs_more`) added to all 6 values
+  files at matching positions — 254 keys per file, identical order, XML
+  parses, placeholders untouched.
+- Count copy updated: SubscriptionScreen compare row literal
+  `listOf("12", "30", "30")` → `listOf("18", "60", "60")`; `popup_body` and
+  `sub_feat_poses` now say 60 poses (all 6 locales).
+
+### Character library: players 5 → 19, mob characters +17
+- VERIFY-FIRST: every candidate was checked live against
+  `https://skinrender.dev/api/profile/<name>` (HTTP 200 + uuid in JSON)
+  before being added — nothing was invented.
+- Players (+14, username-search entries like Notch/Dream): Technoblade,
+  GeorgeNotFound, Sapnap, TommyInnit, WilburSoot, Philza, CaptainSparklez,
+  DanTDM, PewDiePie, jeb_, Dinnerbone, Herobrine, MHF_Steve, MHF_Alex.
+  All 14 candidates PASSED — no player candidate failed verification.
+- Mobs & More (+17, NEW `LibraryCatalog.MOB_CHARACTERS` + a third
+  LibraryScreen section, string `lib_mobs_more`): Mojang's MHF accounts are
+  real player profiles whose skins are the mobs, so they open through the
+  normal character RenderDetail (not the /render/mob endpoint models, which
+  stay untouched at 12). Added: MHF_Blaze, MHF_Ghast, MHF_Slime,
+  MHF_CaveSpider, MHF_Enderman, MHF_Golem (Iron Golem), MHF_Squid,
+  MHF_MushroomCow (Mooshroom), MHF_Ocelot, MHF_PigZombie (Zombie Pigman),
+  MHF_WSkeleton (Wither Skeleton), MHF_Wither, MHF_Witch, MHF_SnowGolem,
+  MHF_LavaSlime (Magma Cube), MHF_Chicken, MHF_Spider.
+- FAILED verification (skipped silently, recorded here per protocol):
+  MHF_MagmaCube — HTTP 404 "No player named mhf_magmacube"; the real Magma
+  Cube MHF account is MHF_LavaSlime, which passed and is included.
+- Library totals now: 19 players + 12 endpoint mob models + 17 mob
+  characters = 48 library entries. Names are hardcoded literals in the
+  catalog (existing pattern), so no new name strings were needed beyond
+  the section title.
+
+### Self-checks (V3.1)
+- (a) String keys: 254 in each of values / -hi / -bn / -ur / -es / -id,
+  identical key order across all six, all XML parses; every `R.string.*`
+  referenced from Kotlin resolves (zero missing).
+- (b) PoseCatalog: 60 entries, all ids unique, the original 30 verified
+  first and in original order; the 6 new free entries lead the expansion
+  block; `extra = arrayOf(...)` convention used throughout; braces/parens
+  balanced.
+- (c) Diff summary — PoseCatalog.kt: doc comment updated + 30 entries
+  appended (no existing line altered). LibraryCatalog.kt: 14 player lines
+  appended to PLAYERS + new MOB_CHARACTERS list (MOBS untouched).
+  LibraryScreen.kt: one appended section block (existing sections
+  untouched). SubscriptionScreen.kt: compare-row literal only.
+  6 × strings.xml: 31 keys added per file + "30"→"60" inside popup_body /
+  sub_feat_poses only. BUILD_NOTES.md: this section. versionCode /
+  versionName NOT bumped (parent does it at build time).
