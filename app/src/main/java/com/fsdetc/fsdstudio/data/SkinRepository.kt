@@ -24,7 +24,8 @@ import java.util.concurrent.TimeUnit
  * - 20 MB OkHttp disk cache; render URLs are immutable so repeats are cache hits.
  * - Profile JSON is cached in memory (LruCache) and in DataStore for 24 h.
  * - On HTTP 429 from skinrender.dev: exactly ONE automatic retry after 2 s, GET only.
- * - AI generation uses a separate long-timeout client; callers enforce one-in-flight.
+ * - AI generation lives in [AiEngine] implementations now; they share [aiClient]
+ *   (long timeouts) and callers enforce one-in-flight.
  */
 class SkinRepository(private val context: Context) {
 
@@ -70,7 +71,7 @@ class SkinRepository(private val context: Context) {
         val request = Request.Builder().url(Api.profileUrl(name)).build()
         httpClient.newCall(request).execute().use { resp ->
             if (resp.code == 404) throw PlayerNotFoundException()
-            if (!resp.isSuccessful) throw IOException("Profile HTTP ${resp.code}")
+            if (!resp.isSuccessful) throw HttpException(resp.code)
             val body = (resp.body ?: throw IOException("Empty profile response")).string()
             val info = parseProfile(body) ?: throw IOException("Bad profile data")
             context.dataStore.edit { p ->
@@ -86,34 +87,8 @@ class SkinRepository(private val context: Context) {
     suspend fun downloadBytes(url: String): ByteArray = withContext(Dispatchers.IO) {
         val request = Request.Builder().url(url).build()
         httpClient.newCall(request).execute().use { resp ->
-            if (!resp.isSuccessful) throw IOException("HTTP ${resp.code}")
+            if (!resp.isSuccessful) throw HttpException(resp.code)
             (resp.body ?: throw IOException("Empty response")).bytes()
-        }
-    }
-
-    /**
-     * One AI generation. If a reference image was supplied and the call fails,
-     * retries exactly once WITHOUT the reference (per the verified API contract).
-     * The returned bytes are re-encoded to PNG by the caller before saving.
-     */
-    suspend fun generateAiImage(fullPrompt: String, seed: Int, referenceUrl: String?): ByteArray =
-        withContext(Dispatchers.IO) {
-            try {
-                callAi(Api.aiUrl(fullPrompt, seed, referenceUrl))
-            } catch (e: Exception) {
-                if (referenceUrl != null) {
-                    callAi(Api.aiUrl(fullPrompt, seed, null))
-                } else {
-                    throw e
-                }
-            }
-        }
-
-    private fun callAi(url: String): ByteArray {
-        val request = Request.Builder().url(url).header("Accept", "image/*").build()
-        aiClient.newCall(request).execute().use { resp ->
-            if (!resp.isSuccessful) throw IOException("AI HTTP ${resp.code}")
-            return (resp.body ?: throw IOException("Empty AI response")).bytes()
         }
     }
 

@@ -12,10 +12,16 @@ data class CharacterInfo(
     /** Absolute path of the copied skin PNG when [source] is [CharacterSource.UPLOAD]. */
     val localSkinPath: String?,
     val source: CharacterSource,
+    /**
+     * Stored render-id override for characters whose render URL id is not their
+     * UUID/name — the built-in defaults use "steve" / "alex". Null normally.
+     */
+    val renderIdOverride: String? = null,
 ) {
     /** Identifier usable in skinrender.dev render URLs; null for uploaded skins. */
     val renderId: String?
-        get() = if (source == CharacterSource.USERNAME) (uuid ?: name) else null
+        get() = renderIdOverride
+            ?: if (source == CharacterSource.USERNAME) (uuid ?: name) else null
 
     val uuidShort: String? get() = uuid?.take(8)
 
@@ -41,5 +47,12 @@ sealed interface DetailRequest {
         val sourceName: String,
         val historyId: Long? = null,
         val deletableHistory: Boolean = false,
+    ) : DetailRequest
+
+    /** A Library mob render (skinrender.dev /render/mob/...), posed via [poses]. */
+    data class MobRender(
+        val mobId: String,
+        val mobLabel: String,
+        val poses: List<Api.Pose>,
     ) : DetailRequest
 }

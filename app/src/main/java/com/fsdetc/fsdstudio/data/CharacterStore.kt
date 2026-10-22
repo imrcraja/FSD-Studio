@@ -17,6 +17,7 @@ class CharacterStore(private val context: Context) {
         val SKIN_HASH = stringPreferencesKey("char_skin_hash")
         val SKIN_URL = stringPreferencesKey("char_skin_url")
         val LOCAL_PATH = stringPreferencesKey("char_local_path")
+        val RENDER_ID = stringPreferencesKey("char_render_id")
     }
 
     val character: Flow<CharacterInfo?> = context.dataStore.data.map { p ->
@@ -31,6 +32,7 @@ class CharacterStore(private val context: Context) {
             localSkinPath = p[Keys.LOCAL_PATH],
             source = runCatching { CharacterSource.valueOf(sourceName) }
                 .getOrDefault(CharacterSource.USERNAME),
+            renderIdOverride = p[Keys.RENDER_ID],
         )
     }
 
@@ -43,6 +45,7 @@ class CharacterStore(private val context: Context) {
             setOrRemove(p, Keys.SKIN_HASH, c.skinHash)
             setOrRemove(p, Keys.SKIN_URL, c.skinUrl)
             setOrRemove(p, Keys.LOCAL_PATH, c.localSkinPath)
+            setOrRemove(p, Keys.RENDER_ID, c.renderIdOverride)
         }
     }
 
@@ -55,6 +58,7 @@ class CharacterStore(private val context: Context) {
             p.remove(Keys.SKIN_HASH)
             p.remove(Keys.SKIN_URL)
             p.remove(Keys.LOCAL_PATH)
+            p.remove(Keys.RENDER_ID)
         }
     }
 
