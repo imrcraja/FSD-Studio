@@ -31,10 +31,6 @@ import coil.compose.AsyncImage
 import com.fsdetc.fsdstudio.R
 import com.fsdetc.fsdstudio.data.DetailRequest
 import com.fsdetc.fsdstudio.data.db.HistoryItem
-import com.fsdetc.fsdstudio.ui.theme.FsdOnSurface
-import com.fsdetc.fsdstudio.ui.theme.FsdOnSurfaceMuted
-import com.fsdetc.fsdstudio.ui.theme.FsdSurface
-import com.fsdetc.fsdstudio.ui.theme.FsdSurfaceVariant
 import com.fsdetc.fsdstudio.viewmodel.HistoryViewModel
 import java.io.File
 
@@ -53,16 +49,16 @@ fun HistoryScreen(
         Text(
             text = stringResource(R.string.history_title),
             style = MaterialTheme.typography.headlineSmall,
-            color = FsdOnSurface,
+            color = MaterialTheme.colorScheme.onSurface,
         )
         Spacer(Modifier.height(12.dp))
 
         if (items.isEmpty()) {
-            Card(colors = CardDefaults.cardColors(containerColor = FsdSurface)) {
+            Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)) {
                 Text(
                     text = stringResource(R.string.history_empty),
                     style = MaterialTheme.typography.bodyMedium,
-                    color = FsdOnSurfaceMuted,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                     modifier = Modifier.padding(16.dp),
                 )
             }
@@ -97,7 +93,7 @@ fun HistoryScreen(
 private fun HistoryCell(item: HistoryItem, onClick: () -> Unit) {
     Card(
         onClick = onClick,
-        colors = CardDefaults.cardColors(containerColor = FsdSurface),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
     ) {
         Column(Modifier.padding(8.dp)) {
             Box(
@@ -105,7 +101,7 @@ private fun HistoryCell(item: HistoryItem, onClick: () -> Unit) {
                     .fillMaxWidth()
                     .aspectRatio(0.8f)
                     .clip(RoundedCornerShape(8.dp))
-                    .background(FsdSurfaceVariant),
+                    .background(MaterialTheme.colorScheme.surfaceVariant),
             ) {
                 AsyncImage(
                     model = File(item.filePath),
@@ -118,14 +114,14 @@ private fun HistoryCell(item: HistoryItem, onClick: () -> Unit) {
             Text(
                 text = item.title,
                 style = MaterialTheme.typography.labelMedium,
-                color = FsdOnSurface,
+                color = MaterialTheme.colorScheme.onSurface,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
             )
             Text(
                 text = item.subtitle,
                 style = MaterialTheme.typography.labelSmall,
-                color = FsdOnSurfaceMuted,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
             )

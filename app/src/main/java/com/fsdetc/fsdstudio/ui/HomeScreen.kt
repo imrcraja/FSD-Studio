@@ -22,14 +22,17 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.GridView
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Upload
+import androidx.compose.material.icons.filled.WorkspacePremium
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
@@ -56,19 +59,17 @@ import com.fsdetc.fsdstudio.data.CharacterSource
 import com.fsdetc.fsdstudio.data.DetailRequest
 import com.fsdetc.fsdstudio.data.SkinBitmaps
 import com.fsdetc.fsdstudio.data.db.HistoryItem
-import com.fsdetc.fsdstudio.ui.theme.FsdError
-import com.fsdetc.fsdstudio.ui.theme.FsdOnSurface
-import com.fsdetc.fsdstudio.ui.theme.FsdOnSurfaceMuted
-import com.fsdetc.fsdstudio.ui.theme.FsdSurface
-import com.fsdetc.fsdstudio.ui.theme.FsdSurfaceVariant
 import com.fsdetc.fsdstudio.viewmodel.MainViewModel
 
 @Composable
 fun HomeScreen(
     mainVm: MainViewModel,
     onOpenDetail: (DetailRequest) -> Unit,
+    onOpenPro: () -> Unit,
+    onOpenLibrary: () -> Unit,
 ) {
     val character by mainVm.character.collectAsState()
+    val downloadsLeft by mainVm.downloadsLeft.collectAsState()
     val searchState by mainVm.searchState.collectAsState()
     val uploadError by mainVm.uploadError.collectAsState()
     val uploading by mainVm.uploading.collectAsState()
@@ -95,21 +96,29 @@ fun HomeScreen(
                     .clip(RoundedCornerShape(14.dp)),
             )
             Spacer(Modifier.width(12.dp))
-            Column {
+            Column(Modifier.weight(1f)) {
                 Text(
                     text = stringResource(R.string.app_name),
                     style = MaterialTheme.typography.headlineMedium,
-                    color = FsdOnSurface,
+                    color = MaterialTheme.colorScheme.onSurface,
                 )
                 Text(
                     text = stringResource(R.string.app_tagline),
                     style = MaterialTheme.typography.bodyMedium,
-                    color = FsdOnSurfaceMuted,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+            }
+            IconButton(onClick = onOpenPro) {
+                Icon(
+                    Icons.Filled.WorkspacePremium,
+                    contentDescription = stringResource(R.string.sub_title),
+                    tint = MaterialTheme.colorScheme.secondary,
+                    modifier = Modifier.size(28.dp),
                 )
             }
         }
 
-        Card(colors = CardDefaults.cardColors(containerColor = FsdSurface)) {
+        Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)) {
             Column(
                 modifier = Modifier.padding(16.dp),
                 verticalArrangement = Arrangement.spacedBy(12.dp),
@@ -138,14 +147,14 @@ fun HomeScreen(
                     }
                 }
                 (searchState as? MainViewModel.SearchState.Error)?.let {
-                    Text(it.message, color = FsdError, style = MaterialTheme.typography.bodySmall)
+                    Text(it.message, color = MaterialTheme.colorScheme.error, style = MaterialTheme.typography.bodySmall)
                 }
 
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     HorizontalDivider(modifier = Modifier.weight(1f))
                     Text(
                         text = "  " + stringResource(R.string.home_or) + "  ",
-                        color = FsdOnSurfaceMuted,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
                         style = MaterialTheme.typography.bodySmall,
                     )
                     HorizontalDivider(modifier = Modifier.weight(1f))
@@ -161,14 +170,23 @@ fun HomeScreen(
                     Text(stringResource(R.string.home_upload))
                 }
                 uploadError?.let {
-                    Text(it, color = FsdError, style = MaterialTheme.typography.bodySmall)
+                    Text(it, color = MaterialTheme.colorScheme.error, style = MaterialTheme.typography.bodySmall)
                 }
             }
         }
 
+        OutlinedButton(
+            onClick = onOpenLibrary,
+            modifier = Modifier.fillMaxWidth(),
+        ) {
+            Icon(Icons.Filled.GridView, contentDescription = null, modifier = Modifier.size(18.dp))
+            Spacer(Modifier.width(8.dp))
+            Text(stringResource(R.string.lib_button))
+        }
+
         val ch = character
         if (ch == null) {
-            Card(colors = CardDefaults.cardColors(containerColor = FsdSurface)) {
+            Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)) {
                 Column(
                     modifier = Modifier.padding(16.dp),
                     verticalArrangement = Arrangement.spacedBy(6.dp),
@@ -176,18 +194,24 @@ fun HomeScreen(
                     Text(
                         text = stringResource(R.string.home_empty_title),
                         style = MaterialTheme.typography.titleMedium,
-                        color = FsdOnSurface,
+                        color = MaterialTheme.colorScheme.onSurface,
                     )
                     Text(
                         text = stringResource(R.string.home_empty_body),
                         style = MaterialTheme.typography.bodyMedium,
-                        color = FsdOnSurfaceMuted,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
                 }
             }
         } else {
             SectionTitle(stringResource(R.string.home_current_character))
             CharacterCard(ch)
+            Text(
+                text = downloadsLeft?.let { stringResource(R.string.dl_left_today, it) }
+                    ?: stringResource(R.string.dl_unlimited),
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
         }
 
         if (recent.isNotEmpty()) {
@@ -217,7 +241,7 @@ fun HomeScreen(
 private fun CharacterCard(ch: CharacterInfo) {
     val context = LocalContext.current
     Card(
-        colors = CardDefaults.cardColors(containerColor = FsdSurface),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
         modifier = Modifier.fillMaxWidth(),
     ) {
         Row(
@@ -228,7 +252,7 @@ private fun CharacterCard(ch: CharacterInfo) {
                 modifier = Modifier
                     .size(84.dp)
                     .clip(RoundedCornerShape(12.dp))
-                    .background(FsdSurfaceVariant),
+                    .background(MaterialTheme.colorScheme.surfaceVariant),
                 contentAlignment = Alignment.Center,
             ) {
                 val model: Any? = when (ch.source) {
@@ -249,7 +273,7 @@ private fun CharacterCard(ch: CharacterInfo) {
                 Text(
                     text = ch.name,
                     style = MaterialTheme.typography.titleMedium,
-                    color = FsdOnSurface,
+                    color = MaterialTheme.colorScheme.onSurface,
                 )
                 InfoChip(
                     text = stringResource(
@@ -266,7 +290,7 @@ private fun CharacterCard(ch: CharacterInfo) {
                             if (ch.isSlim) R.string.model_slim else R.string.model_classic,
                         ) + (ch.uuidShort?.let { " · $it" } ?: ""),
                         style = MaterialTheme.typography.bodySmall,
-                        color = FsdOnSurfaceMuted,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
                 }
             }
@@ -280,7 +304,7 @@ private fun RecentThumb(item: HistoryItem, onClick: () -> Unit) {
         modifier = Modifier
             .size(84.dp)
             .clip(RoundedCornerShape(12.dp))
-            .background(FsdSurfaceVariant)
+            .background(MaterialTheme.colorScheme.surfaceVariant)
             .clickable(onClick = onClick),
     ) {
         AsyncImage(

@@ -37,17 +37,14 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.fsdetc.fsdstudio.R
 import com.fsdetc.fsdstudio.data.CharacterSource
+import com.fsdetc.fsdstudio.data.DownloadOutcome
 import com.fsdetc.fsdstudio.data.ImageSaver
-import com.fsdetc.fsdstudio.ui.theme.FsdError
-import com.fsdetc.fsdstudio.ui.theme.FsdOnSurface
-import com.fsdetc.fsdstudio.ui.theme.FsdOnSurfaceMuted
-import com.fsdetc.fsdstudio.ui.theme.FsdSurface
 import com.fsdetc.fsdstudio.viewmodel.AiViewModel
 import kotlinx.coroutines.launch
 import java.io.File
 
 @Composable
-fun AiScreen(aiVm: AiViewModel) {
+fun AiScreen(aiVm: AiViewModel, onOpenPro: () -> Unit) {
     val character by aiVm.character.collectAsState()
     val remaining by aiVm.remaining.collectAsState()
     val context = LocalContext.current
@@ -65,16 +62,16 @@ fun AiScreen(aiVm: AiViewModel) {
         Text(
             text = stringResource(R.string.ai_title),
             style = MaterialTheme.typography.headlineSmall,
-            color = FsdOnSurface,
+            color = MaterialTheme.colorScheme.onSurface,
         )
 
         val ch = character
         if (ch == null) {
-            Card(colors = CardDefaults.cardColors(containerColor = FsdSurface)) {
+            Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)) {
                 Text(
                     text = stringResource(R.string.ai_need_character),
                     style = MaterialTheme.typography.bodyMedium,
-                    color = FsdOnSurfaceMuted,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                     modifier = Modifier.padding(16.dp),
                 )
             }
@@ -88,7 +85,7 @@ fun AiScreen(aiVm: AiViewModel) {
                     },
                 ),
                 style = MaterialTheme.typography.bodyMedium,
-                color = FsdOnSurfaceMuted,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
         }
 
@@ -104,7 +101,7 @@ fun AiScreen(aiVm: AiViewModel) {
         Text(
             text = stringResource(R.string.ai_remaining, remaining),
             style = MaterialTheme.typography.bodyMedium,
-            color = FsdOnSurfaceMuted,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
 
         Button(
@@ -122,13 +119,13 @@ fun AiScreen(aiVm: AiViewModel) {
                 Text(
                     text = stringResource(R.string.ai_generating),
                     style = MaterialTheme.typography.bodyMedium,
-                    color = FsdOnSurfaceMuted,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
             }
         }
 
         aiVm.error?.let { message ->
-            Text(message, color = FsdError, style = MaterialTheme.typography.bodyMedium)
+            Text(message, color = MaterialTheme.colorScheme.error, style = MaterialTheme.typography.bodyMedium)
             if (!aiVm.generating) {
                 OutlinedButton(onClick = { aiVm.generate() }) {
                     Text(stringResource(R.string.ai_retry))
@@ -144,20 +141,38 @@ fun AiScreen(aiVm: AiViewModel) {
                     .fillMaxWidth()
                     .aspectRatio(1f),
             )
+            aiVm.engineNote?.let { note ->
+                Text(
+                    text = note,
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+            }
             Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                 Button(
                     onClick = {
                         scope.launch {
-                            val ok = ImageSaver.saveToGallery(
-                                context,
-                                File(path),
-                                "FSD_AI_${System.currentTimeMillis()}.png",
-                            )
-                            Toast.makeText(
-                                context,
-                                if (ok) R.string.saved_to_gallery else R.string.saved_failed,
-                                Toast.LENGTH_SHORT,
-                            ).show()
+                            val outcome = aiVm.downloadGate.saveWithGate {
+                                ImageSaver.saveToGallery(
+                                    context,
+                                    File(path),
+                                    "FSD_AI_${System.currentTimeMillis()}.png",
+                                )
+                            }
+                            when (outcome) {
+                                DownloadOutcome.Saved -> Toast.makeText(
+                                    context, R.string.saved_to_gallery, Toast.LENGTH_SHORT,
+                                ).show()
+                                DownloadOutcome.Failed -> Toast.makeText(
+                                    context, R.string.saved_failed, Toast.LENGTH_SHORT,
+                                ).show()
+                                DownloadOutcome.LimitReached -> {
+                                    Toast.makeText(
+                                        context, R.string.dl_limit_reached, Toast.LENGTH_LONG,
+                                    ).show()
+                                    onOpenPro()
+                                }
+                            }
                         }
                     },
                     modifier = Modifier.weight(1f),

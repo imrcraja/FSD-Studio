@@ -39,10 +39,6 @@ import com.fsdetc.fsdstudio.data.Api
 import com.fsdetc.fsdstudio.data.CharacterSource
 import com.fsdetc.fsdstudio.data.DetailRequest
 import com.fsdetc.fsdstudio.data.SkinBitmaps
-import com.fsdetc.fsdstudio.ui.theme.FsdOnSurface
-import com.fsdetc.fsdstudio.ui.theme.FsdOnSurfaceMuted
-import com.fsdetc.fsdstudio.ui.theme.FsdSurface
-import com.fsdetc.fsdstudio.ui.theme.FsdSurfaceVariant
 import com.fsdetc.fsdstudio.viewmodel.MainViewModel
 import java.io.File
 
@@ -53,7 +49,7 @@ fun PosesScreen(
     onOpenPro: () -> Unit,
 ) {
     val character by mainVm.character.collectAsState()
-    val isPro by mainVm.isPro.collectAsState()
+    val plan by mainVm.plan.collectAsState()
     val context = LocalContext.current
 
     Column(
@@ -64,17 +60,17 @@ fun PosesScreen(
         Text(
             text = stringResource(R.string.poses_title),
             style = MaterialTheme.typography.headlineSmall,
-            color = FsdOnSurface,
+            color = MaterialTheme.colorScheme.onSurface,
         )
         Spacer(Modifier.height(12.dp))
 
         val ch = character
         if (ch == null) {
-            Card(colors = CardDefaults.cardColors(containerColor = FsdSurface)) {
+            Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)) {
                 Text(
                     text = stringResource(R.string.poses_no_character),
                     style = MaterialTheme.typography.bodyMedium,
-                    color = FsdOnSurfaceMuted,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                     modifier = Modifier.padding(16.dp),
                 )
             }
@@ -85,7 +81,7 @@ fun PosesScreen(
             CharacterSource.USERNAME -> {
                 val renderId = ch.renderId
                 if (renderId == null) {
-                    Text(stringResource(R.string.poses_no_character), color = FsdOnSurfaceMuted)
+                    Text(stringResource(R.string.poses_no_character), color = MaterialTheme.colorScheme.onSurfaceVariant)
                     return@Column
                 }
                 LazyVerticalGrid(
@@ -94,8 +90,8 @@ fun PosesScreen(
                     verticalArrangement = Arrangement.spacedBy(10.dp),
                     modifier = Modifier.fillMaxSize(),
                 ) {
-                    itemsIndexed(Api.POSES) { index, pose ->
-                        val locked = index >= Api.FREE_POSE_COUNT && !isPro
+                    itemsIndexed(Api.POSES, key = { _, pose -> pose.id }) { index, pose ->
+                        val locked = index >= mainVm.entitlements.maxPoseIndex(plan)
                         PoseCell(
                             pose = pose,
                             renderId = renderId,
@@ -123,7 +119,7 @@ fun PosesScreen(
                 Text(
                     text = stringResource(R.string.poses_upload_note),
                     style = MaterialTheme.typography.bodyMedium,
-                    color = FsdOnSurfaceMuted,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
                 Spacer(Modifier.height(12.dp))
                 val sha = ch.skinHash
@@ -169,7 +165,7 @@ private fun PoseCell(
 ) {
     Card(
         onClick = onClick,
-        colors = CardDefaults.cardColors(containerColor = FsdSurface),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
     ) {
         Column(
             modifier = Modifier.padding(8.dp),
@@ -180,14 +176,14 @@ private fun PoseCell(
                     .fillMaxWidth()
                     .aspectRatio(5f / 8f)
                     .clip(RoundedCornerShape(8.dp))
-                    .background(FsdSurfaceVariant),
+                    .background(MaterialTheme.colorScheme.surfaceVariant),
                 contentAlignment = Alignment.Center,
             ) {
                 if (locked) {
                     Icon(
                         Icons.Filled.Lock,
                         contentDescription = null,
-                        tint = FsdOnSurfaceMuted,
+                        tint = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
                     ProChip(
                         modifier = Modifier
@@ -195,11 +191,10 @@ private fun PoseCell(
                             .padding(4.dp),
                     )
                 } else {
-                    AsyncImage(
-                        model = Api.renderUrl(renderId, "body", 384, pose = pose.id),
+                    GridThumb(
+                        model = Api.renderUrl(renderId, "body", 320, pose = pose.id),
                         contentDescription = pose.label,
                         modifier = Modifier.fillMaxSize(),
-                        contentScale = ContentScale.Fit,
                     )
                 }
             }
@@ -207,7 +202,7 @@ private fun PoseCell(
             Text(
                 text = pose.label,
                 style = MaterialTheme.typography.labelMedium,
-                color = FsdOnSurface,
+                color = MaterialTheme.colorScheme.onSurface,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
             )
@@ -219,7 +214,7 @@ private fun PoseCell(
 private fun FlatCell(file: File, label: String, onClick: () -> Unit) {
     Card(
         onClick = onClick,
-        colors = CardDefaults.cardColors(containerColor = FsdSurface),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
     ) {
         Column(
             modifier = Modifier.padding(8.dp),
@@ -230,7 +225,7 @@ private fun FlatCell(file: File, label: String, onClick: () -> Unit) {
                     .fillMaxWidth()
                     .aspectRatio(5f / 8f)
                     .clip(RoundedCornerShape(8.dp))
-                    .background(FsdSurfaceVariant),
+                    .background(MaterialTheme.colorScheme.surfaceVariant),
                 contentAlignment = Alignment.Center,
             ) {
                 AsyncImage(
@@ -244,7 +239,7 @@ private fun FlatCell(file: File, label: String, onClick: () -> Unit) {
             Text(
                 text = label,
                 style = MaterialTheme.typography.labelMedium,
-                color = FsdOnSurface,
+                color = MaterialTheme.colorScheme.onSurface,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
             )

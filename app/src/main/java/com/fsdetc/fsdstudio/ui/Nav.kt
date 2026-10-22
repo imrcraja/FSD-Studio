@@ -8,12 +8,16 @@ import androidx.compose.material.icons.filled.AutoAwesome
 import androidx.compose.material.icons.filled.History
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -24,7 +28,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.fsdetc.fsdstudio.R
-import com.fsdetc.fsdstudio.ui.theme.FsdSurface
+import com.fsdetc.fsdstudio.data.DetailRequest
 import com.fsdetc.fsdstudio.viewmodel.AiViewModel
 import com.fsdetc.fsdstudio.viewmodel.HistoryViewModel
 import com.fsdetc.fsdstudio.viewmodel.MainViewModel
@@ -37,6 +41,7 @@ object Routes {
     const val SETTINGS = "settings"
     const val PRO = "pro"
     const val DETAIL = "detail"
+    const val LIBRARY = "library"
 }
 
 private data class Tab(val route: String, val labelRes: Int, val icon: ImageVector)
@@ -56,10 +61,18 @@ fun FsdNavHost(mainVm: MainViewModel, aiVm: AiViewModel, historyVm: HistoryViewM
     val currentRoute = backStack?.destination?.route
     val showBar = currentRoute in TABS.map { it.route }
 
+    fun goHome() {
+        nav.navigate(Routes.HOME) {
+            popUpTo(nav.graph.findStartDestination().id) { saveState = true }
+            launchSingleTop = true
+            restoreState = true
+        }
+    }
+
     Scaffold(
         bottomBar = {
             if (showBar) {
-                NavigationBar(containerColor = FsdSurface) {
+                NavigationBar(containerColor = MaterialTheme.colorScheme.surface) {
                     TABS.forEach { tab ->
                         NavigationBarItem(
                             selected = currentRoute == tab.route,
@@ -87,6 +100,8 @@ fun FsdNavHost(mainVm: MainViewModel, aiVm: AiViewModel, historyVm: HistoryViewM
                             mainVm.openDetail(req)
                             nav.navigate(Routes.DETAIL)
                         },
+                        onOpenPro = { nav.navigate(Routes.PRO) },
+                        onOpenLibrary = { nav.navigate(Routes.LIBRARY) },
                     )
                 }
                 composable(Routes.POSES) {
@@ -100,7 +115,10 @@ fun FsdNavHost(mainVm: MainViewModel, aiVm: AiViewModel, historyVm: HistoryViewM
                     )
                 }
                 composable(Routes.AI) {
-                    AiScreen(aiVm = aiVm)
+                    AiScreen(
+                        aiVm = aiVm,
+                        onOpenPro = { nav.navigate(Routes.PRO) },
+                    )
                 }
                 composable(Routes.HISTORY) {
                     HistoryScreen(
@@ -115,7 +133,27 @@ fun FsdNavHost(mainVm: MainViewModel, aiVm: AiViewModel, historyVm: HistoryViewM
                     SettingsScreen(onOpenPro = { nav.navigate(Routes.PRO) })
                 }
                 composable(Routes.PRO) {
-                    ProScreen(onBack = { nav.popBackStack() })
+                    SubscriptionScreen(onBack = { nav.popBackStack() })
+                }
+                composable(Routes.LIBRARY) {
+                    LibraryScreen(
+                        onBack = { nav.popBackStack() },
+                        onSelectPlayer = { player ->
+                            player.character?.let { mainVm.selectCharacter(it) }
+                            player.searchName?.let { mainVm.search(it) }
+                            goHome()
+                        },
+                        onSelectMob = { mob ->
+                            mainVm.openDetail(
+                                DetailRequest.MobRender(
+                                    mobId = mob.id,
+                                    mobLabel = mob.label,
+                                    poses = mob.poses,
+                                ),
+                            )
+                            nav.navigate(Routes.DETAIL)
+                        },
+                    )
                 }
                 composable(Routes.DETAIL) {
                     RenderDetailScreen(
@@ -126,5 +164,30 @@ fun FsdNavHost(mainVm: MainViewModel, aiVm: AiViewModel, historyVm: HistoryViewM
                 }
             }
         }
+    }
+
+    // The one gentle upgrade pop-up: fired by the 3rd successful free download
+    // of the day (the gate marks it shown before emitting, so ≤ once per day,
+    // and it never appears on app start).
+    val showPopup by mainVm.showUpgradePopup.collectAsState()
+    if (showPopup) {
+        AlertDialog(
+            onDismissRequest = { mainVm.dismissUpgradePopup() },
+            title = { Text(stringResource(R.string.popup_title)) },
+            text = { Text(stringResource(R.string.popup_body)) },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        mainVm.dismissUpgradePopup()
+                        nav.navigate(Routes.PRO)
+                    },
+                ) { Text(stringResource(R.string.popup_see_plans)) }
+            },
+            dismissButton = {
+                TextButton(onClick = { mainVm.dismissUpgradePopup() }) {
+                    Text(stringResource(R.string.popup_not_now))
+                }
+            },
+        )
     }
 }

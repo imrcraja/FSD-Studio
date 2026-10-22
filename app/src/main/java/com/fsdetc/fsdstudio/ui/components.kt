@@ -2,17 +2,30 @@ package com.fsdetc.fsdstudio.ui
 
 import androidx.annotation.StringRes
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Refresh
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.FilterChip
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
@@ -23,11 +36,8 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import coil.compose.SubcomposeAsyncImage
 import com.fsdetc.fsdstudio.R
-import com.fsdetc.fsdstudio.ui.theme.FsdOnSurface
-import com.fsdetc.fsdstudio.ui.theme.FsdPrimary
-import com.fsdetc.fsdstudio.ui.theme.FsdSecondaryAccent
-import com.fsdetc.fsdstudio.ui.theme.FsdSurfaceVariant
 
 /** Background choices on the render-detail screen. [hex] is the API `bg` value; null = transparent. */
 enum class BgOption(@StringRes val labelRes: Int, val hex: String?, val previewColor: Color?) {
@@ -35,6 +45,13 @@ enum class BgOption(@StringRes val labelRes: Int, val hex: String?, val previewC
     Dark(R.string.bg_dark, "101018", Color(0xFF101018)),
     Purple(R.string.bg_purple, "6E4CAD", Color(0xFF6E4CAD)),
     White(R.string.bg_white, "FFFFFF", Color.White),
+    ;
+
+    companion object {
+        /** Resolve a stored option name (Settings default); Transparent when unknown. */
+        fun fromName(name: String?): BgOption =
+            entries.firstOrNull { it.name == name } ?: Transparent
+    }
 }
 
 /** Classic transparency checkerboard. */
@@ -67,6 +84,7 @@ fun FramedImage(
     bg: BgOption,
     modifier: Modifier = Modifier,
     onSuccess: () -> Unit = {},
+    onError: (Throwable?) -> Unit = {},
 ) {
     Box(modifier.clip(RoundedCornerShape(16.dp))) {
         when {
@@ -83,6 +101,54 @@ fun FramedImage(
             modifier = Modifier.fillMaxSize(),
             contentScale = ContentScale.Fit,
             onSuccess = { onSuccess() },
+            onError = { state -> onError(state.result.throwable) },
+        )
+    }
+}
+
+/**
+ * A grid thumbnail with a loading spinner and a tap-to-retry error placeholder,
+ * so a failed render request shows a human state instead of an empty box.
+ */
+@Composable
+fun GridThumb(
+    model: Any?,
+    contentDescription: String?,
+    modifier: Modifier = Modifier,
+) {
+    var attempt by remember(model) { mutableIntStateOf(0) }
+    key(attempt) {
+        SubcomposeAsyncImage(
+            model = model,
+            contentDescription = contentDescription,
+            modifier = modifier,
+            contentScale = ContentScale.Fit,
+            loading = {
+                Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                    CircularProgressIndicator(modifier = Modifier.size(22.dp), strokeWidth = 2.dp)
+                }
+            },
+            error = {
+                Box(
+                    Modifier
+                        .fillMaxSize()
+                        .clickable { attempt++ },
+                    contentAlignment = Alignment.Center,
+                ) {
+                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                        Icon(
+                            Icons.Filled.Refresh,
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                        )
+                        Text(
+                            text = stringResource(R.string.action_retry),
+                            style = MaterialTheme.typography.labelSmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        )
+                    }
+                }
+            },
         )
     }
 }
@@ -103,10 +169,10 @@ fun BgSelector(selected: BgOption, onSelect: (BgOption) -> Unit) {
 
 @Composable
 fun ProChip(modifier: Modifier = Modifier) {
-    Surface(modifier, color = FsdPrimary, shape = RoundedCornerShape(6.dp)) {
+    Surface(modifier, color = MaterialTheme.colorScheme.primaryContainer, shape = RoundedCornerShape(6.dp)) {
         Text(
             text = "🔒 " + stringResource(R.string.pro_badge),
-            color = FsdOnSurface,
+            color = MaterialTheme.colorScheme.onSurface,
             style = MaterialTheme.typography.labelSmall,
             modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp),
         )
@@ -115,10 +181,10 @@ fun ProChip(modifier: Modifier = Modifier) {
 
 @Composable
 fun InfoChip(text: String, modifier: Modifier = Modifier) {
-    Surface(modifier, color = FsdSurfaceVariant, shape = RoundedCornerShape(6.dp)) {
+    Surface(modifier, color = MaterialTheme.colorScheme.surfaceVariant, shape = RoundedCornerShape(6.dp)) {
         Text(
             text = text,
-            color = FsdSecondaryAccent,
+            color = MaterialTheme.colorScheme.secondary,
             style = MaterialTheme.typography.labelSmall,
             modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp),
         )
@@ -130,7 +196,7 @@ fun SectionTitle(text: String, modifier: Modifier = Modifier) {
     Text(
         text = text,
         style = MaterialTheme.typography.titleMedium,
-        color = FsdOnSurface,
+        color = MaterialTheme.colorScheme.onSurface,
         modifier = modifier,
     )
 }
