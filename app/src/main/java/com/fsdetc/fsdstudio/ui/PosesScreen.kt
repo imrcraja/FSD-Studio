@@ -143,7 +143,7 @@ fun PosesScreen(
                     verticalArrangement = Arrangement.spacedBy(10.dp),
                     modifier = Modifier.fillMaxSize(),
                 ) {
-                    items(flats) { (kind, labelRes, title) ->
+                    items(flats, key = { it.first }) { (kind, labelRes, title) ->
                         val file = SkinBitmaps.flatFile(context, sha, kind)
                         FlatCell(file = file, label = stringResource(labelRes)) {
                             onOpenDetail(

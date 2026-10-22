@@ -5,6 +5,7 @@ import android.content.Intent
 import android.net.Uri
 import android.text.format.Formatter
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
@@ -110,7 +111,8 @@ fun SettingsScreen(onOpenPro: () -> Unit, onReplayTutorial: () -> Unit) {
                         contentDescription = null,
                         modifier = Modifier
                             .size(56.dp)
-                            .clip(RoundedCornerShape(12.dp)),
+                            .clip(RoundedCornerShape(12.dp))
+                            .background(MaterialTheme.colorScheme.surfaceVariant),
                     )
                 } else {
                     Image(
