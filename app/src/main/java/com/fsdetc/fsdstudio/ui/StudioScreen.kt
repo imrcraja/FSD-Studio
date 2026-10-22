@@ -3,7 +3,9 @@ package com.fsdetc.fsdstudio.ui
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
@@ -13,8 +15,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Download
 import androidx.compose.material.icons.filled.KeyboardArrowDown
@@ -31,6 +33,7 @@ import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
@@ -52,6 +55,7 @@ import com.fsdetc.fsdstudio.data.PoseCatalog
 import com.fsdetc.fsdstudio.data.PoseDef
 import com.fsdetc.fsdstudio.data.SkinBitmaps
 import com.fsdetc.fsdstudio.viewmodel.MainViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.io.File
 import java.util.Locale
@@ -62,9 +66,14 @@ import kotlin.math.roundToInt
  * library, then adjust camera, position and body joints, and export the
  * result to the gallery. The app's normal render/download limits apply.
  *
- * API discipline: sliders edit a local value while dragging; the committed
- * state (and therefore the render URL / Coil key) changes ONLY on slider
- * release or on chip/toggle taps — never one request per drag frame.
+ * The preview is pinned at the top of the screen and the controls scroll
+ * beneath it, so adjusting a slider and seeing the result happens in one
+ * view — no scrolling up and down.
+ *
+ * API discipline: sliders update the draft state on every change (so the
+ * thumbs and value labels feel live), but the render URL is rebuilt only
+ * from a debounced snapshot of the parameters — see the LaunchedEffect in
+ * [StudioEditor]. Never one request per drag frame.
  */
 @Composable
 fun StudioScreen(
@@ -165,7 +174,8 @@ private fun StudioEditor(
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
 
-    // Committed render state — the ONLY values the preview URL is built from.
+    // Draft render state — sliders write these on EVERY change so the UI
+    // feels live; the preview below renders a debounced snapshot of them.
     var poseDef by remember(renderId) { mutableStateOf(PoseCatalog.POSES.first()) }
     var yaw by remember(renderId) { mutableFloatStateOf(35f) }
     var pitch by remember(renderId) { mutableFloatStateOf(12f) }
@@ -226,150 +236,210 @@ private fun StudioEditor(
     }
 
     val poseLabel = stringResource(poseDef.labelRes)
-    val previewUrl = Api.renderUrl(renderId, "body", 512, bgHex = bg.hex, extra = currentParams())
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .verticalScroll(rememberScrollState()),
-        verticalArrangement = Arrangement.spacedBy(12.dp),
-    ) {
-        // ---------------------------------------------------------- preview
-        Box(
-            Modifier
-                .fillMaxWidth()
-                .aspectRatio(3f / 4f),
-        ) {
-            FramedImage(
-                model = previewUrl,
-                bg = bg,
-                modifier = Modifier.fillMaxSize(),
-            )
-            // Preview-only branding; the export below stays clean.
-            WatermarkOverlay(Modifier.fillMaxSize())
-        }
-        BgSelector(selected = bg, onSelect = { bg = it })
+    // Debounced render snapshot: the preview URL is built ONLY from
+    // [renderParams]/[renderBg], which are refreshed ~350 ms after the draft
+    // parameters stop changing. This debounce protects the free render API
+    // from a request flood while a slider is being dragged (potentially one
+    // request per pixel of travel); a released slider simply settles and is
+    // picked up immediately. Settled URLs are immutable, so repeats are
+    // served by Coil's cache. Export below still uses the live draft values
+    // via currentParams(), never the possibly-stale snapshot.
+    val draftParams = currentParams()
+    var renderParams by remember(renderId) { mutableStateOf(draftParams) }
+    var renderBg by remember(renderId) { mutableStateOf(bg) }
+    LaunchedEffect(draftParams, bg) {
+        delay(350)
+        renderParams = draftParams
+        renderBg = bg
+    }
+    val previewUrl = Api.renderUrl(renderId, "body", 512, bgHex = renderBg.hex, extra = renderParams)
 
-        // ---------------------------------------------------------- poses
-        SectionTitle(stringResource(R.string.studio_pose))
-        Row(Modifier.horizontalScroll(rememberScrollState())) {
-            PoseCatalog.POSES.forEach { def ->
-                val locked = !mainVm.entitlements.poseUnlocked(def, plan)
-                val label = stringResource(def.labelRes)
-                FilterChip(
-                    selected = poseDef.id == def.id,
-                    onClick = { if (locked) onOpenPro() else applyPose(def) },
-                    label = { Text(if (locked) "$label 🔒" else label) },
-                    modifier = Modifier.padding(end = 8.dp),
+    // Sticky layout: the preview is pinned at the top (38% of the available
+    // height) and never scrolls; every control lives in the LazyColumn below
+    // it, so adjusting a slider and watching the result needs no scrolling.
+    BoxWithConstraints(Modifier.fillMaxSize()) {
+        Column(Modifier.fillMaxSize()) {
+            // ------------------------------------------------------ preview
+            Box(
+                Modifier
+                    .fillMaxWidth()
+                    .height(maxHeight * 0.38f),
+            ) {
+                FramedImage(
+                    model = previewUrl,
+                    bg = renderBg,
+                    modifier = Modifier.fillMaxSize(),
                 )
+                // Preview-only branding; the export below stays clean.
+                WatermarkOverlay(Modifier.fillMaxSize())
             }
-        }
 
-        // ---------------------------------------------------------- camera
-        SectionTitle(stringResource(R.string.studio_camera))
-        StudioSlider(stringResource(R.string.studio_yaw), yaw, -180f..180f) { yaw = it }
-        StudioSlider(stringResource(R.string.studio_pitch), pitch, -60f..60f) { pitch = it }
-        StudioSlider(stringResource(R.string.studio_roll), roll, -45f..45f) { roll = it }
-        StudioSlider(
-            stringResource(R.string.studio_zoom), zoom, 0.5f..2.5f,
-            format = { String.format(Locale.US, "%.1f", it) },
-        ) { zoom = it }
+            // ------------------------------------------------------ controls
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f),
+                contentPadding = PaddingValues(top = 12.dp, bottom = 16.dp),
+                verticalArrangement = Arrangement.spacedBy(12.dp),
+            ) {
+                item { BgSelector(selected = bg, onSelect = { bg = it }) }
 
-        // ---------------------------------------------------------- position
-        SectionTitle(stringResource(R.string.studio_position))
-        StudioSlider(
-            stringResource(R.string.studio_offset_x), offsetX, -0.5f..0.5f,
-            format = { String.format(Locale.US, "%.2f", it) },
-        ) { offsetX = it }
-        StudioSlider(
-            stringResource(R.string.studio_offset_y), offsetY, -0.5f..0.5f,
-            format = { String.format(Locale.US, "%.2f", it) },
-        ) { offsetY = it }
-
-        // ---------------------------------------------------------- advanced joints
-        TextButton(onClick = { advancedOpen = !advancedOpen }) {
-            Text(stringResource(R.string.studio_advanced))
-            Icon(
-                if (advancedOpen) Icons.Filled.KeyboardArrowUp else Icons.Filled.KeyboardArrowDown,
-                contentDescription = null,
-            )
-        }
-        if (advancedOpen) {
-            StudioSlider(stringResource(R.string.studio_head_yaw), headYaw, -90f..90f) { headYaw = it }
-            StudioSlider(stringResource(R.string.studio_head_pitch), headPitch, -90f..90f) { headPitch = it }
-            StudioSlider(stringResource(R.string.studio_arm_left), armLeft, -120f..120f) { armLeft = it }
-            StudioSlider(stringResource(R.string.studio_arm_right), armRight, -120f..120f) { armRight = it }
-            StudioSlider(stringResource(R.string.studio_leg_left), legLeft, -90f..90f) { legLeft = it }
-            StudioSlider(stringResource(R.string.studio_leg_right), legRight, -90f..90f) { legRight = it }
-        }
-
-        // ---------------------------------------------------------- toggles
-        ToggleRow(stringResource(R.string.studio_shadow), shadow) { shadow = it }
-        ToggleRow(stringResource(R.string.studio_cape), cape) { cape = it }
-        ToggleRow(stringResource(R.string.studio_layers), overlay) { overlay = it }
-
-        // ---------------------------------------------------------- actions
-        Text(
-            text = downloadsLeft?.let { stringResource(R.string.dl_left_today, it) }
-                ?: stringResource(R.string.dl_unlimited),
-            style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-        )
-        Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-            Button(
-                onClick = {
-                    if (busy) return@Button
-                    busy = true
-                    scope.launch {
-                        val exportSize = mainVm.entitlements.maxRenderSize(plan)
-                        val exportUrl = Api.renderUrl(
-                            renderId, "body", exportSize,
-                            bgHex = bg.hex, extra = currentParams(),
-                        )
-                        val outcome = mainVm.downloadGate.saveWithGate {
-                            val item = mainVm.ensureRemoteHistory(
-                                exportUrl, "Studio — $poseLabel", charName, charName,
-                                kind = "STUDIO",
+                // -------------------------------------------------- poses
+                item { SectionTitle(stringResource(R.string.studio_pose)) }
+                item {
+                    Row(Modifier.horizontalScroll(rememberScrollState())) {
+                        PoseCatalog.POSES.forEach { def ->
+                            val locked = !mainVm.entitlements.poseUnlocked(def, plan)
+                            val label = stringResource(def.labelRes)
+                            FilterChip(
+                                selected = poseDef.id == def.id,
+                                onClick = { if (locked) onOpenPro() else applyPose(def) },
+                                label = { Text(if (locked) "$label 🔒" else label) },
+                                modifier = Modifier.padding(end = 8.dp),
                             )
-                            ImageSaver.saveToGallery(
-                                context,
-                                File(item.filePath),
-                                "FSD_${charName}_studio_$exportSize.png",
-                            )
-                        }
-                        busy = false
-                        when (outcome) {
-                            DownloadOutcome.Saved ->
-                                mainVm.postSnackbar(context.getString(R.string.saved_to_gallery))
-                            DownloadOutcome.Failed ->
-                                mainVm.postSnackbar(context.getString(R.string.saved_failed))
-                            DownloadOutcome.LimitReached -> {
-                                mainVm.postSnackbar(context.getString(R.string.dl_limit_reached))
-                                onOpenPro()
-                            }
                         }
                     }
-                },
-                modifier = Modifier.weight(1f),
-            ) {
-                Icon(Icons.Filled.Download, contentDescription = null, modifier = Modifier.size(18.dp))
-                Spacer(Modifier.width(6.dp))
-                Text(stringResource(R.string.studio_export))
-            }
-            OutlinedButton(
-                onClick = { applyPose(PoseCatalog.POSES.first()) },
-                modifier = Modifier.weight(1f),
-            ) {
-                Text(stringResource(R.string.studio_reset))
+                }
+
+                // -------------------------------------------------- camera
+                item { SectionTitle(stringResource(R.string.studio_camera)) }
+                item {
+                    StudioSlider(stringResource(R.string.studio_yaw), yaw, -180f..180f) { yaw = it }
+                }
+                item {
+                    StudioSlider(stringResource(R.string.studio_pitch), pitch, -60f..60f) { pitch = it }
+                }
+                item {
+                    StudioSlider(stringResource(R.string.studio_roll), roll, -45f..45f) { roll = it }
+                }
+                item {
+                    StudioSlider(
+                        stringResource(R.string.studio_zoom), zoom, 0.5f..2.5f,
+                        format = { String.format(Locale.US, "%.1f", it) },
+                    ) { zoom = it }
+                }
+
+                // -------------------------------------------------- position
+                item { SectionTitle(stringResource(R.string.studio_position)) }
+                item {
+                    StudioSlider(
+                        stringResource(R.string.studio_offset_x), offsetX, -0.5f..0.5f,
+                        format = { String.format(Locale.US, "%.2f", it) },
+                    ) { offsetX = it }
+                }
+                item {
+                    StudioSlider(
+                        stringResource(R.string.studio_offset_y), offsetY, -0.5f..0.5f,
+                        format = { String.format(Locale.US, "%.2f", it) },
+                    ) { offsetY = it }
+                }
+
+                // -------------------------------------------------- advanced joints
+                item {
+                    TextButton(onClick = { advancedOpen = !advancedOpen }) {
+                        Text(stringResource(R.string.studio_advanced))
+                        Icon(
+                            if (advancedOpen) Icons.Filled.KeyboardArrowUp else Icons.Filled.KeyboardArrowDown,
+                            contentDescription = null,
+                        )
+                    }
+                }
+                if (advancedOpen) {
+                    item {
+                        StudioSlider(stringResource(R.string.studio_head_yaw), headYaw, -90f..90f) { headYaw = it }
+                    }
+                    item {
+                        StudioSlider(stringResource(R.string.studio_head_pitch), headPitch, -90f..90f) { headPitch = it }
+                    }
+                    item {
+                        StudioSlider(stringResource(R.string.studio_arm_left), armLeft, -120f..120f) { armLeft = it }
+                    }
+                    item {
+                        StudioSlider(stringResource(R.string.studio_arm_right), armRight, -120f..120f) { armRight = it }
+                    }
+                    item {
+                        StudioSlider(stringResource(R.string.studio_leg_left), legLeft, -90f..90f) { legLeft = it }
+                    }
+                    item {
+                        StudioSlider(stringResource(R.string.studio_leg_right), legRight, -90f..90f) { legRight = it }
+                    }
+                }
+
+                // -------------------------------------------------- toggles
+                item { ToggleRow(stringResource(R.string.studio_shadow), shadow) { shadow = it } }
+                item { ToggleRow(stringResource(R.string.studio_cape), cape) { cape = it } }
+                item { ToggleRow(stringResource(R.string.studio_layers), overlay) { overlay = it } }
+
+                // -------------------------------------------------- actions
+                item {
+                    Text(
+                        text = downloadsLeft?.let { stringResource(R.string.dl_left_today, it) }
+                            ?: stringResource(R.string.dl_unlimited),
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
+                }
+                item {
+                    Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                        Button(
+                            onClick = {
+                                if (busy) return@Button
+                                busy = true
+                                scope.launch {
+                                    val exportSize = mainVm.entitlements.maxRenderSize(plan)
+                                    val exportUrl = Api.renderUrl(
+                                        renderId, "body", exportSize,
+                                        bgHex = bg.hex, extra = currentParams(),
+                                    )
+                                    val outcome = mainVm.downloadGate.saveWithGate {
+                                        val item = mainVm.ensureRemoteHistory(
+                                            exportUrl, "Studio — $poseLabel", charName, charName,
+                                            kind = "STUDIO",
+                                        )
+                                        ImageSaver.saveToGallery(
+                                            context,
+                                            File(item.filePath),
+                                            "FSD_${charName}_studio_$exportSize.png",
+                                        )
+                                    }
+                                    busy = false
+                                    when (outcome) {
+                                        DownloadOutcome.Saved ->
+                                            mainVm.postSnackbar(context.getString(R.string.saved_to_gallery))
+                                        DownloadOutcome.Failed ->
+                                            mainVm.postSnackbar(context.getString(R.string.saved_failed))
+                                        DownloadOutcome.LimitReached -> {
+                                            mainVm.postSnackbar(context.getString(R.string.dl_limit_reached))
+                                            onOpenPro()
+                                        }
+                                    }
+                                }
+                            },
+                            modifier = Modifier.weight(1f),
+                        ) {
+                            Icon(Icons.Filled.Download, contentDescription = null, modifier = Modifier.size(18.dp))
+                            Spacer(Modifier.width(6.dp))
+                            Text(stringResource(R.string.studio_export))
+                        }
+                        OutlinedButton(
+                            onClick = { applyPose(PoseCatalog.POSES.first()) },
+                            modifier = Modifier.weight(1f),
+                        ) {
+                            Text(stringResource(R.string.studio_reset))
+                        }
+                    }
+                }
             }
         }
-        Spacer(Modifier.height(8.dp))
     }
 }
 
 /**
- * A slider that reports its value ONLY when the drag finishes, so the render
- * URL (and the network) changes once per adjustment, not once per frame.
+ * A fully controlled slider: every change is reported immediately so the
+ * draft state (and the value label) stays live while dragging. The render
+ * itself is debounced in [StudioEditor] — this slider never talks to the
+ * network on its own.
  */
 @Composable
 private fun StudioSlider(
@@ -377,9 +447,8 @@ private fun StudioSlider(
     value: Float,
     range: ClosedFloatingPointRange<Float>,
     format: (Float) -> String = { it.roundToInt().toString() },
-    onCommit: (Float) -> Unit,
+    onChange: (Float) -> Unit,
 ) {
-    var local by remember(value) { mutableFloatStateOf(value) }
     Column {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Text(
@@ -389,15 +458,14 @@ private fun StudioSlider(
                 modifier = Modifier.weight(1f),
             )
             Text(
-                text = format(local),
+                text = format(value),
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
         }
         Slider(
-            value = local,
-            onValueChange = { local = it },
-            onValueChangeFinished = { onCommit(local) },
+            value = value,
+            onValueChange = onChange,
             valueRange = range,
         )
     }
